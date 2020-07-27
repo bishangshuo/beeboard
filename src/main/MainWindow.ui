@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QToolBar" name="toolbar">
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonTextUnderIcon</enum>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionSelect"/>
+   <addaction name="separator"/>
+   <addaction name="actionPencil"/>
+   <addaction name="actionRectangle"/>
+   <addaction name="actionEllipse"/>
+   <addaction name="actionLine"/>
+   <addaction name="separator"/>
+   <addaction name="actionEraser"/>
+   <addaction name="separator"/>
+   <addaction name="actionUndo"/>
+   <addaction name="actionRedo"/>
+   <addaction name="separator"/>
+   <addaction name="actionMove"/>
+   <addaction name="separator"/>
+   <addaction name="actionZoomin"/>
+   <addaction name="actionZoomout"/>
+   <addaction name="actionReset"/>
+   <addaction name="separator"/>
+   <addaction name="actionClear"/>
+  </widget>
+  <action name="actionSelect">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normalon>:/resources/images/select_blue.png</normalon>
+     <disabledon>:/resources/images/select_blue.png</disabledon>
+     <activeoff>:/resources/images/select_gray.png</activeoff>
+     <activeon>:/resources/images/select_blue.png</activeon>
+     <selectedoff>:/resources/images/select_gray.png</selectedoff>
+     <selectedon>:/resources/images/select_blue.png</selectedon>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>Select</string>
+   </property>
+  </action>
+  <action name="actionPencil">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../Resources.qrc">
+     <normaloff>:/resources/images/brush_gray.png</normaloff>
+     <normalon>:/resources/images/brush_blue.png</normalon>:/resources/images/brush_gray.png</iconset>
+   </property>
+   <property name="text">
+    <string>Pencil</string>
+   </property>
+  </action>
+  <action name="actionRectangle">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../Resources.qrc">
+     <normaloff>:/resources/images/rectangle_gray.png</normaloff>
+     <normalon>:/resources/images/rectangle_blue.png</normalon>:/resources/images/rectangle_gray.png</iconset>
+   </property>
+   <property name="text">
+    <string>Rectangle</string>
+   </property>
+  </action>
+  <action name="actionEllipse">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../Resources.qrc">
+     <normaloff>:/resources/images/circle_gray.png</normaloff>
+     <normalon>:/resources/images/circle_blue.png</normalon>:/resources/images/circle_gray.png</iconset>
+   </property>
+   <property name="text">
+    <string>Ellipse</string>
+   </property>
+  </action>
+  <action name="actionLine">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../Resources.qrc">
+     <normaloff>:/resources/images/line_gray.png</normaloff>
+     <normalon>:/resources/images/line_blue.png</normalon>:/resources/images/line_gray.png</iconset>
+   </property>
+   <property name="text">
+    <string>Line</string>
+   </property>
+  </action>
+  <action name="actionEraser">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../Resources.qrc">
+     <normaloff>:/resources/images/eraser_gray.png</normaloff>
+     <normalon>:/resources/images/eraser_blue.png</normalon>:/resources/images/eraser_gray.png</iconset>
+   </property>
+   <property name="text">
+    <string>Eraser</string>
+   </property>
+  </action>
+  <action name="actionUndo">
+   <property name="icon">
+    <iconset resource="../../Resources.qrc">
+     <normaloff>:/resources/images/revocation_gray.png</normaloff>
+     <normalon>:/resources/images/revocation_blue.png</normalon>:/resources/images/revocation_gray.png</iconset>
+   </property>
+   <property name="text">
+    <string>Undo</string>
+   </property>
+  </action>
+  <action name="actionRedo">
+   <property name="icon">
+    <iconset resource="../../Resources.qrc">
+     <normaloff>:/resources/images/withdraw_gray.png</normaloff>
+     <normalon>:/resources/images/withdraw_blue.png</normalon>:/resources/images/withdraw_gray.png</iconset>
+   </property>
+   <property name="text">
+    <string>Redo</string>
+   </property>
+  </action>
+  <action name="actionClear">
+   <property name="icon">
+    <iconset resource="../../Resources.qrc">
+     <normaloff>:/resources/images/clean_gray.png</normaloff>
+     <normalon>:/resources/images/clean_blue.png</normalon>:/resources/images/clean_gray.png</iconset>
+   </property>
+   <property name="text">
+    <string>Clear</string>
+   </property>
+  </action>
+  <action name="actionZoomin">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../Resources.qrc">
+     <normaloff>:/resources/images/zoom-in.png</normaloff>
+     <normalon>:/resources/images/zoom-in-selected.png</normalon>:/resources/images/zoom-in.png</iconset>
+   </property>
+   <property name="text">
+    <string>Zoomin</string>
+   </property>
+  </action>
+  <action name="actionZoomout">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../Resources.qrc">
+     <normaloff>:/resources/images/zoom-out.png</normaloff>
+     <normalon>:/resources/images/zoom-out-selected.png</normalon>:/resources/images/zoom-out.png</iconset>
+   </property>
+   <property name="text">
+    <string>Zoomout</string>
+   </property>
+  </action>
+  <action name="actionReset">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../Resources.qrc">
+     <normaloff>:/resources/images/reset.png</normaloff>
+     <normalon>:/resources/images/reset-selected.png</normalon>:/resources/images/reset.png</iconset>
+   </property>
+   <property name="text">
+    <string>Reset</string>
+   </property>
+  </action>
+  <action name="actionMove">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../Resources.qrc">
+     <normaloff>:/resources/images/move.png</normaloff>
+     <normalon>:/resources/images/move-selected.png</normalon>:/resources/images/move.png</iconset>
+   </property>
+   <property name="text">
+    <string>Move</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="../../Resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>
