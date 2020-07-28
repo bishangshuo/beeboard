@@ -4,6 +4,7 @@
 #include "src/graphics/GraphicsScene.h"
 #include "src/graphics/GraphicsView.h"
 #include "src/graphics/OperatorForm.h"
+#include "src/common/ToolType.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -71,23 +72,33 @@ void MainWindow::setupActions(){
 
     connect(ui->actionUndo, &QAction::triggered, [=](){
         qDebug() << "on undo";
+        hideOperatorForm();
+        m_pView->SetToolType(TOOL_TYPE::UNDO);
     });
     connect(ui->actionRedo, &QAction::triggered, [=](){
         qDebug() << "on redo";
+        hideOperatorForm();
+        m_pView->SetToolType(TOOL_TYPE::REDO);
     });
 
     connect(ui->actionMove, &QAction::triggered, [=](){
         qDebug() << "on move";
+        hideOperatorForm();
+        m_pView->SetToolType(TOOL_TYPE::MOVE);
         m_pView->beginMove();
     });
 
     connect(ui->actionReset, &QAction::triggered, [=](){
         qDebug() << "on reset";
+        hideOperatorForm();
+        m_pView->SetToolType(TOOL_TYPE::RESET);
         m_pView->reset();
     });
 
     connect(ui->actionClear, &QAction::triggered, [=](){
         qDebug() << "on clear";
+        hideOperatorForm();
+        m_pView->SetToolType(TOOL_TYPE::CLEAR);
         m_pScene->clearScene();
     });
 
@@ -114,36 +125,108 @@ void MainWindow::initGraphics(){
 
     m_pScene->setView(m_pView);
 
-    connect(m_pScene, SIGNAL(sigItemSelected(int, const QRect &)), this, SLOT(slotSceneItemSelected(int, const QRect &)));
+    connect(m_pScene, SIGNAL(sigItemSelected(int, TOOL_TYPE::Type, const QRect &, const QPointF &, const QPointF &)),
+            this, SLOT(slotSceneItemSelected(int, TOOL_TYPE::Type, const QRect &, const QPointF &, const QPointF &)));
+    connect(m_pScene, &GraphicsScene::sigSceneClicked, [=](){
+        hideOperatorForm();
+    });
+    connect(m_pScene, SIGNAL(sigItemResizeCompleted(int, TOOL_TYPE::Type, const QRect &, const QPointF &, const QPointF &)),
+            this, SLOT(slotSceneItemSelected(int, TOOL_TYPE::Type, const QRect &, const QPointF &, const QPointF &)));
+    connect(m_pScene, SIGNAL(sigItemPointsChanged(int, TOOL_TYPE::Type, const QRect &, const QPointF &, const QPointF &)),
+            this, SLOT(slotSceneItemSelected(int, TOOL_TYPE::Type, const QRect &, const QPointF &, const QPointF &)));
 }
 
 void MainWindow::slotActionGroup(QAction *action){
     m_eToolType = (TOOL_TYPE::Type)action->data().toInt();
     qDebug() << "slotActionGroup tool_type=" << m_eToolType;
+    hideOperatorForm();
+    m_pView->SetToolType(m_eToolType);
     m_pScene->setToolType(m_eToolType);
     m_pView->endMove();
 }
 
 QRect MainWindow::MapSceneToView(const QRect &rc){
-    //m_pView->rect();
+    return m_pView->rect();
 }
 
-void MainWindow::slotSceneItemSelected(int key, const QRect &rc){
-    showOperatorForm(key, rc);
+void MainWindow::slotSceneItemSelected(int key, TOOL_TYPE::Type toolType, const QRect &rc, const QPointF &p1, const QPointF &p2){
+    showOperatorForm(key, toolType, rc, p1, p2);
 }
 
-void MainWindow::showOperatorForm(int key, const QRect &rc){
+void MainWindow::showOperatorForm(int key, TOOL_TYPE::Type toolType, const QRect &rc, const QPointF &p1, const QPointF &p2){
     if(nullptr == m_pOperatorForm){
-        m_pOperatorForm = new OperatorForm(key, this);
+        m_pOperatorForm = new OperatorForm(key, toolType, this);
+        m_pOperatorForm->DisabledResize(true);
+        connect(m_pOperatorForm, SIGNAL(sigPosChanged(int, int, int)),
+                this, SLOT(slotItemPosChanged(int, int, int)));
+        connect(m_pOperatorForm, SIGNAL(sigItemRemove(int)),
+                this, SLOT(slotItemRemove(int)));
+        connect(m_pOperatorForm, SIGNAL(sigResizeItemBegin(int)),
+                this, SLOT(slotItemResizeBegin(int)));
+        connect(m_pOperatorForm, SIGNAL(sigResizeItem(int, int, int)),
+                this, SLOT(slotItemResize(int, int, int)));
+        connect(m_pOperatorForm, SIGNAL(sigResizeItemEnd(int)),
+                this, SLOT(slotItemResizeEnd(int)));
     }
+    m_pOperatorForm->setKey(key);
     if(m_pOperatorForm->isHidden()){
         m_pOperatorForm->show();
-        m_pOperatorForm->setGeometry(rc);
     }
+    QSize tsize = ui->toolbar->size();
+    qreal itemX = rc.x();
+    qreal itemY = rc.y()+tsize.height();
+    qreal itemWidth = rc.width();
+    qreal itemHeight = rc.height();
+    qreal edge = OperatorForm::EDGE_WIDTH();
+    QRect rectReal = QRect(itemX-edge, itemY-edge, itemWidth+edge*2, itemHeight+edge*2);
+    m_pOperatorForm->setGeometry(rectReal);
+    m_pOperatorForm->setToolType(toolType);
+    if(TOOL_TYPE::LINE == toolType){
+        QPoint p1_w = m_pOperatorForm->mapFromParent(p1.toPoint());
+        QPoint p2_w = m_pOperatorForm->mapFromParent(p2.toPoint());
+        p1_w.setY(p1_w.y()+tsize.height());
+        p2_w.setY(p2_w.y()+tsize.height());
+        m_pOperatorForm->setPoints(p1_w, p2_w);
+    }
+    m_pOperatorForm->showControls();
+    m_pOperatorForm->raise();
 }
 
 void MainWindow::hideOperatorForm(){
     if(nullptr != m_pOperatorForm){
         m_pOperatorForm->hide();
     }
+}
+
+void MainWindow::slotItemPosChanged(int key, int dx, int dy){
+    qreal scaled = m_pView->GetScale();
+    qreal rdx = dx / scaled;
+    qreal rdy = dy / scaled;
+    m_pScene->onItemPosChanged(key, rdx, rdy);
+}
+
+void MainWindow::slotItemRemove(int key){
+    m_pScene->onItemRemove(key);
+    hideOperatorForm();
+}
+
+
+void MainWindow::slotItemResizeBegin(int key){
+    m_pScene->onItemResizeBegin(key);
+}
+
+void MainWindow::slotItemResize(int key, int dx, int dy){
+    qreal scaled = m_pView->GetScale();
+    qreal rdx = dx / scaled;
+    qreal rdy = dy / scaled;
+    m_pScene->onItemResize(key, rdx, rdy);
+    if(m_pOperatorForm != nullptr){
+        QRect oldRect = m_pOperatorForm->geometry();
+        QRect newRect = QRect(oldRect.x(), oldRect.y(), oldRect.width()+dx, oldRect.height()+dy);
+        m_pOperatorForm->setGeometry(newRect);
+    }
+}
+
+void MainWindow::slotItemResizeEnd(int key){
+    m_pScene->onItemResizeEnd(key);
 }

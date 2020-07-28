@@ -33,12 +33,15 @@ void GraphicsScene::setView(GraphicsView *view){
 
 void GraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    emit sigSceneClicked();
+
     QGraphicsScene::mousePressEvent(event);
     m_bPressed = true;
     QPointF pos = event->scenePos();
     m_ptPrev = pos;
 
-    qDebug() << "GraphicsScene::mousePressEvent pos = " << pos;
+    QPoint viewPos = m_pView->mapFromScene(pos);
+    qDebug() << "GraphicsScene::mousePressEvent scene pos = " << pos << ", view pos = "<<viewPos;
 
     ShapeBase *shape = nullptr;
     switch(m_eToolType){
@@ -103,7 +106,7 @@ void GraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
     if(shape != nullptr){
         m_nCurKey = shape->Create(m_ptPrev, pos, this);
-        m_mapShape[m_nCurKey] = new SHAPE_DATA(m_nCurKey, shape, m_mapShape.size()+1);
+        m_mapShape[m_nCurKey] = new SHAPE_DATA(m_nCurKey, m_eToolType, shape, m_mapShape.size()+1);
     }
 }
 
@@ -211,7 +214,13 @@ void GraphicsScene::onMouseSelectItem(const QPointF &pos)
     MapShape::iterator it = m_mapShape.find(key);
     if(it != m_mapShape.end()){
         it.value()->shape->SetSelected();
-        emit sigItemSelected(key, it.value()->shape->GetRect());
+        QRect rcSceneShape = it.value()->shape->GetRect();
+        QPoint topLeftView = m_pView->mapFromScene(rcSceneShape.topLeft());
+        QPoint bottomRightView = m_pView->mapFromScene(rcSceneShape.bottomRight());
+        QRect rcViewShape = QRect(topLeftView, bottomRightView);
+        QPointF p1 = m_pView->mapFromScene(it.value()->shape->GetP1());
+        QPointF p2 = m_pView->mapFromScene(it.value()->shape->GetP2());
+        emit sigItemSelected(key, it.value()->toolType, rcViewShape, p1, p2);
     }
 }
 
@@ -225,4 +234,64 @@ void GraphicsScene::clearScene(){
         it = m_mapShape.erase(it);
     }
     m_pView->update();
+}
+
+void GraphicsScene::onItemPosChanged(int key, qreal dx, qreal dy){
+    MapShape::iterator it = m_mapShape.find(key);
+    if(it != m_mapShape.end()){
+        SHAPE_DATA *data = it.value();
+        ShapeBase *shape = data->shape;
+        shape->ChangePos(dx, dy);
+    }
+}
+
+void GraphicsScene::onItemRemove(int key){
+    MapShape::iterator it = m_mapShape.find(key);
+    if(it != m_mapShape.end()){
+        SHAPE_DATA *data = it.value();
+        ShapeBase *shape = data->shape;
+        removeItem(shape->GetGraphicsItem());
+        shape->deleteLater();
+        delete data;
+        it = m_mapShape.erase(it);
+    }
+}
+
+void GraphicsScene::onItemResizeBegin(int key){
+
+}
+
+void GraphicsScene::onItemResize(int key, qreal dx, qreal dy){
+    MapShape::iterator it = m_mapShape.find(key);
+    if(it == m_mapShape.end())
+        return;
+    SHAPE_DATA *data = it.value();
+    ShapeBase *shape = data->shape;
+    shape->ChangeSize(dx, dy);
+    //if(data->toolType == TOOL_TYPE::LINE){
+        QRectF rcSceneShape = shape->GetRect();
+        QPoint topLeftView = m_pView->mapFromScene(rcSceneShape.topLeft());
+        QPoint bottomRightView = m_pView->mapFromScene(rcSceneShape.bottomRight());
+        QRect rcViewShape = QRect(topLeftView, bottomRightView);
+        QPointF p1 = m_pView->mapFromScene(it.value()->shape->GetP1());
+        QPointF p2 = m_pView->mapFromScene(it.value()->shape->GetP2());
+        emit sigItemPointsChanged(key, data->toolType, rcViewShape, p1, p2);
+    //}
+}
+
+void GraphicsScene::onItemResizeEnd(int key){
+    MapShape::iterator it = m_mapShape.find(key);
+    if(it == m_mapShape.end())
+        return;
+
+    SHAPE_DATA *data = it.value();
+    ShapeBase *shape = data->shape;
+    QRectF rcSceneShape = shape->GetRect();
+    QPoint topLeftView = m_pView->mapFromScene(rcSceneShape.topLeft());
+    QPoint bottomRightView = m_pView->mapFromScene(rcSceneShape.bottomRight());
+    QRect rcViewShape = QRect(topLeftView, bottomRightView);
+    QPointF p1 = m_pView->mapFromScene(it.value()->shape->GetP1());
+    QPointF p2 = m_pView->mapFromScene(it.value()->shape->GetP2());
+
+    emit sigItemResizeCompleted(key, data->toolType, rcViewShape, p1, p2);
 }

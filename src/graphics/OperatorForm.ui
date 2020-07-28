@@ -1,22 +1,25 @@
-<?xml version='1.0'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <author/>
- <comment/>
- <exportmacro/>
  <class>OperatorForm</class>
- <widget name="OperatorForm" class="QWidget">
+ <widget class="QWidget" name="OperatorForm">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>320</width>
-    <height>240</height>
+    <width>148</width>
+    <height>146</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>80</width>
+    <height>80</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
  </widget>
- <pixmapfunction/>
+ <resources/>
  <connections/>
 </ui>

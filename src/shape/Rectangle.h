@@ -16,6 +16,11 @@ protected:
     void Remove(GraphicsScene *pScene) override;
 
     QRect GetRect() override;
+    QPointF GetP1() override;
+    QPointF GetP2() override;
+    void ChangePos(qreal dx, qreal dy) override;
+    QGraphicsItem *GetGraphicsItem() override;
+    void ChangeSize(qreal dx, qreal dy) override;
 private:
     QGraphicsRectItem *m_pItem;
 };

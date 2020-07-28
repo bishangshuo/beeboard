@@ -2,6 +2,7 @@
 #define GRAPHICSVIEW_H
 
 #include <QGraphicsView>
+#include "src/common/ToolType.h"
 class QWheelEvent;
 class QKeyEvent;
 
@@ -22,6 +23,14 @@ public:
     }
     void endMove(){
         bMove = false;
+    }
+
+    void SetToolType(const TOOL_TYPE::Type &toolType){
+        m_eToolType = toolType;
+    }
+
+    qreal GetScale() const{
+        return m_scale;
     }
 protected:
     // 上/下/左/右键向各个方向移动、加/减键进行缩放、空格/回车键旋转
@@ -52,6 +61,8 @@ private:
     qreal m_scale;  // 缩放值
 
     bool bMove{false};
+
+    TOOL_TYPE::Type m_eToolType{TOOL_TYPE::SELECT};
 };
 
 #endif // GRAPHICSVIEW_H

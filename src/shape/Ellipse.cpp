@@ -18,7 +18,7 @@ int Ellipse::Create(const QPointF &leftTop, const QPointF &rightBottom, Graphics
     m_pItem->setRect(QRectF(leftTop, rightBottom));
     int key = reinterpret_cast<int>(m_pItem);
     m_pItem->setData(ITEM_DATA_KEY, key);
-    //m_pItem->setFlag(QGraphicsItem::ItemIsSelectable, true);
+    m_pItem->setFlag(QGraphicsItem::ItemIsSelectable, true);
     return key;
 }
 
@@ -44,4 +44,34 @@ void Ellipse::Remove(GraphicsScene *pScene){
 
 QRect Ellipse::GetRect(){
     return m_pItem->sceneBoundingRect().toRect();
+}
+
+QPointF Ellipse::GetP1(){
+    return m_pItem->sceneBoundingRect().topLeft();
+}
+
+QPointF Ellipse::GetP2(){
+    return m_pItem->sceneBoundingRect().bottomRight();
+}
+
+void Ellipse::ChangePos(qreal dx, qreal dy){
+    QPointF pos = m_pItem->scenePos();
+    QPointF newPos = pos + QPointF(dx, dy);
+    m_pItem->setPos(newPos);
+}
+
+QGraphicsItem *Ellipse::GetGraphicsItem(){
+    return m_pItem;
+}
+
+void Ellipse::ChangeSize(qreal dx, qreal dy){
+    QRectF oldRect = m_pItem->rect();
+    QRectF newRect = QRectF(oldRect.x(), oldRect.y(), oldRect.width()+dx, oldRect.height()+dy);
+    if(newRect.width() < 10){
+        newRect.setWidth(10);
+    }
+    if(newRect.height() < 10){
+        newRect.setHeight(10);
+    }
+    m_pItem->setRect(newRect);
 }

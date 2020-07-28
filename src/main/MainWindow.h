@@ -23,13 +23,18 @@ public:
 
 public slots:
     void slotActionGroup(QAction *action);
-    void slotSceneItemSelected(int key, const QRect &rc);
+    void slotSceneItemSelected(int key, TOOL_TYPE::Type toolType, const QRect &rc, const QPointF &p1, const QPointF &p2);
+    void slotItemPosChanged(int key, int dx, int dy);
+    void slotItemRemove(int key);
+    void slotItemResizeBegin(int key);
+    void slotItemResize(int key, int dx, int dy);
+    void slotItemResizeEnd(int key);
 protected:
     void resizeEvent(QResizeEvent* event);
 private:
     void setupActions();
     void initGraphics();
-    void showOperatorForm(int key, const QRect &rc);
+    void showOperatorForm(int key, TOOL_TYPE::Type toolType, const QRect &rc, const QPointF &p1, const QPointF &p2);
     void hideOperatorForm();
     QRect MapSceneToView(const QRect &rc);
 private:

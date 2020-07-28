@@ -2,6 +2,7 @@
 #include <QGraphicsRectItem>
 #include "src/graphics/GraphicsScene.h"
 #include "src/property/PropObj.h"
+#include <QtDebug>
 
 Rectangle::Rectangle(QObject *parent)
     : ShapeBase(parent)
@@ -18,7 +19,7 @@ int Rectangle::Create(const QPointF &leftTop, const QPointF &rightBottom, Graphi
     m_pItem->setRect(QRectF(leftTop, rightBottom));
     int key = reinterpret_cast<int>(m_pItem);
     m_pItem->setData(ITEM_DATA_KEY, key);
-    //m_pItem->setFlag(QGraphicsItem::ItemIsSelectable, true);
+    m_pItem->setFlag(QGraphicsItem::ItemIsSelectable, true);
     return key;
 }
 
@@ -44,4 +45,35 @@ void Rectangle::Remove(GraphicsScene *pScene){
 
 QRect Rectangle::GetRect(){
     return m_pItem->sceneBoundingRect().toRect();
+}
+
+QPointF Rectangle::GetP1(){
+    return m_pItem->sceneBoundingRect().topLeft();
+}
+
+QPointF Rectangle::GetP2(){
+    return m_pItem->sceneBoundingRect().bottomRight();
+}
+
+void Rectangle::ChangePos(qreal dx, qreal dy){
+    QPointF pos = m_pItem->scenePos();
+    QPointF newPos = pos + QPointF(dx, dy);
+    m_pItem->setPos(newPos);
+}
+
+QGraphicsItem *Rectangle::GetGraphicsItem(){
+    return m_pItem;
+}
+
+void Rectangle::ChangeSize(qreal dx, qreal dy){
+    QRectF oldRect = m_pItem->rect();
+    QRectF newRect = QRectF(oldRect.x(), oldRect.y(), oldRect.width()+dx, oldRect.height()+dy);
+    //qDebug()<<"Rectangle::ChangeSize oldRect="<<oldRect<<", newRect="<<newRect;
+    if(newRect.width() < 10){
+        newRect.setWidth(10);
+    }
+    if(newRect.height() < 10){
+        newRect.setHeight(10);
+    }
+    m_pItem->setRect(newRect);
 }

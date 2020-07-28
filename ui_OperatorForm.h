@@ -23,7 +23,8 @@ public:
     {
         if (OperatorForm->objectName().isEmpty())
             OperatorForm->setObjectName(QString::fromUtf8("OperatorForm"));
-        OperatorForm->resize(320, 240);
+        OperatorForm->resize(148, 146);
+        OperatorForm->setMinimumSize(QSize(80, 80));
 
         retranslateUi(OperatorForm);
 

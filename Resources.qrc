@@ -51,5 +51,10 @@
         <file>resources/images/zoom-out-selected.png</file>
         <file>resources/images/move.png</file>
         <file>resources/images/move-selected.png</file>
+        <file>resources/images/close.png</file>
+        <file>resources/images/delete.png</file>
+        <file>resources/images/rotate-left.png</file>
+        <file>resources/images/zoom.png</file>
+        <file>resources/images/repos-line.png</file>
     </qresource>
 </RCC>

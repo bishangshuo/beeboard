@@ -94,9 +94,12 @@ void GraphicsView::mousePressEvent(QMouseEvent *event)
     int sx = verticalScrollBar()->x();
     int sy = verticalScrollBar()->y();
     qDebug() << "GraphicsView::mousePressEvent pos = " << pos << " sx=" << sx << "sy" << sy;
-    if (event->button() == m_translateButton && bMove) {
-        m_bMouseTranslate = true;
-        m_lastMousePos = pos;
+
+    if(TOOL_TYPE::MOVE == m_eToolType || TOOL_TYPE::ZOOMIN == m_eToolType || TOOL_TYPE::ZOOMOUT == m_eToolType){
+           if (event->button() == m_translateButton && bMove) {
+            m_bMouseTranslate = true;
+            m_lastMousePos = pos;
+        }
     }
 
     QGraphicsView::mousePressEvent(event);
@@ -105,21 +108,25 @@ void GraphicsView::mousePressEvent(QMouseEvent *event)
 // 平移
 void GraphicsView::mouseMoveEvent(QMouseEvent *event)
 {
+    QPoint pos = event->pos();
+    if(TOOL_TYPE::MOVE == m_eToolType || TOOL_TYPE::ZOOMIN == m_eToolType || TOOL_TYPE::ZOOMOUT == m_eToolType){
+        if (m_bMouseTranslate && bMove){
+            QPointF mouseDelta = mapToScene(pos) - mapToScene(m_lastMousePos);
+            translate(mouseDelta);
+        }
 
-    if (m_bMouseTranslate && bMove){
-        QPointF mouseDelta = mapToScene(event->pos()) - mapToScene(m_lastMousePos);
-        translate(mouseDelta);
+        m_lastMousePos = pos;
     }
-
-    m_lastMousePos = event->pos();
 
     QGraphicsView::mouseMoveEvent(event);
 }
 
 void GraphicsView::mouseReleaseEvent(QMouseEvent *event)
 {
-    if (event->button() == m_translateButton && bMove)
-        m_bMouseTranslate = false;
+    if(TOOL_TYPE::MOVE == m_eToolType || TOOL_TYPE::ZOOMIN == m_eToolType || TOOL_TYPE::ZOOMOUT == m_eToolType){
+        if (event->button() == m_translateButton && bMove)
+            m_bMouseTranslate = false;
+    }
 
     QGraphicsView::mouseReleaseEvent(event);
 }
