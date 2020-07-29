@@ -212,23 +212,7 @@ void GraphicsScene::onMouseSelectItem(const QPointF &pos)
         return;
     }
     int key = item->data(ITEM_DATA_KEY).toInt();
-    MapShape::iterator it = m_mapShape.find(key);
-    if(it != m_mapShape.end()){
-        it.value()->shape->SetSelected();
-        QRect rcSceneShape = it.value()->shape->GetRect();
-        QPoint topLeftView = m_pView->mapFromScene(rcSceneShape.topLeft());
-        QPoint bottomRightView = m_pView->mapFromScene(rcSceneShape.bottomRight());
-        QRect rcViewShape = QRect(topLeftView, bottomRightView);
-        QPointF lineP1 = it.value()->shape->GetP1();
-        QPointF lineP2 = it.value()->shape->GetP2();
-        QPointF p1 = m_pView->mapFromScene(lineP1);
-        QPointF p2 = m_pView->mapFromScene(lineP2);
-        //qDebug()<<"GraphicsScene::onMouseSelectItem lineP1="<<lineP1<<", lineP2="<<lineP2
-        //       <<"; map to view FromScene, p1="<<p1<<", p2="<<p2;
-        emit sigItemSelected(key, it.value()->toolType, rcViewShape, p1, p2);
-    }else{
-        qDebug() << "GraphicsScene::onMouseSelectItem item not in map" ;
-    }
+    signalItemSelected(key);
 }
 
 void GraphicsScene::clearScene(){
@@ -301,6 +285,61 @@ void GraphicsScene::onItemResizeEnd(int key){
     QPointF p2 = m_pView->mapFromScene(it.value()->shape->GetP2());
 
     emit sigItemResizeCompleted(key, data->toolType, rcViewShape, p1, p2);
+
+    signalItemSelected(key);
+
+    m_pView->update();
+}
+
+void GraphicsScene::onItemRotateBegin(int key){
+    MapShape::iterator it = m_mapShape.find(key);
+    if(it == m_mapShape.end())
+        return;
+
+    SHAPE_DATA *data = it.value();
+    ShapeBase *shape = data->shape;
+    shape->RotateBegin();
+}
+
+void GraphicsScene::onItemRotate(int key, qreal angle){
+    MapShape::iterator it = m_mapShape.find(key);
+    if(it == m_mapShape.end())
+        return;
+
+    SHAPE_DATA *data = it.value();
+    ShapeBase *shape = data->shape;
+    shape->Rotate(angle);
+}
+
+void GraphicsScene::onItemRotateEnd(int key){
+    MapShape::iterator it = m_mapShape.find(key);
+    if(it == m_mapShape.end())
+        return;
+
+    SHAPE_DATA *data = it.value();
+    ShapeBase *shape = data->shape;
+    shape->RotateEnd();
+
+    signalItemSelected(key);
+
+    m_pView->update();
+}
+
+void GraphicsScene::signalItemSelected(int key){
+    MapShape::iterator it = m_mapShape.find(key);
+    if(it != m_mapShape.end()){
+        it.value()->shape->SetSelected();
+        QRect rcSceneShape = it.value()->shape->GetRect();
+        QPoint topLeftView = m_pView->mapFromScene(rcSceneShape.topLeft());
+        QPoint bottomRightView = m_pView->mapFromScene(rcSceneShape.bottomRight());
+        QRect rcViewShape = QRect(topLeftView, bottomRightView);
+        QPointF lineP1 = it.value()->shape->GetP1();
+        QPointF lineP2 = it.value()->shape->GetP2();
+        QPointF p1 = m_pView->mapFromScene(lineP1);
+        QPointF p2 = m_pView->mapFromScene(lineP2);
+        qDebug()<<"GraphicsScene::signalItemSelected lineP1="<<lineP1<<", lineP2="<<lineP2<<"; p1="<<p1<<", p2"<<p2;
+        emit sigItemSelected(key, it.value()->toolType, rcViewShape, p1, p2);
+    }
 }
 
 TOOL_TYPE::Type GraphicsScene::GetPoints(int key, QPoint &p1, QPoint &p2){

@@ -5,6 +5,18 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 #include "src/common/TrackButton.h"
+#include <QVector2D>
+#include <QPainter>
+
+const qreal PI = 3.141592653;
+const qreal AnglePerPI = 180.0 / PI;
+const int MAX_ITEM_SIZE    = 512;
+const int MIN_ITEM_SIZE    = 16;
+
+inline qreal GetDegreeAngle(QVector2D vector2d)
+{
+    return fmod((atan2((qreal)vector2d.y(), (qreal)vector2d.x()) * AnglePerPI + 360.0), 360.0 );
+}
 
 OperatorForm::OperatorForm(int key, TOOL_TYPE::Type toolType, QWidget *parent)
     : HMoveableWidget(parent)
@@ -12,6 +24,7 @@ OperatorForm::OperatorForm(int key, TOOL_TYPE::Type toolType, QWidget *parent)
     , m_nKey(key)
     , m_eToolType(toolType)
     , m_bDraging(false)
+    , m_bRotating(false)
 {
     ui->setupUi(this);
     setAttribute(Qt::WA_StyledBackground,true);
@@ -49,7 +62,8 @@ void OperatorForm::setupButtons(){
     mainLy->addLayout(topLy);
     topLy->setMargin(0);
 
-    m_pBtnRotate = new QPushButton();
+    m_pBtnRotate = new TrackButton();
+    m_pBtnRotate->setMouseTracking(true);
     topLy->addWidget(m_pBtnRotate);
     topLy->setAlignment(Qt::AlignCenter|Qt::AlignTop);
     QIcon icon;
@@ -58,6 +72,13 @@ void OperatorForm::setupButtons(){
     m_pBtnRotate->setIconSize(QSize(24,24));
     m_pBtnRotate->setStyleSheet("background-color:rgba(0,0,0,0)");
     m_pBtnRotate->setFocusPolicy(Qt::NoFocus);
+    QPixmap px = QPixmap(":/resources/images/rotate-left-cur.png");
+    px = px.scaled(24, 24);
+    m_pBtnRotate->setCursor(px);
+
+    connect(m_pBtnRotate, SIGNAL(sigMousePressed(const QPoint &)), this, SLOT(slotRotateBtnPressed(const QPoint &)));
+    connect(m_pBtnRotate, SIGNAL(sigMouseMove(const QPoint &)), this, SLOT(slotRotateBtnMove(const QPoint &)));
+    connect(m_pBtnRotate, SIGNAL(sigMouseReleased(const QPoint &)), this, SLOT(slotRotateBtnReleased(const QPoint &)));
 
     connect(m_pBtnRotate, &QPushButton::clicked, [=](){});
 
@@ -139,6 +160,7 @@ void OperatorForm::slotResizeBtnReleased(const QPoint &pos) {
     Q_UNUSED(pos)
     emit sigResizeItemEnd(m_nKey);
     m_bDraging = false;
+    m_bRotating = false;
     m_pBtnLinePoint->setIcon(QIcon(":/resources/images/repos-line.png"));
     showControls();
     m_pBtnRemove->show();
@@ -165,4 +187,76 @@ void OperatorForm::setPoints(const QPoint &p1, const QPoint &p2){
     m_ptP1 = p1;
     m_ptP2 = p2;
     showControls();
+}
+
+
+void OperatorForm::slotRotateBtnPressed(const QPoint &pos){
+    m_bRotating = true;
+    m_ptResizeBegin = pos;
+    m_pBtnRemove->hide();
+    m_pBtnLinePoint->hide();
+    m_pBtnResize->hide();
+    m_pBtnRotate->setIcon(QIcon(""));
+
+    //中心点
+    p0 = QPoint(rect().width()/2, rect().height()/2);
+
+    //起点和终点在同一点
+    p1 = p2 = pos;
+
+    emit sigRotateItemBegin(m_nKey);
+}
+
+void OperatorForm::slotRotateBtnMove(const QPoint &pos){
+    p2 = pos;
+
+    int m_size;
+    int dx = int(2.0 * pos.x());
+    int dy = int(2.0 * pos.y());
+    m_size = (dx > dy ? dx : dy);
+    if (m_size < MIN_ITEM_SIZE)
+        m_size = MIN_ITEM_SIZE;
+    else if (m_size > MAX_ITEM_SIZE)
+        m_size = MAX_ITEM_SIZE;
+
+    QVector2D vectorStart = QVector2D(QPointF(p0.x(), - m_size / 2) - p0);// 起始向量
+    QVector2D vectorEnd = QVector2D(p2 - p0);// 结束向量
+
+    // 计算起始向量和结束向量之间的角度
+    qreal angle = 0.0;
+    qreal angleEnd = GetDegreeAngle(vectorEnd);
+    qreal angleStart = GetDegreeAngle(vectorStart);
+    angle = angleEnd - angleStart;
+
+    emit sigRotateItem(m_nKey, angle);
+
+    p1 = p2;
+}
+
+void OperatorForm::slotRotateBtnReleased(const QPoint &pos){
+    Q_UNUSED(pos)
+    emit sigRotateItemEnd(m_nKey);
+    m_bRotating = false;
+    m_bDraging = false;
+    m_pBtnRotate->setIcon(QIcon(":/resources/images/rotate-left-cur.png"));
+    m_pBtnRemove->show();
+    showControls();
+}
+
+void OperatorForm::paintEvent(QPaintEvent *event){
+    QWidget::paintEvent(event);
+    if(!m_bRotating && !m_bDraging){
+        QPainter p(this);
+        QPen pen;
+        QColor pColor(255, 0, 255, 180);
+        pen.setColor(pColor);
+        pen.setWidth(1);
+        pen.setStyle(Qt::DashLine);
+        p.setPen(pen);
+        QPoint bp = rect().topLeft();
+        QPoint ep = rect().bottomRight();
+        p.drawRect(QRect(bp+QPoint(OperatorForm::EDGE_WIDTH(), OperatorForm::EDGE_WIDTH()),
+                         ep-QPoint(OperatorForm::EDGE_WIDTH(), OperatorForm::EDGE_WIDTH())));
+        p.end();
+    }
 }

@@ -56,5 +56,6 @@
         <file>resources/images/rotate-left.png</file>
         <file>resources/images/zoom.png</file>
         <file>resources/images/repos-line.png</file>
+        <file>resources/images/rotate-left-cur.png</file>
     </qresource>
 </RCC>

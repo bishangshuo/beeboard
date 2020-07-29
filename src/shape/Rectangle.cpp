@@ -2,7 +2,7 @@
 #include <QGraphicsRectItem>
 #include "src/graphics/GraphicsScene.h"
 #include "src/property/PropObj.h"
-#include <QtDebug>
+#include <QDebug>
 
 Rectangle::Rectangle(QObject *parent)
     : ShapeBase(parent)
@@ -19,7 +19,7 @@ int Rectangle::Create(const QPointF &leftTop, const QPointF &rightBottom, Graphi
     m_pItem->setRect(QRectF(leftTop, rightBottom));
     int key = reinterpret_cast<int>(m_pItem);
     m_pItem->setData(ITEM_DATA_KEY, key);
-    m_pItem->setFlag(QGraphicsItem::ItemIsSelectable, true);
+    //m_pItem->setFlag(QGraphicsItem::ItemIsSelectable, true);
     return key;
 }
 
@@ -27,8 +27,12 @@ void Rectangle::UpdateRect(const QPointF &leftTop, const QPointF &rightBottom, G
     if(m_pItem == nullptr){
         return;
     }
-    QPointF pos = (leftTop + rightBottom) / 2;
-    m_pItem->setRect(QRectF(leftTop, rightBottom));
+
+    QPointF p1 = leftTop;
+    QPointF p2 = rightBottom;
+    swapPointIf(p1, p2);
+
+    m_pItem->setRect(QRectF(p1, p2));
     m_pItem->update();
 }
 
@@ -41,6 +45,22 @@ void Rectangle::SetSelected(){
 
 void Rectangle::Remove(GraphicsScene *pScene){
    pScene->removeItem(m_pItem);
+}
+
+void Rectangle::RotateBegin(){
+    m_rAngle = m_pItem->rotation();
+}
+
+void Rectangle::Rotate(qreal angle){
+    QPointF pos = m_pItem->pos();
+    qreal ang = trimAngle(angle);
+    m_pItem->setTransformOriginPoint(m_pItem->boundingRect().center());
+    m_pItem->setRotation(ang + m_rAngle);
+    m_pItem->setPos(pos);
+}
+
+void Rectangle::RotateEnd(){
+    m_rAngle = m_pItem->rotation();
 }
 
 QRect Rectangle::GetRect(){
@@ -60,9 +80,7 @@ QPointF Rectangle::GetPos(){
 }
 
 void Rectangle::ChangePos(qreal dx, qreal dy){
-    QPointF pos = m_pItem->scenePos();
-    QPointF newPos = pos + QPointF(dx, dy);
-    m_pItem->setPos(newPos);
+    m_pItem->moveBy(dx, dy);
 }
 
 QGraphicsItem *Rectangle::GetGraphicsItem(){

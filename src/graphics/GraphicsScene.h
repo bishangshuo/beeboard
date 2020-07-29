@@ -31,9 +31,15 @@ public:
     void clearScene();
     void onItemPosChanged(int key, qreal dx, qreal dy);
     void onItemRemove(int key);
+
     void onItemResizeBegin(int key);
     void onItemResize(int key, qreal dx, qreal dy);
     void onItemResizeEnd(int key);
+
+    void onItemRotateBegin(int key);
+    void onItemRotate(int key, qreal angle);
+    void onItemRotateEnd(int key);
+
     TOOL_TYPE::Type GetPoints(int key, QPoint &p1, QPoint &p2);
     QPoint GetDeltaPos(int key);
 signals:
@@ -48,6 +54,7 @@ protected:
 
 private:
     void onMouseSelectItem(const QPointF &pos);
+    void signalItemSelected(int key);
 private:
     TOOL_TYPE::Type m_eToolType;
     bool m_bPressed;

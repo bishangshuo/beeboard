@@ -167,6 +167,13 @@ void MainWindow::showOperatorForm(int key, TOOL_TYPE::Type toolType, const QRect
                 this, SLOT(slotItemResize(int, int, int)));
         connect(m_pOperatorForm, SIGNAL(sigResizeItemEnd(int)),
                 this, SLOT(slotItemResizeEnd(int)));
+
+        connect(m_pOperatorForm, SIGNAL(sigRotateItemBegin(int)),
+                this, SLOT(slotItemRotateBegin(int)));
+        connect(m_pOperatorForm, SIGNAL(sigRotateItem(int, qreal)),
+                this, SLOT(slotItemRotate(int, qreal)));
+        connect(m_pOperatorForm, SIGNAL(sigRotateItemEnd(int)),
+                this, SLOT(slotItemRotateEnd(int)));
     }
     m_pOperatorForm->setKey(key);
     if(m_pOperatorForm->isHidden()){
@@ -179,7 +186,7 @@ void MainWindow::showOperatorForm(int key, TOOL_TYPE::Type toolType, const QRect
     qreal itemHeight = rc.height();
     qreal edge = OperatorForm::EDGE_WIDTH();
     QRect rectReal = QRect(itemX-edge, itemY-edge, itemWidth+edge*2, itemHeight+edge*2);
-    qDebug() << "MainWindow::showOperatorForm rectReal="<<rectReal;
+    //qDebug() << "MainWindow::showOperatorForm rectReal="<<rectReal;
     m_pOperatorForm->setGeometry(rectReal);
     m_pOperatorForm->setToolType(toolType);
     if(TOOL_TYPE::LINE == toolType){
@@ -232,4 +239,17 @@ void MainWindow::slotItemResize(int key, int dx, int dy){
 
 void MainWindow::slotItemResizeEnd(int key){
     m_pScene->onItemResizeEnd(key);
+}
+
+
+void MainWindow::slotItemRotateBegin(int key){
+    m_pScene->onItemRotateBegin(key);
+}
+
+void MainWindow::slotItemRotate(int key, qreal angle){
+    m_pScene->onItemRotate(key, angle);
+}
+
+void MainWindow::slotItemRotateEnd(int key){
+    m_pScene->onItemRotateEnd(key);
 }

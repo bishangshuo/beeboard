@@ -20,7 +20,7 @@ int Line::Create(const QPointF &leftTop, const QPointF &rightBottom, GraphicsSce
     m_pItem->setLine(leftTop.x(), leftTop.y(), rightBottom.x(), rightBottom.y());
     int key = reinterpret_cast<int>(m_pItem);
     m_pItem->setData(ITEM_DATA_KEY, key);
-    m_pItem->setFlag(QGraphicsItem::ItemIsSelectable, true);
+    //m_pItem->setFlag(QGraphicsItem::ItemIsSelectable, true);
     return key;
 }
 
@@ -44,6 +44,20 @@ void Line::Remove(GraphicsScene *pScene){
    pScene->removeItem(m_pItem);
 }
 
+void Line::RotateBegin(){
+    m_rAngle = m_pItem->rotation();
+}
+
+void Line::Rotate(qreal angle){
+    qreal ang = trimAngle(angle);
+    m_pItem->setTransformOriginPoint(m_pItem->boundingRect().center());
+    m_pItem->setRotation(ang + m_rAngle);
+}
+
+void Line::RotateEnd(){
+    m_rAngle = m_pItem->rotation();
+}
+
 QRect Line::GetRect(){
     return m_pItem->sceneBoundingRect().toRect();
 }
@@ -61,12 +75,7 @@ QPointF Line::GetPos(){
 }
 
 void Line::ChangePos(qreal dx, qreal dy){
-//    QPointF pos = m_pItem->scenePos();
-//    QPointF newPos = pos + QPointF(dx, dy);
-//    m_pItem->setPos(newPos);
-//    qDebug()<<"Line::ChangePos prev pos="<<m_pItem->scenePos();
     m_pItem->moveBy(dx, dy);
-//    qDebug()<<"Line::ChangePos after pos="<<m_pItem->scenePos();
 }
 
 QGraphicsItem *Line::GetGraphicsItem(){

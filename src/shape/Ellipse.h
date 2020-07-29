@@ -15,6 +15,10 @@ protected:
     void SetSelected() override;
     void Remove(GraphicsScene *pScene) override;
 
+    void RotateBegin() override;
+    void Rotate(qreal angle) override;
+    void RotateEnd() override;
+
     QRect GetRect() override;
     QPointF GetP1() override;
     QPointF GetP2() override;

@@ -38,13 +38,22 @@ signals:
     void sigResizeItemBegin(int key);
     void sigResizeItem(int key, int dx, int dy);
     void sigResizeItemEnd(int key);
+
+    void sigRotateItemBegin(int key);
+    void sigRotateItem(int key, qreal angle);
+    void sigRotateItemEnd(int key);
 public slots:
     void slotResizeBtnPressed(const QPoint &pos);
     void slotResizeBtnMove(const QPoint &pos);
     void slotResizeBtnReleased(const QPoint &pos);
+
+    void slotRotateBtnPressed(const QPoint &pos);
+    void slotRotateBtnMove(const QPoint &pos);
+    void slotRotateBtnReleased(const QPoint &pos);
 protected:
     void OnPosChanged(int dx, int dy) override;
     void resizeEvent(QResizeEvent *event) override;
+    void paintEvent(QPaintEvent *event) override;
 private:
     void setupButtons();
     void posButtons();
@@ -53,13 +62,16 @@ private:
     int m_nKey;
     TOOL_TYPE::Type m_eToolType;
     QPushButton *m_pBtnRemove;
-    QPushButton *m_pBtnRotate;
+    TrackButton *m_pBtnRotate;
     TrackButton *m_pBtnResize;
     TrackButton *m_pBtnLinePoint;
 
     bool m_bDraging;
     QPoint m_ptResizeBegin;
     QPoint m_ptP1, m_ptP2;
+
+    bool m_bRotating;
+    QPoint p0,p1,p2;
 };
 
 #endif // OPERATORFORM_H

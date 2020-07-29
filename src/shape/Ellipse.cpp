@@ -18,7 +18,7 @@ int Ellipse::Create(const QPointF &leftTop, const QPointF &rightBottom, Graphics
     m_pItem->setRect(QRectF(leftTop, rightBottom));
     int key = reinterpret_cast<int>(m_pItem);
     m_pItem->setData(ITEM_DATA_KEY, key);
-    m_pItem->setFlag(QGraphicsItem::ItemIsSelectable, true);
+    //m_pItem->setFlag(QGraphicsItem::ItemIsSelectable, true);
     return key;
 }
 
@@ -26,8 +26,12 @@ void Ellipse::UpdateRect(const QPointF &leftTop, const QPointF &rightBottom, Gra
     if(m_pItem == nullptr){
         return;
     }
-    QPointF pos = (leftTop + rightBottom) / 2;
-    m_pItem->setRect(QRectF(leftTop, rightBottom));
+
+    QPointF p1 = leftTop;
+    QPointF p2 = rightBottom;
+    swapPointIf(p1, p2);
+
+    m_pItem->setRect(QRectF(p1, p2));
     m_pItem->update();
 }
 
@@ -40,6 +44,20 @@ void Ellipse::SetSelected(){
 
 void Ellipse::Remove(GraphicsScene *pScene){
    pScene->removeItem(m_pItem);
+}
+
+void Ellipse::RotateBegin(){
+    m_rAngle = m_pItem->rotation();
+}
+
+void Ellipse::Rotate(qreal angle){
+    qreal ang = trimAngle(angle);
+    m_pItem->setTransformOriginPoint(m_pItem->boundingRect().center());
+    m_pItem->setRotation(ang + m_rAngle);
+}
+
+void Ellipse::RotateEnd(){
+    m_rAngle = m_pItem->rotation();
 }
 
 QRect Ellipse::GetRect(){
@@ -59,9 +77,7 @@ QPointF Ellipse::GetPos(){
 }
 
 void Ellipse::ChangePos(qreal dx, qreal dy){
-    QPointF pos = m_pItem->scenePos();
-    QPointF newPos = pos + QPointF(dx, dy);
-    m_pItem->setPos(newPos);
+    m_pItem->moveBy(dx, dy);
 }
 
 QGraphicsItem *Ellipse::GetGraphicsItem(){
