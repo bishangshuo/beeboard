@@ -123,6 +123,7 @@ void OperatorForm::slotResizeBtnPressed(const QPoint &pos) {
     m_ptResizeBegin = pos;
     m_pBtnRemove->hide();
     m_pBtnRotate->hide();
+    m_pBtnLinePoint->setIcon(QIcon(""));
     emit sigResizeItemBegin(m_nKey);
 }
 
@@ -138,6 +139,7 @@ void OperatorForm::slotResizeBtnReleased(const QPoint &pos) {
     Q_UNUSED(pos)
     emit sigResizeItemEnd(m_nKey);
     m_bDraging = false;
+    m_pBtnLinePoint->setIcon(QIcon(":/resources/images/repos-line.png"));
     showControls();
     m_pBtnRemove->show();
     m_pBtnRotate->show();
@@ -146,6 +148,7 @@ void OperatorForm::slotResizeBtnReleased(const QPoint &pos) {
 void OperatorForm::showControls(){
     if(TOOL_TYPE::LINE == m_eToolType){
         m_pBtnResize->hide();
+        //qDebug() << "OperatorForm::showControls m_ptP1="<<m_ptP1<<", m_ptP2=" <<m_ptP2;
         m_pBtnLinePoint->setGeometry(m_ptP2.x()-12, m_ptP2.y()-12, 24, 24);
         m_pBtnLinePoint->show();
         m_pBtnLinePoint->raise();

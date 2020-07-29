@@ -132,13 +132,13 @@ void MainWindow::initGraphics(){
     });
     connect(m_pScene, SIGNAL(sigItemResizeCompleted(int, TOOL_TYPE::Type, const QRect &, const QPointF &, const QPointF &)),
             this, SLOT(slotSceneItemSelected(int, TOOL_TYPE::Type, const QRect &, const QPointF &, const QPointF &)));
-    connect(m_pScene, SIGNAL(sigItemPointsChanged(int, TOOL_TYPE::Type, const QRect &, const QPointF &, const QPointF &)),
-            this, SLOT(slotSceneItemSelected(int, TOOL_TYPE::Type, const QRect &, const QPointF &, const QPointF &)));
+//    connect(m_pScene, SIGNAL(sigItemPointsChanged(int, TOOL_TYPE::Type, const QRect &, const QPointF &, const QPointF &)),
+//            this, SLOT(slotSceneItemSelected(int, TOOL_TYPE::Type, const QRect &, const QPointF &, const QPointF &)));
 }
 
 void MainWindow::slotActionGroup(QAction *action){
     m_eToolType = (TOOL_TYPE::Type)action->data().toInt();
-    qDebug() << "slotActionGroup tool_type=" << m_eToolType;
+    //qDebug() << "slotActionGroup tool_type=" << m_eToolType;
     hideOperatorForm();
     m_pView->SetToolType(m_eToolType);
     m_pScene->setToolType(m_eToolType);
@@ -179,6 +179,7 @@ void MainWindow::showOperatorForm(int key, TOOL_TYPE::Type toolType, const QRect
     qreal itemHeight = rc.height();
     qreal edge = OperatorForm::EDGE_WIDTH();
     QRect rectReal = QRect(itemX-edge, itemY-edge, itemWidth+edge*2, itemHeight+edge*2);
+    qDebug() << "MainWindow::showOperatorForm rectReal="<<rectReal;
     m_pOperatorForm->setGeometry(rectReal);
     m_pOperatorForm->setToolType(toolType);
     if(TOOL_TYPE::LINE == toolType){
@@ -186,7 +187,8 @@ void MainWindow::showOperatorForm(int key, TOOL_TYPE::Type toolType, const QRect
         QPoint p2_w = m_pOperatorForm->mapFromParent(p2.toPoint());
         p1_w.setY(p1_w.y()+tsize.height());
         p2_w.setY(p2_w.y()+tsize.height());
-        m_pOperatorForm->setPoints(p1_w, p2_w);
+        QPoint deltaPos = m_pScene->GetDeltaPos(key);
+        m_pOperatorForm->setPoints(p1_w+deltaPos, p2_w+deltaPos);
     }
     m_pOperatorForm->showControls();
     m_pOperatorForm->raise();
@@ -224,6 +226,7 @@ void MainWindow::slotItemResize(int key, int dx, int dy){
         QRect oldRect = m_pOperatorForm->geometry();
         QRect newRect = QRect(oldRect.x(), oldRect.y(), oldRect.width()+dx, oldRect.height()+dy);
         m_pOperatorForm->setGeometry(newRect);
+        m_pOperatorForm->showControls();
     }
 }
 

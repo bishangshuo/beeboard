@@ -4,6 +4,7 @@
 #include "src/graphics/GraphicsScene.h"
 #include "src/property/PropObj.h"
 #include "src/shape/GraphicsLineItem.h"
+#include <QDebug>
 
 Line::Line(QObject *parent)
     : ShapeBase(parent)
@@ -55,10 +56,17 @@ QPointF Line::GetP2(){
     return m_pItem->line().p2();
 }
 
+QPointF Line::GetPos(){
+    return m_pItem->scenePos();
+}
+
 void Line::ChangePos(qreal dx, qreal dy){
-    QPointF pos = m_pItem->scenePos();
-    QPointF newPos = pos + QPointF(dx, dy);
-    m_pItem->setPos(newPos);
+//    QPointF pos = m_pItem->scenePos();
+//    QPointF newPos = pos + QPointF(dx, dy);
+//    m_pItem->setPos(newPos);
+//    qDebug()<<"Line::ChangePos prev pos="<<m_pItem->scenePos();
+    m_pItem->moveBy(dx, dy);
+//    qDebug()<<"Line::ChangePos after pos="<<m_pItem->scenePos();
 }
 
 QGraphicsItem *Line::GetGraphicsItem(){

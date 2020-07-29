@@ -55,6 +55,10 @@ QPointF Rectangle::GetP2(){
     return m_pItem->sceneBoundingRect().bottomRight();
 }
 
+QPointF Rectangle::GetPos(){
+    return m_pItem->scenePos();
+}
+
 void Rectangle::ChangePos(qreal dx, qreal dy){
     QPointF pos = m_pItem->scenePos();
     QPointF newPos = pos + QPointF(dx, dy);

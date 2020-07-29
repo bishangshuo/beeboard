@@ -41,7 +41,7 @@ void GraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     m_ptPrev = pos;
 
     QPoint viewPos = m_pView->mapFromScene(pos);
-    qDebug() << "GraphicsScene::mousePressEvent scene pos = " << pos << ", view pos = "<<viewPos;
+    //qDebug() << "GraphicsScene::mousePressEvent scene pos = " << pos << ", view pos = "<<viewPos;
 
     ShapeBase *shape = nullptr;
     switch(m_eToolType){
@@ -208,6 +208,7 @@ void GraphicsScene::onMouseSelectItem(const QPointF &pos)
     QPointF itemPos = QPointF(pos.x(), pos.y());
     QGraphicsItem *item = this->itemAt(itemPos, QTransform());
     if(item == nullptr){
+        qDebug() << "GraphicsScene::onMouseSelectItem item == nullptr" ;
         return;
     }
     int key = item->data(ITEM_DATA_KEY).toInt();
@@ -218,9 +219,15 @@ void GraphicsScene::onMouseSelectItem(const QPointF &pos)
         QPoint topLeftView = m_pView->mapFromScene(rcSceneShape.topLeft());
         QPoint bottomRightView = m_pView->mapFromScene(rcSceneShape.bottomRight());
         QRect rcViewShape = QRect(topLeftView, bottomRightView);
-        QPointF p1 = m_pView->mapFromScene(it.value()->shape->GetP1());
-        QPointF p2 = m_pView->mapFromScene(it.value()->shape->GetP2());
+        QPointF lineP1 = it.value()->shape->GetP1();
+        QPointF lineP2 = it.value()->shape->GetP2();
+        QPointF p1 = m_pView->mapFromScene(lineP1);
+        QPointF p2 = m_pView->mapFromScene(lineP2);
+        //qDebug()<<"GraphicsScene::onMouseSelectItem lineP1="<<lineP1<<", lineP2="<<lineP2
+        //       <<"; map to view FromScene, p1="<<p1<<", p2="<<p2;
         emit sigItemSelected(key, it.value()->toolType, rcViewShape, p1, p2);
+    }else{
+        qDebug() << "GraphicsScene::onMouseSelectItem item not in map" ;
     }
 }
 
@@ -268,15 +275,15 @@ void GraphicsScene::onItemResize(int key, qreal dx, qreal dy){
     SHAPE_DATA *data = it.value();
     ShapeBase *shape = data->shape;
     shape->ChangeSize(dx, dy);
-    //if(data->toolType == TOOL_TYPE::LINE){
-        QRectF rcSceneShape = shape->GetRect();
-        QPoint topLeftView = m_pView->mapFromScene(rcSceneShape.topLeft());
-        QPoint bottomRightView = m_pView->mapFromScene(rcSceneShape.bottomRight());
-        QRect rcViewShape = QRect(topLeftView, bottomRightView);
-        QPointF p1 = m_pView->mapFromScene(it.value()->shape->GetP1());
-        QPointF p2 = m_pView->mapFromScene(it.value()->shape->GetP2());
-        emit sigItemPointsChanged(key, data->toolType, rcViewShape, p1, p2);
-    //}
+
+    QRectF rcSceneShape = shape->GetRect();
+    QPoint topLeftView = m_pView->mapFromScene(rcSceneShape.topLeft());
+    QPoint bottomRightView = m_pView->mapFromScene(rcSceneShape.bottomRight());
+    QRect rcViewShape = QRect(topLeftView, bottomRightView);
+    QPointF p1 = m_pView->mapFromScene(it.value()->shape->GetP1());
+    QPointF p2 = m_pView->mapFromScene(it.value()->shape->GetP2());
+    emit sigItemPointsChanged(key, data->toolType, rcViewShape, p1, p2);
+
 }
 
 void GraphicsScene::onItemResizeEnd(int key){
@@ -294,4 +301,25 @@ void GraphicsScene::onItemResizeEnd(int key){
     QPointF p2 = m_pView->mapFromScene(it.value()->shape->GetP2());
 
     emit sigItemResizeCompleted(key, data->toolType, rcViewShape, p1, p2);
+}
+
+TOOL_TYPE::Type GraphicsScene::GetPoints(int key, QPoint &p1, QPoint &p2){
+    MapShape::iterator it = m_mapShape.find(key);
+    if(it == m_mapShape.end())
+        return TOOL_TYPE::SELECT;
+    SHAPE_DATA *data = it.value();
+    ShapeBase *shape = data->shape;
+    p1 = shape->GetP1().toPoint();
+    p2 = shape->GetP2().toPoint();
+    return data->toolType;
+}
+
+QPoint GraphicsScene::GetDeltaPos(int key){
+    MapShape::iterator it = m_mapShape.find(key);
+    if(it != m_mapShape.end()){
+        SHAPE_DATA *data = it.value();
+        ShapeBase *shape = data->shape;
+        return shape->GetPos().toPoint();
+    }
+    return QPoint();
 }

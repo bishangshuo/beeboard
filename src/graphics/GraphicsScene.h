@@ -34,6 +34,8 @@ public:
     void onItemResizeBegin(int key);
     void onItemResize(int key, qreal dx, qreal dy);
     void onItemResizeEnd(int key);
+    TOOL_TYPE::Type GetPoints(int key, QPoint &p1, QPoint &p2);
+    QPoint GetDeltaPos(int key);
 signals:
     void sigSceneClicked();
     void sigItemSelected(int key, TOOL_TYPE::Type toolType, const QRect &rc, const QPointF &p1, const QPointF &p2);

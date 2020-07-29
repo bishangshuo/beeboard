@@ -23,6 +23,7 @@ public:
     virtual QRect GetRect() = 0;
     virtual QPointF GetP1() = 0;
     virtual QPointF GetP2() = 0;
+    virtual QPointF GetPos() = 0;
     virtual void ChangePos(qreal dx, qreal dy) = 0;
     virtual QGraphicsItem *GetGraphicsItem() = 0;
     virtual void ChangeSize(qreal dx, qreal dy) = 0;

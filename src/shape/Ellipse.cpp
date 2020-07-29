@@ -54,6 +54,10 @@ QPointF Ellipse::GetP2(){
     return m_pItem->sceneBoundingRect().bottomRight();
 }
 
+QPointF Ellipse::GetPos(){
+    return m_pItem->scenePos();
+}
+
 void Ellipse::ChangePos(qreal dx, qreal dy){
     QPointF pos = m_pItem->scenePos();
     QPointF newPos = pos + QPointF(dx, dy);

@@ -93,7 +93,7 @@ void GraphicsView::mousePressEvent(QMouseEvent *event)
     QPoint pos = event->pos();
     int sx = verticalScrollBar()->x();
     int sy = verticalScrollBar()->y();
-    qDebug() << "GraphicsView::mousePressEvent pos = " << pos << " sx=" << sx << "sy" << sy;
+    //qDebug() << "GraphicsView::mousePressEvent pos = " << pos << " sx=" << sx << "sy" << sy;
 
     if(TOOL_TYPE::MOVE == m_eToolType || TOOL_TYPE::ZOOMIN == m_eToolType || TOOL_TYPE::ZOOMOUT == m_eToolType){
            if (event->button() == m_translateButton && bMove) {
