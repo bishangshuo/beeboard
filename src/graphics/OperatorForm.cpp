@@ -238,7 +238,7 @@ void OperatorForm::slotRotateBtnReleased(const QPoint &pos){
     emit sigRotateItemEnd(m_nKey);
     m_bRotating = false;
     m_bDraging = false;
-    m_pBtnRotate->setIcon(QIcon(":/resources/images/rotate-left-cur.png"));
+    m_pBtnRotate->setIcon(QIcon(":/resources/images/rotate-left.png"));
     m_pBtnRemove->show();
     showControls();
 }
