@@ -1,14 +1,14 @@
-#ifndef ELLIPSE_H
-#define ELLIPSE_H
+#ifndef MULTISELECTOR_H
+#define MULTISELECTOR_H
 
 #include "ShapeBase.h"
+class MultiSelectorItem;
 
-class EllipseItem;
-
-class Ellipse : public ShapeBase
+class MultiSelector: public ShapeBase
 {
+    Q_OBJECT
 public:
-    Ellipse(QObject *parent = nullptr);
+    MultiSelector(QObject *parent = nullptr);
 protected:
     int Create(const QPointF &leftTop, const QPointF &rightBottom, GraphicsScene *pScene) override;
     void UpdateRect(const QPointF &leftTop, const QPointF &rightBottom, GraphicsScene *pScene) override;
@@ -31,7 +31,7 @@ protected:
 
     void HideControls(bool hide) override;
 private:
-    EllipseItem *m_pItem;
+    MultiSelectorItem *m_pItem;
 };
 
-#endif // ELLIPSE_H
+#endif // MULTISELECTOR_H

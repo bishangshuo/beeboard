@@ -34,6 +34,7 @@ public:
     QAction *actionZoomout;
     QAction *actionReset;
     QAction *actionMove;
+    QAction *actionTriangle;
     QWidget *centralwidget;
     QToolBar *toolbar;
 
@@ -134,6 +135,13 @@ public:
         icon12.addFile(QString::fromUtf8(":/resources/images/move.png"), QSize(), QIcon::Normal, QIcon::Off);
         icon12.addFile(QString::fromUtf8(":/resources/images/move-selected.png"), QSize(), QIcon::Normal, QIcon::On);
         actionMove->setIcon(icon12);
+        actionTriangle = new QAction(MainWindow);
+        actionTriangle->setObjectName(QString::fromUtf8("actionTriangle"));
+        actionTriangle->setCheckable(true);
+        QIcon icon13;
+        icon13.addFile(QString::fromUtf8(":/resources/images/triangle.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon13.addFile(QString::fromUtf8(":/resources/images/triangle-selected.png"), QSize(), QIcon::Normal, QIcon::On);
+        actionTriangle->setIcon(icon13);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         MainWindow->setCentralWidget(centralwidget);
@@ -147,6 +155,7 @@ public:
         toolbar->addAction(actionPencil);
         toolbar->addAction(actionRectangle);
         toolbar->addAction(actionEllipse);
+        toolbar->addAction(actionTriangle);
         toolbar->addAction(actionLine);
         toolbar->addSeparator();
         toolbar->addAction(actionEraser);
@@ -183,6 +192,7 @@ public:
         actionZoomout->setText(QCoreApplication::translate("MainWindow", "Zoomout", nullptr));
         actionReset->setText(QCoreApplication::translate("MainWindow", "Reset", nullptr));
         actionMove->setText(QCoreApplication::translate("MainWindow", "Move", nullptr));
+        actionTriangle->setText(QCoreApplication::translate("MainWindow", "Triangle", nullptr));
     } // retranslateUi
 
 };

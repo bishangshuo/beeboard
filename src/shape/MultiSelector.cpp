@@ -1,19 +1,20 @@
-#include "Rectangle.h"
+#include "MultiSelector.h"
+
 #include <QGraphicsRectItem>
 #include "src/graphics/GraphicsScene.h"
-#include "src/shape/RectItem.h"
+#include "src/shape/MultiSelectorItem.h"
 #include "src/property/PropObj.h"
 #include <QDebug>
 
-Rectangle::Rectangle(QObject *parent)
+MultiSelector::MultiSelector(QObject *parent)
     : ShapeBase(parent)
     , m_pItem(nullptr)
 {
 
 }
 
-int Rectangle::Create(const QPointF &leftTop, const QPointF &rightBottom, GraphicsScene *pScene){
-    m_pItem = new RectItem(leftTop.x(), leftTop.y(), rightBottom.x()-leftTop.x(), rightBottom.y()-leftTop.y());
+int MultiSelector::Create(const QPointF &leftTop, const QPointF &rightBottom, GraphicsScene *pScene){
+    m_pItem = new MultiSelectorItem(leftTop.x(), leftTop.y(), rightBottom.x()-leftTop.x(), rightBottom.y()-leftTop.y());
     pScene->addItem(m_pItem);
     int key = reinterpret_cast<int>(m_pItem);
     m_pItem->setData(ITEM_DATA_KEY, key);
@@ -21,10 +22,11 @@ int Rectangle::Create(const QPointF &leftTop, const QPointF &rightBottom, Graphi
     m_pItem->SetRemoveCallback([=](int _key){
         emit sigRemove(_key);
     });
+    m_pItem->setZValue(INT_MAX);
     return key;
 }
 
-void Rectangle::UpdateRect(const QPointF &leftTop, const QPointF &rightBottom, GraphicsScene *pScene){
+void MultiSelector::UpdateRect(const QPointF &leftTop, const QPointF &rightBottom, GraphicsScene *pScene){
     if(m_pItem == nullptr){
         return;
     }
@@ -34,18 +36,18 @@ void Rectangle::UpdateRect(const QPointF &leftTop, const QPointF &rightBottom, G
     m_pItem->UpdateSize(width*2, height*2);
 }
 
-void Rectangle::CreateEnd(){
+void MultiSelector::CreateEnd(){
     m_pItem->Created();
 }
 
-void Rectangle::SetSelected(bool selected){
+void MultiSelector::SetSelected(bool selected){
     if(m_pItem == nullptr){
         return;
     }
     m_pItem->setSelected(selected);
 }
 
-void Rectangle::SetEditable(bool editable){
+void MultiSelector::SetEditable(bool editable){
     if(m_pItem == nullptr){
         return;
     }
@@ -57,15 +59,15 @@ void Rectangle::SetEditable(bool editable){
     //m_pItem->setSelected(editable);
 }
 
-void Rectangle::Remove(GraphicsScene *pScene){
+void MultiSelector::Remove(GraphicsScene *pScene){
    pScene->removeItem(m_pItem);
 }
 
-void Rectangle::RotateBegin(){
+void MultiSelector::RotateBegin(){
     m_rAngle = m_pItem->rotation();
 }
 
-void Rectangle::Rotate(qreal angle){
+void MultiSelector::Rotate(qreal angle){
     QPointF pos = m_pItem->pos();
     qreal ang = trimAngle(angle);
     m_pItem->setTransformOriginPoint(m_pItem->sceneBoundingRect().center());
@@ -73,38 +75,38 @@ void Rectangle::Rotate(qreal angle){
     m_pItem->setPos(pos);
 }
 
-void Rectangle::RotateEnd(){
+void MultiSelector::RotateEnd(){
     m_rAngle = m_pItem->rotation();
 }
 
-QRect Rectangle::GetRect(){
+QRect MultiSelector::GetRect(){
     return m_pItem->sceneBoundingRect().toRect();
 }
 
-QPointF Rectangle::GetP1(){
+QPointF MultiSelector::GetP1(){
     return m_pItem->sceneBoundingRect().topLeft();
 }
 
-QPointF Rectangle::GetP2(){
+QPointF MultiSelector::GetP2(){
     return m_pItem->sceneBoundingRect().bottomRight();
 }
 
-QPointF Rectangle::GetPos(){
+QPointF MultiSelector::GetPos(){
     return m_pItem->scenePos();
 }
 
-void Rectangle::ChangePos(qreal dx, qreal dy){
+void MultiSelector::ChangePos(qreal dx, qreal dy){
     m_pItem->moveBy(dx, dy);
 }
 
-QGraphicsItem *Rectangle::GetGraphicsItem(){
+QGraphicsItem *MultiSelector::GetGraphicsItem(){
     return m_pItem;
 }
 
-void Rectangle::ChangeSize(qreal dx, qreal dy){
+void MultiSelector::ChangeSize(qreal dx, qreal dy){
 //    QRectF oldRect = m_pItem->rect();
 //    QRectF newRect = QRectF(oldRect.x(), oldRect.y(), oldRect.width()+dx, oldRect.height()+dy);
-//    //qDebug()<<"Rectangle::ChangeSize oldRect="<<oldRect<<", newRect="<<newRect;
+//    //qDebug()<<"MultiSelector::ChangeSize oldRect="<<oldRect<<", newRect="<<newRect;
 //    if(newRect.width() < 10){
 //        newRect.setWidth(10);
 //    }
@@ -114,6 +116,6 @@ void Rectangle::ChangeSize(qreal dx, qreal dy){
 //    m_pItem->setRect(newRect);
 }
 
-void Rectangle::HideControls(bool hide){
+void MultiSelector::HideControls(bool hide){
     m_pItem->HideBaseControls(hide);
 }

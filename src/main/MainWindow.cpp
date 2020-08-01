@@ -6,6 +6,11 @@
 #include "src/graphics/OperatorForm.h"
 #include "src/common/ToolType.h"
 
+#include <QRandomGenerator>
+
+const qreal PI = 3.1415926;
+const qreal ARC = PI/180;
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -47,6 +52,7 @@ void MainWindow::setupActions(){
     ui->actionEllipse->setData(QVariant(TOOL_TYPE::ELLIPSE));
     ui->actionLine->setData(QVariant(TOOL_TYPE::LINE));
     ui->actionEraser->setData(QVariant(TOOL_TYPE::ERASER));
+    ui->actionTriangle->setData(QVariant(TOOL_TYPE::TRIANGLE));
 
     ui->actionUndo->setData(QVariant(TOOL_TYPE::UNDO));
     ui->actionRedo->setData(QVariant(TOOL_TYPE::REDO));
@@ -65,6 +71,7 @@ void MainWindow::setupActions(){
     m_pActionGroup->addAction(ui->actionEllipse);
     m_pActionGroup->addAction(ui->actionLine);
     m_pActionGroup->addAction(ui->actionEraser);
+    m_pActionGroup->addAction(ui->actionTriangle);
     m_pActionGroup->addAction(ui->actionMove);
     m_pActionGroup->addAction(ui->actionZoomin);
     m_pActionGroup->addAction(ui->actionZoomout);
@@ -74,11 +81,13 @@ void MainWindow::setupActions(){
         qDebug() << "on undo";
         hideOperatorForm();
         m_pView->SetToolType(TOOL_TYPE::UNDO);
+        m_pScene->UnselectedAll();
     });
     connect(ui->actionRedo, &QAction::triggered, [=](){
         qDebug() << "on redo";
         hideOperatorForm();
         m_pView->SetToolType(TOOL_TYPE::REDO);
+        m_pScene->UnselectedAll();
     });
 
     connect(ui->actionMove, &QAction::triggered, [=](){
@@ -86,6 +95,7 @@ void MainWindow::setupActions(){
         hideOperatorForm();
         m_pView->SetToolType(TOOL_TYPE::MOVE);
         m_pView->beginMove();
+        m_pScene->UnselectedAll();
     });
 
     connect(ui->actionReset, &QAction::triggered, [=](){
@@ -93,6 +103,7 @@ void MainWindow::setupActions(){
         hideOperatorForm();
         m_pView->SetToolType(TOOL_TYPE::RESET);
         m_pView->reset();
+        m_pScene->UnselectedAll();
     });
 
     connect(ui->actionClear, &QAction::triggered, [=](){
@@ -100,6 +111,7 @@ void MainWindow::setupActions(){
         hideOperatorForm();
         m_pView->SetToolType(TOOL_TYPE::CLEAR);
         m_pScene->clearScene();
+        m_pScene->UnselectedAll();
     });
 
     ui->actionSelect->setChecked(true);
@@ -122,6 +134,7 @@ void MainWindow::initGraphics(){
     m_pView->setRenderHints (QPainter::Antialiasing | QPainter::SmoothPixmapTransform | QPainter::TextAntialiasing);
     m_pView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_pView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_pView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 
     m_pScene->setView(m_pView);
 
@@ -134,6 +147,7 @@ void MainWindow::initGraphics(){
             this, SLOT(slotSceneItemSelected(int, TOOL_TYPE::Type, const QRect &, const QPointF &, const QPointF &)));
 //    connect(m_pScene, SIGNAL(sigItemPointsChanged(int, TOOL_TYPE::Type, const QRect &, const QPointF &, const QPointF &)),
 //            this, SLOT(slotSceneItemSelected(int, TOOL_TYPE::Type, const QRect &, const QPointF &, const QPointF &)));
+
 }
 
 void MainWindow::slotActionGroup(QAction *action){
@@ -143,6 +157,7 @@ void MainWindow::slotActionGroup(QAction *action){
     m_pView->SetToolType(m_eToolType);
     m_pScene->setToolType(m_eToolType);
     m_pView->endMove();
+    m_pScene->UnselectedAll();
 }
 
 QRect MainWindow::MapSceneToView(const QRect &rc){
@@ -150,7 +165,7 @@ QRect MainWindow::MapSceneToView(const QRect &rc){
 }
 
 void MainWindow::slotSceneItemSelected(int key, TOOL_TYPE::Type toolType, const QRect &rc, const QPointF &p1, const QPointF &p2){
-    showOperatorForm(key, toolType, rc, p1, p2);
+    //showOperatorForm(key, toolType, rc, p1, p2);
 }
 
 void MainWindow::showOperatorForm(int key, TOOL_TYPE::Type toolType, const QRect &rc, const QPointF &p1, const QPointF &p2){
@@ -194,8 +209,16 @@ void MainWindow::showOperatorForm(int key, TOOL_TYPE::Type toolType, const QRect
         QPoint p2_w = m_pOperatorForm->mapFromParent(p2.toPoint());
         p1_w.setY(p1_w.y()+tsize.height());
         p2_w.setY(p2_w.y()+tsize.height());
+
+        QPointF p0 = (p1_w+p2_w)/2;
+        qreal angle = m_pScene->GetAngle(key);
+        QPoint p1_a = QPoint((p1_w.x()-p0.x())*cos(angle*ARC)-(p1_w.y()-p0.y())*sin(angle*ARC) + p0.x(),
+                               (p1_w.x()-p0.x())*sin(angle*ARC)+(p1_w.y()-p0.y())*cos(angle*ARC) + p0.y());
+        QPoint p2_a = QPoint((p2_w.x()-p0.x())*cos(angle*ARC)-(p2_w.y()-p0.y())*sin(angle*ARC) + p0.x(),
+                               (p2_w.x()-p0.x())*sin(angle*ARC)+(p2_w.y()-p0.y())*cos(angle*ARC) + p0.y());
+
         QPoint deltaPos = m_pScene->GetDeltaPos(key);
-        m_pOperatorForm->setPoints(p1_w+deltaPos, p2_w+deltaPos);
+        m_pOperatorForm->setPoints(p1_a+deltaPos, p2_a+deltaPos);
     }
     m_pOperatorForm->showControls();
     m_pOperatorForm->raise();

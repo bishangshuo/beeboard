@@ -4,9 +4,14 @@
 #include <QStyleOptionGraphicsItem>
 #include "src/shape/Rectangle.h"
 #include "src/shape/Ellipse.h"
+#include "src/shape/Triangle.h"
 #include "src/shape/Line.h"
+#include "src/shape/MultiSelector.h"
 #include "src/graphics/GraphicsView.h"
 #include <QDebug>
+
+const qreal PI = 3.1415926;
+const qreal ARC = PI/180;
 
 inline QPixmap GetCursorPixmap(const QString &fileName){
     QPixmap pixmap(fileName);
@@ -20,6 +25,8 @@ GraphicsScene::GraphicsScene(QObject *parent)
     , m_ptPrev()
     , m_nCurKey(0)
     , m_pView(nullptr)
+    , m_pSelect(NULL)
+    , m_multiSelector(NULL)
 {
 }
 
@@ -35,19 +42,28 @@ void GraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     emit sigSceneClicked();
 
-    QGraphicsScene::mousePressEvent(event);
+    //SetAllEditable(false);
+    deleteSelectItem();
+    UnselectedAll();
+//    destroyMultiSelector();
+
     m_bPressed = true;
     QPointF pos = event->scenePos();
     m_ptPrev = pos;
 
-    QPoint viewPos = m_pView->mapFromScene(pos);
+    //QPoint viewPos = m_pView->mapFromScene(pos);
     //qDebug() << "GraphicsScene::mousePressEvent scene pos = " << pos << ", view pos = "<<viewPos;
 
     ShapeBase *shape = nullptr;
     switch(m_eToolType){
         case TOOL_TYPE::SELECT:{
-            onMouseSelectItem(pos);
-            break;
+            QGraphicsScene::mousePressEvent(event);
+            if(!onMouseSelectItem(pos)){
+                m_pSelect = new Select();
+                m_ptSelect = pos;
+                m_pSelect->Create(m_ptSelect, m_ptSelect+QPointF(1.0, 1.0), this);
+            }
+            return;
         }
         case TOOL_TYPE::PENCIL:{
             break;
@@ -58,6 +74,10 @@ void GraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
         }
         case TOOL_TYPE::ELLIPSE:{
             shape = new Ellipse(this);
+            break;
+        }
+        case TOOL_TYPE::TRIANGLE:{
+            shape = new Triangle(this);
             break;
         }
         case TOOL_TYPE::LINE:{
@@ -105,8 +125,13 @@ void GraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     }
 
     if(shape != nullptr){
-        m_nCurKey = shape->Create(m_ptPrev, pos, this);
+        m_nCurKey = shape->Create(m_ptPrev, m_ptPrev+QPointF(1.0, 1.0), this);
         m_mapShape[m_nCurKey] = new SHAPE_DATA(m_nCurKey, m_eToolType, shape, m_mapShape.size()+1);
+        //shape->SetSelected(true);
+        connect(shape, &ShapeBase::sigRemove, [=](int _key){
+            onItemRemove(_key);
+        });
+
     }
 }
 
@@ -114,6 +139,12 @@ void GraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsScene::mouseMoveEvent(event);
     if(!m_bPressed){
+        return;
+    }
+    QPointF pos = event->scenePos();
+
+    if(m_pSelect != NULL){
+        m_pSelect->UpdateRect(m_ptSelect, pos, this);
         return;
     }
 
@@ -126,7 +157,6 @@ void GraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         return;
     }
 
-    QPointF pos = event->scenePos();
     switch(m_eToolType){
         case TOOL_TYPE::SELECT:{
             break;
@@ -136,7 +166,8 @@ void GraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         }
         case TOOL_TYPE::RECTANGLE:
         case TOOL_TYPE::ELLIPSE:
-        case TOOL_TYPE::LINE:{
+        case TOOL_TYPE::LINE:
+        case TOOL_TYPE::TRIANGLE:{
             shape->UpdateRect(m_ptPrev, pos, this);
             break;
         }
@@ -161,7 +192,22 @@ void GraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 void GraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsScene::mouseReleaseEvent(event);
+
+    if(m_pSelect != NULL){
+        QRectF rcSelect = m_pSelect->GetRect();
+        SelectItemsByRubberBand(rcSelect);
+    }
+
     m_bPressed = false;
+    ShapeBase *shape = nullptr;
+    MapShape::iterator it = m_mapShape.find(m_nCurKey);
+    if(it != m_mapShape.end()){
+        shape = it.value()->shape;
+    }
+    if(shape == nullptr){
+        return;
+    }
+    shape->CreateEnd();
     switch(m_eToolType){
         case TOOL_TYPE::SELECT:{
             break;
@@ -174,6 +220,8 @@ void GraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         }
         case TOOL_TYPE::ELLIPSE:{
             break;
+        }
+        case TOOL_TYPE::TRIANGLE:{
         }
         case TOOL_TYPE::LINE:{
             break;
@@ -203,16 +251,67 @@ void GraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     }
 }
 
-void GraphicsScene::onMouseSelectItem(const QPointF &pos)
+void GraphicsScene::SetAllEditable(bool editable){
+   for(MapShape::iterator it = m_mapShape.begin(); it != m_mapShape.end(); it++){
+       it.value()->shape->SetEditable(editable);
+   }
+}
+
+void GraphicsScene::SelectItemsByRubberBand(const QRectF &rubberBandRect){
+    for(MapShape::iterator it = m_mapShape.begin(); it != m_mapShape.end(); it++){
+        QRectF rcShape = it.value()->shape->GetRect();
+        if(rcShape.intersects(rubberBandRect)){
+            it.value()->shape->SetSelected(true);
+            it.value()->shape->HideControls(true);
+            m_listSelectedItems.push_back(it.value()->key);
+        }
+    }
+    if(m_listSelectedItems.size() == 1){
+        m_mapShape.find(m_listSelectedItems.first()).value()->shape->HideControls(false);
+    }else if(m_listSelectedItems.size() > 1){
+        //求多选矩形的并集
+        QRectF rc;
+        for(ListShapeKey::iterator it = m_listSelectedItems.begin(); it != m_listSelectedItems.end(); it++){
+            QRectF rcShape = m_mapShape.find(*it).value()->shape->GetRect();
+            rc = rc.united(rcShape);
+        }
+        //添加选框
+        createMultiSelector(rc);
+    }else{
+        destroyMultiSelector();
+    }
+
+    deleteSelectItem();
+}
+
+void GraphicsScene::UnselectedAll(){
+    for(MapShape::iterator it = m_mapShape.begin(); it != m_mapShape.end(); it++){
+        //it.value()->shape->SetSelected(false);
+        it.value()->shape->HideControls(false);
+    }
+    for(ListShapeKey::iterator it = m_listSelectedItems.begin(); it != m_listSelectedItems.end(); ){
+        it = m_listSelectedItems.erase(it);
+    }
+    m_listSelectedItems.clear();
+}
+
+bool GraphicsScene::onMouseSelectItem(const QPointF &pos)
 {
     QPointF itemPos = QPointF(pos.x(), pos.y());
     QGraphicsItem *item = this->itemAt(itemPos, QTransform());
     if(item == nullptr){
         qDebug() << "GraphicsScene::onMouseSelectItem item == nullptr" ;
-        return;
+        deleteSelectItem();
+        destroyMultiSelector();
+        return false;
     }
     int key = item->data(ITEM_DATA_KEY).toInt();
-    signalItemSelected(key);
+//    MapShape::iterator it = m_mapShape.find(key);
+//    if(it != m_mapShape.end()){
+//        it.value()->shape->SetEditable(true);
+//    }
+    //signalItemSelected(key);
+    return true;
 }
 
 void GraphicsScene::clearScene(){
@@ -245,6 +344,23 @@ void GraphicsScene::onItemRemove(int key){
         shape->deleteLater();
         delete data;
         it = m_mapShape.erase(it);
+    }
+}
+
+void GraphicsScene::onItemsRemoveByRubberBand(){
+    for(ListShapeKey::iterator it = m_listSelectedItems.begin(); it != m_listSelectedItems.end(); ){
+        onItemRemove(*it);
+        it = m_listSelectedItems.erase(it);
+    }
+    m_listSelectedItems.clear();
+    deleteSelectItem();
+}
+
+void GraphicsScene::deleteSelectItem(){
+    if(m_pSelect != NULL){
+        m_pSelect->Remove(this);
+        m_pSelect->deleteLater();
+        m_pSelect = NULL;
     }
 }
 
@@ -328,7 +444,7 @@ void GraphicsScene::onItemRotateEnd(int key){
 void GraphicsScene::signalItemSelected(int key){
     MapShape::iterator it = m_mapShape.find(key);
     if(it != m_mapShape.end()){
-        it.value()->shape->SetSelected();
+        it.value()->shape->SetSelected(true);
         QRect rcSceneShape = it.value()->shape->GetRect();
         QPoint topLeftView = m_pView->mapFromScene(rcSceneShape.topLeft());
         QPoint bottomRightView = m_pView->mapFromScene(rcSceneShape.bottomRight());
@@ -337,7 +453,15 @@ void GraphicsScene::signalItemSelected(int key){
         QPointF lineP2 = it.value()->shape->GetP2();
         QPointF p1 = m_pView->mapFromScene(lineP1);
         QPointF p2 = m_pView->mapFromScene(lineP2);
+
         qDebug()<<"GraphicsScene::signalItemSelected lineP1="<<lineP1<<", lineP2="<<lineP2<<"; p1="<<p1<<", p2"<<p2;
+//        QPointF p0 = (p1+p2)/2;
+//        qreal angle = it.value()->shape->GetAngle();
+//        QPointF p1_a = QPointF((p1.x()-p0.x())*cos(angle*ARC)-(p1.y()-p0.y())*sin(angle*ARC) + p0.x(),
+//                               (p1.x()-p0.x())*sin(angle*ARC)+(p1.y()-p0.y())*cos(angle*ARC) + p0.y());
+//        QPointF p2_a = QPointF((p2.x()-p0.x())*cos(angle*ARC)-(p2.y()-p0.y())*sin(angle*ARC) + p0.x(),
+//                               (p2.x()-p0.x())*sin(angle*ARC)+(p2.y()-p0.y())*cos(angle*ARC) + p0.y());
+
         emit sigItemSelected(key, it.value()->toolType, rcViewShape, p1, p2);
     }
 }
@@ -361,4 +485,31 @@ QPoint GraphicsScene::GetDeltaPos(int key){
         return shape->GetPos().toPoint();
     }
     return QPoint();
+}
+
+qreal GraphicsScene::GetAngle(int key){
+    MapShape::iterator it = m_mapShape.find(key);
+    if(it != m_mapShape.end()){
+        SHAPE_DATA *data = it.value();
+        ShapeBase *shape = data->shape;
+        return shape->GetAngle();
+    }
+    return 0.0;
+}
+
+void GraphicsScene::createMultiSelector(const QRectF &rc){
+    if(m_multiSelector == NULL){
+        QRectF rcSelector = QRectF(rc.x()+rc.width()/2, rc.y()+rc.height()/2, rc.width(), rc.height());
+        m_multiSelector = new MultiSelector();
+        m_multiSelector->Create(rcSelector.topLeft(), rcSelector.bottomRight(), this);
+        m_multiSelector->SetSelected(true);
+    }
+}
+
+void GraphicsScene::destroyMultiSelector(){
+    if(m_multiSelector != NULL){
+        m_multiSelector->Remove(this);
+        m_multiSelector->deleteLater();
+        m_multiSelector = NULL;
+    }
 }

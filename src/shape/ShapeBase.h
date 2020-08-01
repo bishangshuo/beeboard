@@ -17,7 +17,9 @@ public:
 
     virtual int Create(const QPointF &leftTop, const QPointF &rightBottom, GraphicsScene *pScene) = 0;
     virtual void UpdateRect(const QPointF &leftTop, const QPointF &rightBottom, GraphicsScene *pScene) = 0;
-    virtual void SetSelected() = 0;
+    virtual void CreateEnd() = 0;
+    virtual void SetSelected(bool selected) = 0;
+    virtual void SetEditable(bool editable) = 0;
     virtual void Remove(GraphicsScene *pScene) = 0;
     virtual void RotateBegin() = 0;
     virtual void Rotate(qreal angle) = 0;
@@ -30,7 +32,10 @@ public:
     virtual void ChangePos(qreal dx, qreal dy) = 0;
     virtual QGraphicsItem *GetGraphicsItem() = 0;
     virtual void ChangeSize(qreal dx, qreal dy) = 0;
-protected:
+
+    virtual void HideControls(bool hide) = 0;
+
+public:
     inline void swapPointIf(QPointF &p1, QPointF &p2){
         QPointF leftTop, rightBottom;
         if(p2.x() < p1.x()){
@@ -73,8 +78,12 @@ protected:
         return ang;
     }
 
-signals:
+    qreal GetAngle() const{
+        return m_rAngle;
+    }
 
+signals:
+    void sigRemove(int key);
 protected:
     qreal m_rAngle;
 };

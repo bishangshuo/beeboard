@@ -57,5 +57,7 @@
         <file>resources/images/zoom.png</file>
         <file>resources/images/repos-line.png</file>
         <file>resources/images/rotate-left-cur.png</file>
+        <file>resources/images/triangle.png</file>
+        <file>resources/images/triangle-selected.png</file>
     </qresource>
 </RCC>

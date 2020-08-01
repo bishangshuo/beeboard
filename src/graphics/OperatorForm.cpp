@@ -100,6 +100,7 @@ void OperatorForm::setupButtons(){
         emit sigItemRemove(m_nKey);
     });
 
+
     m_pBtnResize = new TrackButton(this);
     m_pBtnResize->setMouseTracking(true);
 //    bottomLy->addWidget(m_pBtnResize);
@@ -164,17 +165,20 @@ void OperatorForm::slotResizeBtnReleased(const QPoint &pos) {
     m_pBtnLinePoint->setIcon(QIcon(":/resources/images/repos-line.png"));
     showControls();
     m_pBtnRemove->show();
-    m_pBtnRotate->show();
+    if(m_eToolType != TOOL_TYPE::LINE)
+        m_pBtnRotate->show();
 }
 
 void OperatorForm::showControls(){
     if(TOOL_TYPE::LINE == m_eToolType){
+        m_pBtnRotate->hide();
         m_pBtnResize->hide();
         //qDebug() << "OperatorForm::showControls m_ptP1="<<m_ptP1<<", m_ptP2=" <<m_ptP2;
         m_pBtnLinePoint->setGeometry(m_ptP2.x()-12, m_ptP2.y()-12, 24, 24);
         m_pBtnLinePoint->show();
         m_pBtnLinePoint->raise();
     }else{
+        m_pBtnRotate->show();
         m_pBtnLinePoint->hide();
         QSize sz = size();
         m_pBtnResize->setGeometry(sz.width()-24, sz.height()-24, 24, 24);

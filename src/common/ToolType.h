@@ -7,6 +7,7 @@ typedef struct _TOOL_TYPE{
         PENCIL,
         RECTANGLE,
         ELLIPSE,
+        TRIANGLE,
         LINE,
         ERASER,
         UNDO,

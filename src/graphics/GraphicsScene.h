@@ -5,6 +5,7 @@
 #include <QMap>
 #include "src/common/ToolType.h"
 #include "src/shape/ShapeBase.h"
+#include "src/shape/Select.h"
 
 class GraphicsView;
 
@@ -19,6 +20,8 @@ typedef struct _SHAPE_DATA{
 
 typedef QMap<int, SHAPE_DATA *> MapShape;
 
+typedef QList<int> ListShapeKey;
+
 class GraphicsScene : public QGraphicsScene
 {
     Q_OBJECT
@@ -31,6 +34,7 @@ public:
     void clearScene();
     void onItemPosChanged(int key, qreal dx, qreal dy);
     void onItemRemove(int key);
+    void onItemsRemoveByRubberBand();
 
     void onItemResizeBegin(int key);
     void onItemResize(int key, qreal dx, qreal dy);
@@ -42,6 +46,9 @@ public:
 
     TOOL_TYPE::Type GetPoints(int key, QPoint &p1, QPoint &p2);
     QPoint GetDeltaPos(int key);
+    qreal GetAngle(int key);
+
+    void UnselectedAll();
 signals:
     void sigSceneClicked();
     void sigItemSelected(int key, TOOL_TYPE::Type toolType, const QRect &rc, const QPointF &p1, const QPointF &p2);
@@ -53,8 +60,13 @@ protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 
 private:
-    void onMouseSelectItem(const QPointF &pos);
+    void SetAllEditable(bool editable);
+    bool onMouseSelectItem(const QPointF &pos);
     void signalItemSelected(int key);
+    void SelectItemsByRubberBand(const QRectF &rubberBandRect);
+    void deleteSelectItem();
+    void createMultiSelector(const QRectF &rc);
+    void destroyMultiSelector();
 private:
     TOOL_TYPE::Type m_eToolType;
     bool m_bPressed;
@@ -62,6 +74,12 @@ private:
     MapShape m_mapShape;
     int m_nCurKey;
     GraphicsView *m_pView;
+
+    QPointF m_ptSelect;
+    ShapeBase *m_pSelect;
+    ShapeBase *m_multiSelector;
+
+    ListShapeKey m_listSelectedItems;
 };
 
 #endif // GRAPHICSSCENE_H

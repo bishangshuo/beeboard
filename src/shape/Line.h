@@ -2,7 +2,7 @@
 #define LINE_H
 
 #include "ShapeBase.h"
-class GraphicsLineItem;
+class LineItem;
 
 class Line : public ShapeBase
 {
@@ -11,7 +11,9 @@ public:
 protected:
     int Create(const QPointF &leftTop, const QPointF &rightBottom, GraphicsScene *pScene) override;
     void UpdateRect(const QPointF &leftTop, const QPointF &rightBottom, GraphicsScene *pScene) override;
-    void SetSelected() override;
+    void CreateEnd() override;
+    void SetSelected(bool selected) override;
+    void SetEditable(bool editable) override;
     void Remove(GraphicsScene *pScene) override;
 
     void RotateBegin() override;
@@ -25,8 +27,10 @@ protected:
     void ChangePos(qreal dx, qreal dy) override;
     QGraphicsItem *GetGraphicsItem() override;
     void ChangeSize(qreal dx, qreal dy) override;
+
+    void HideControls(bool hide) override;
 private:
-    GraphicsLineItem *m_pItem;
+    LineItem *m_pItem;
 };
 
 #endif // LINE_H

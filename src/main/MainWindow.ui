@@ -29,6 +29,7 @@
    <addaction name="actionPencil"/>
    <addaction name="actionRectangle"/>
    <addaction name="actionEllipse"/>
+   <addaction name="actionTriangle"/>
    <addaction name="actionLine"/>
    <addaction name="separator"/>
    <addaction name="actionEraser"/>
@@ -207,6 +208,19 @@
    </property>
    <property name="text">
     <string>Move</string>
+   </property>
+  </action>
+  <action name="actionTriangle">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../Resources.qrc">
+     <normaloff>:/resources/images/triangle.png</normaloff>
+     <normalon>:/resources/images/triangle-selected.png</normalon>:/resources/images/triangle.png</iconset>
+   </property>
+   <property name="text">
+    <string>Triangle</string>
    </property>
   </action>
  </widget>

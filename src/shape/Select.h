@@ -1,14 +1,16 @@
-#ifndef ELLIPSE_H
-#define ELLIPSE_H
+#ifndef SELECT_H
+#define SELECT_H
 
-#include "ShapeBase.h"
+#include "src/shape/ShapeBase.h"
 
-class EllipseItem;
+class QGraphicsRectItem;
+class SelectItem;
 
-class Ellipse : public ShapeBase
+class Select : public ShapeBase
 {
+    Q_OBJECT
 public:
-    Ellipse(QObject *parent = nullptr);
+    Select(QObject *parent = nullptr);
 protected:
     int Create(const QPointF &leftTop, const QPointF &rightBottom, GraphicsScene *pScene) override;
     void UpdateRect(const QPointF &leftTop, const QPointF &rightBottom, GraphicsScene *pScene) override;
@@ -31,7 +33,7 @@ protected:
 
     void HideControls(bool hide) override;
 private:
-    EllipseItem *m_pItem;
+    SelectItem *m_pItem;
 };
 
-#endif // ELLIPSE_H
+#endif // SELECT_H
