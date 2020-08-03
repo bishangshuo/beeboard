@@ -5,7 +5,7 @@
 MultiSelectorItem::MultiSelectorItem(int x, int y, int width, int height)
     : ItemBase(x, y, width, height)
 {
-    //HideBaseControls(true);
+    HideResize(true);
 }
 
 void MultiSelectorItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

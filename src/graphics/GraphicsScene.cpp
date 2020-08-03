@@ -44,7 +44,7 @@ void GraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
     //SetAllEditable(false);
     deleteSelectItem();
-    UnselectedAll();
+//    UnselectedAll();
 //    destroyMultiSelector();
 
     m_bPressed = true;
@@ -197,6 +197,11 @@ void GraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         QRectF rcSelect = m_pSelect->GetRect();
         SelectItemsByRubberBand(rcSelect);
     }
+    if(event->scenePos() == m_ptPrev){
+        destroyMultiSelector();
+
+        resetMultiSelector();
+    }
 
     m_bPressed = false;
     ShapeBase *shape = nullptr;
@@ -258,6 +263,10 @@ void GraphicsScene::SetAllEditable(bool editable){
 }
 
 void GraphicsScene::SelectItemsByRubberBand(const QRectF &rubberBandRect){
+//    m_listSelectedItems.clear();
+    resetMultiSelector();
+    destroyMultiSelector();
+
     for(MapShape::iterator it = m_mapShape.begin(); it != m_mapShape.end(); it++){
         QRectF rcShape = it.value()->shape->GetRect();
         if(rcShape.intersects(rubberBandRect)){
@@ -269,6 +278,7 @@ void GraphicsScene::SelectItemsByRubberBand(const QRectF &rubberBandRect){
     if(m_listSelectedItems.size() == 1){
         m_mapShape.find(m_listSelectedItems.first()).value()->shape->HideControls(false);
     }else if(m_listSelectedItems.size() > 1){
+
         //求多选矩形的并集
         QRectF rc;
         for(ListShapeKey::iterator it = m_listSelectedItems.begin(); it != m_listSelectedItems.end(); it++){
@@ -286,8 +296,8 @@ void GraphicsScene::SelectItemsByRubberBand(const QRectF &rubberBandRect){
 
 void GraphicsScene::UnselectedAll(){
     for(MapShape::iterator it = m_mapShape.begin(); it != m_mapShape.end(); it++){
-        //it.value()->shape->SetSelected(false);
-        it.value()->shape->HideControls(false);
+        it.value()->shape->SetSelected(false);
+        //it.value()->shape->HideControls(true);
     }
     for(ListShapeKey::iterator it = m_listSelectedItems.begin(); it != m_listSelectedItems.end(); ){
         it = m_listSelectedItems.erase(it);
@@ -303,15 +313,29 @@ bool GraphicsScene::onMouseSelectItem(const QPointF &pos)
         qDebug() << "GraphicsScene::onMouseSelectItem item == nullptr" ;
         deleteSelectItem();
         destroyMultiSelector();
+
+        resetMultiSelector();
+
         return false;
     }
     int key = item->data(ITEM_DATA_KEY).toInt();
-//    MapShape::iterator it = m_mapShape.find(key);
-//    if(it != m_mapShape.end()){
-//        it.value()->shape->SetEditable(true);
-//    }
+    MapShape::iterator it = m_mapShape.find(key);
+    if(it != m_mapShape.end()){
+        //it.value()->shape->SetEditable(true);
+        qDebug() << "content item selected";
+    }else{
+        qDebug() << "selector item selected, or no items selected";
+        //destroyMultiSelector();
+    }
     //signalItemSelected(key);
     return true;
+}
+
+void GraphicsScene::resetMultiSelector(){
+    for(ListShapeKey::iterator it = m_listSelectedItems.begin(); it != m_listSelectedItems.end(); it++){
+        m_mapShape.find(*it).value()->shape->HideControls(false);
+    }
+    m_listSelectedItems.clear();
 }
 
 void GraphicsScene::clearScene(){
@@ -354,6 +378,7 @@ void GraphicsScene::onItemsRemoveByRubberBand(){
     }
     m_listSelectedItems.clear();
     deleteSelectItem();
+    destroyMultiSelector();
 }
 
 void GraphicsScene::deleteSelectItem(){
@@ -499,10 +524,15 @@ qreal GraphicsScene::GetAngle(int key){
 
 void GraphicsScene::createMultiSelector(const QRectF &rc){
     if(m_multiSelector == NULL){
-        QRectF rcSelector = QRectF(rc.x()+rc.width()/2, rc.y()+rc.height()/2, rc.width(), rc.height());
+        QRectF rcSelector = QRectF(rc.x()+rc.width()/2, rc.y()+rc.height()/2,
+                                   rc.width()+50, rc.height()+50);
         m_multiSelector = new MultiSelector();
         m_multiSelector->Create(rcSelector.topLeft(), rcSelector.bottomRight(), this);
         m_multiSelector->SetSelected(true);
+
+        connect(m_multiSelector, &ShapeBase::sigRemove, [=](int _key){
+            onItemsRemoveByRubberBand();
+        });
     }
 }
 

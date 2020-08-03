@@ -112,5 +112,6 @@ void Line::ChangeSize(qreal dx, qreal dy){
 }
 
 void Line::HideControls(bool hide){
-    //m_pItem->HideBaseControls(hide);
+    m_pItem->HideClose(hide);
+    m_pItem->HideResize(hide);
 }

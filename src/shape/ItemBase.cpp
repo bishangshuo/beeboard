@@ -23,7 +23,9 @@ ItemBase::ItemBase(int x, int y, int width, int height)
     , m_isResizing(false)
     , m_isRotating(false)
     , m_isCreating(true)
-    , m_hideBaseControls(false)
+    , m_hideRotate(false)
+    , m_hideClose(false)
+    , m_hideResize(false)
 {
     setFlag(QGraphicsItem::ItemIsMovable, true);
     setFlag(QGraphicsItem::ItemIsSelectable, true);
@@ -51,7 +53,7 @@ void ItemBase::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 
     if (option->state & QStyle::State_Selected)
     {
-        //绘制选中边框和中心点
+        //绘制选中边框
         //if (option->state & QStyle::State_HasFocus)
         {
             QPen pen_r = painter->pen();
@@ -65,17 +67,21 @@ void ItemBase::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
             painter->drawRect(-m_width/2-itemWidth/2-1, -m_height/2-itemWidth/2-1,  m_width+itemWidth+2, m_height+itemWidth+2);
         }
 
-        if(!m_hideBaseControls){
+        if(!m_hideResize){
             //缩放按钮区域
             QPixmap px_m(":/resources/images/move.png");
             px_m = px_m.scaled(20, 20);
             painter->drawPixmap(m_width/2-20, m_height/2-20, px_m);
+        }
 
+        if(!m_hideRotate){
             //旋转按钮区域
             QPixmap px_r(":/resources/images/rotate-left.png");
             px_r = px_r.scaled(20, 20);
             painter->drawPixmap(-10, -m_height/2, px_r);
+        }
 
+        if(!m_hideClose){
             //关闭按钮区域
             QPixmap px_c(":/resources/images/close.png");
             px_c = px_c.scaled(20, 20);
@@ -206,9 +212,9 @@ void ItemBase::shrinkSelectedItems(QGraphicsScene *scene)
 
 void ItemBase::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 {
-    if ((isInResizeArea(event->pos()) && isSelected()) && !m_hideBaseControls){
+    if ((isInResizeArea(event->pos()) && isSelected()) && !m_hideResize){
         setCursor(Qt::SizeAllCursor);
-    }else if ((isInRotateArea(event->pos()) && isSelected()) && !m_hideBaseControls)
+    }else if ((isInRotateArea(event->pos()) && isSelected()) && !m_hideRotate)
     {
         QCursor *rotateCursor = new QCursor(QPixmap(":/resources/images/rotate-left-cur.png"));
         setCursor(*rotateCursor);
@@ -220,7 +226,7 @@ void ItemBase::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 
 void ItemBase::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (m_isResizing && !m_hideBaseControls)
+    if (m_isResizing && !m_hideResize)
     {
         int dx = int(2.0 * event->pos().x());
         int dy = int(2.0 * event->pos().y());
@@ -241,7 +247,7 @@ void ItemBase::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
         qDebug()<<"resize, scenePos="<<scenePos();
     }
-    else if (m_isRotating && !m_hideBaseControls)
+    else if (m_isRotating && !m_hideRotate)
     {
         QPointF cursorPos = event->pos();
         QVector2D vectorStart = QVector2D(QPointF(0.0, -m_width / 2) - QPointF(0.0, 0.0));           // 起始向量
@@ -279,16 +285,16 @@ void ItemBase::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     static qreal z = 0.0;
     setZValue(z += 1.0);
-    if (event->button() == Qt::LeftButton && isInResizeArea(event->pos())  && !m_hideBaseControls)
+    if (event->button() == Qt::LeftButton && isInResizeArea(event->pos())  && !m_hideResize)
     {
         qDebug()<<"before resize, scenePos="<<scenePos();
         m_isResizing = true;
     }
-    else if (event->button() == Qt::LeftButton && isInRotateArea(event->pos())  && !m_hideBaseControls)
+    else if (event->button() == Qt::LeftButton && isInRotateArea(event->pos())  && !m_hideRotate)
     {
         m_isRotating = true;
     }
-    else if (event->button() == Qt::LeftButton && isInCloseArea(event->pos())  && !m_hideBaseControls)
+    else if (event->button() == Qt::LeftButton && isInCloseArea(event->pos())  && !m_hideClose)
     {
         if(m_pCBRemove){
             m_pCBRemove(reinterpret_cast<int>(this));

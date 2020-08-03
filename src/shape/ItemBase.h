@@ -34,8 +34,16 @@ public:
         m_isCreating = false;
     }
 
-    void HideBaseControls(bool hide){
-        m_hideBaseControls = hide;
+    void HideRotate(bool hide){
+        m_hideRotate = hide;
+    }
+
+    void HideClose(bool hide){
+        m_hideClose = hide;
+    }
+
+    void HideResize(bool hide){
+        m_hideResize = hide;
     }
 
 protected:
@@ -73,7 +81,9 @@ public:
     bool        m_isRotating;
     bool        m_isCreating;
 
-    bool m_hideBaseControls;
+    bool m_hideRotate;
+    bool m_hideClose;
+    bool m_hideResize;
 };
 
 

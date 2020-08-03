@@ -67,6 +67,7 @@ private:
     void deleteSelectItem();
     void createMultiSelector(const QRectF &rc);
     void destroyMultiSelector();
+    void resetMultiSelector();
 private:
     TOOL_TYPE::Type m_eToolType;
     bool m_bPressed;

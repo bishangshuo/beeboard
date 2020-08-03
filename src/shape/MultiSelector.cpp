@@ -117,5 +117,7 @@ void MultiSelector::ChangeSize(qreal dx, qreal dy){
 }
 
 void MultiSelector::HideControls(bool hide){
-    m_pItem->HideBaseControls(hide);
+    m_pItem->HideRotate(hide);
+    m_pItem->HideClose(hide);
+//    m_pItem->HideResize(hide);
 }
