@@ -37,7 +37,7 @@ void Line::UpdateRect(const QPointF &leftTop, const QPointF &rightBottom, Graphi
     m_pItem->setLine(QLineF(leftTop, rightBottom));
 }
 
-void Line::CreateEnd(){
+void Line::CreateEnd(GraphicsScene *pScene){
 
     m_pItem->update();
 }
@@ -69,7 +69,7 @@ void Line::RotateBegin(){
     m_rAngle = trimAngle(m_pItem->rotation());
 }
 
-void Line::Rotate(qreal angle){
+void Line::Rotate(qreal x, qreal y, qreal angle){
     qDebug()<<"Line::Rotate angle="<<angle;
 //    qreal ang = trimAngle(angle);
 //    m_pItem->setTransformOriginPoint(m_pItem->boundingRect().center());

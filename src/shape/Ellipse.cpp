@@ -32,7 +32,7 @@ void Ellipse::UpdateRect(const QPointF &leftTop, const QPointF &rightBottom, Gra
     m_pItem->UpdateSize(width*2, height*2);
 }
 
-void Ellipse::CreateEnd(){
+void Ellipse::CreateEnd(GraphicsScene *pScene){
     m_pItem->Created();
 }
 
@@ -63,7 +63,7 @@ void Ellipse::RotateBegin(){
     m_rAngle = m_pItem->rotation();
 }
 
-void Ellipse::Rotate(qreal angle){
+void Ellipse::Rotate(qreal x, qreal y, qreal angle){
 }
 
 void Ellipse::RotateEnd(){

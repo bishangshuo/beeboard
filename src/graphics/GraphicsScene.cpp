@@ -6,6 +6,7 @@
 #include "src/shape/Ellipse.h"
 #include "src/shape/Triangle.h"
 #include "src/shape/Line.h"
+#include "src/shape/Pencil.h"
 #include "src/shape/MultiSelector.h"
 #include "src/graphics/GraphicsView.h"
 #include <QDebug>
@@ -66,6 +67,7 @@ void GraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
             return;
         }
         case TOOL_TYPE::PENCIL:{
+            shape = new Pencil(this);
             break;
         }
         case TOOL_TYPE::RECTANGLE:{
@@ -161,9 +163,7 @@ void GraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         case TOOL_TYPE::SELECT:{
             break;
         }
-        case TOOL_TYPE::PENCIL:{
-            break;
-        }
+        case TOOL_TYPE::PENCIL:
         case TOOL_TYPE::RECTANGLE:
         case TOOL_TYPE::ELLIPSE:
         case TOOL_TYPE::LINE:
@@ -212,7 +212,7 @@ void GraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     if(shape == nullptr){
         return;
     }
-    shape->CreateEnd();
+    shape->CreateEnd(this);
     switch(m_eToolType){
         case TOOL_TYPE::SELECT:{
             break;
@@ -333,7 +333,9 @@ bool GraphicsScene::onMouseSelectItem(const QPointF &pos)
 
 void GraphicsScene::resetMultiSelector(){
     for(ListShapeKey::iterator it = m_listSelectedItems.begin(); it != m_listSelectedItems.end(); it++){
-        m_mapShape.find(*it).value()->shape->HideControls(false);
+        MapShape::iterator it_shape = m_mapShape.find(*it);
+        if(it_shape != m_mapShape.end())
+            it_shape.value()->shape->HideControls(false);
     }
     m_listSelectedItems.clear();
 }
@@ -379,6 +381,20 @@ void GraphicsScene::onItemsRemoveByRubberBand(){
     m_listSelectedItems.clear();
     deleteSelectItem();
     destroyMultiSelector();
+}
+
+void GraphicsScene::onMultiSelectedItemsRotate(qreal anchor_x, qreal anchor_y, qreal angle){ 
+    QPointF anchorPoint = m_multiSelector->GetRect().center();
+    anchorPoint = m_pView->mapFromScene(anchorPoint);
+    qDebug() << "GraphicsScene::onMultiSelectedItemsRotate anchor_x="
+             << anchor_x << ", anchor_y=" << anchor_y << ", angle=" << angle
+             << ", anchor="<<anchorPoint;
+    for(ListShapeKey::iterator it_select = m_listSelectedItems.begin(); it_select != m_listSelectedItems.end(); it_select++){
+        MapShape::iterator it_shape = m_mapShape.find(*it_select);
+        if(it_shape != m_mapShape.end()){
+            it_shape.value()->shape->Rotate(anchor_x, anchor_y, angle);
+        }
+    }
 }
 
 void GraphicsScene::deleteSelectItem(){
@@ -449,7 +465,7 @@ void GraphicsScene::onItemRotate(int key, qreal angle){
 
     SHAPE_DATA *data = it.value();
     ShapeBase *shape = data->shape;
-    shape->Rotate(angle);
+    shape->Rotate(0, 0, angle);
 }
 
 void GraphicsScene::onItemRotateEnd(int key){
@@ -533,6 +549,11 @@ void GraphicsScene::createMultiSelector(const QRectF &rc){
         connect(m_multiSelector, &ShapeBase::sigRemove, [=](int _key){
             onItemsRemoveByRubberBand();
         });
+
+        connect(m_multiSelector, &ShapeBase::sigRotate, [=](qreal anchor_x, qreal anchor_y, qreal _angle){
+            //坐标有问题，多选图元旋转暂时不实现
+            onMultiSelectedItemsRotate(anchor_x, anchor_y, _angle);
+        });
     }
 }
 
@@ -542,4 +563,8 @@ void GraphicsScene::destroyMultiSelector(){
         m_multiSelector->deleteLater();
         m_multiSelector = NULL;
     }
+}
+
+QSizeF GraphicsScene::GetViewSize() const{
+    return  m_pView->size();
 }

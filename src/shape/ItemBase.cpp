@@ -90,14 +90,14 @@ void ItemBase::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 
     }
 
-    if(m_isCreating){
-        //中心点
-        QPen pen_c;
-        pen_c.setWidth(2);
-        pen_c.setColor(color);
-        painter->setPen(pen_c);
-        painter->drawEllipse(-1, -1, 2, 2);
-    }
+//    if(m_isCreating){
+//        //中心点
+//        QPen pen_c;
+//        pen_c.setWidth(2);
+//        pen_c.setColor(color);
+//        painter->setPen(pen_c);
+//        painter->drawEllipse(-1, -1, 2, 2);
+//    }
 
     painter->setRenderHint(QPainter::Antialiasing, false);
 }
@@ -274,6 +274,11 @@ void ItemBase::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             }
         }
         setRotation(angle);
+
+        if(m_pCBRotate){
+            QPointF _scenePos = scenePos();
+            m_pCBRotate(_scenePos.x(), _scenePos.y(), angle);
+        }
     }
     else
     {

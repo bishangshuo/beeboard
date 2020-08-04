@@ -35,6 +35,7 @@ public:
     void onItemPosChanged(int key, qreal dx, qreal dy);
     void onItemRemove(int key);
     void onItemsRemoveByRubberBand();
+    void onMultiSelectedItemsRotate(qreal anchor_x, qreal anchor_y, qreal angle);
 
     void onItemResizeBegin(int key);
     void onItemResize(int key, qreal dx, qreal dy);
@@ -49,6 +50,8 @@ public:
     qreal GetAngle(int key);
 
     void UnselectedAll();
+
+    QSizeF GetViewSize() const;
 signals:
     void sigSceneClicked();
     void sigItemSelected(int key, TOOL_TYPE::Type toolType, const QRect &rc, const QPointF &p1, const QPointF &p2);

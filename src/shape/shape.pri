@@ -7,6 +7,8 @@ HEADERS += \
     $$PWD/LineItem.h \
     $$PWD/MultiSelector.h \
     $$PWD/MultiSelectorItem.h \
+    $$PWD/Pencil.h \
+    $$PWD/PencilItem.h \
     $$PWD/RectItem.h \
     $$PWD/Rectangle.h \
     $$PWD/Select.h \
@@ -24,6 +26,8 @@ SOURCES += \
     $$PWD/LineItem.cpp \
     $$PWD/MultiSelector.cpp \
     $$PWD/MultiSelectorItem.cpp \
+    $$PWD/Pencil.cpp \
+    $$PWD/PencilItem.cpp \
     $$PWD/RectItem.cpp \
     $$PWD/Rectangle.cpp \
     $$PWD/Select.cpp \

@@ -22,7 +22,12 @@ int MultiSelector::Create(const QPointF &leftTop, const QPointF &rightBottom, Gr
     m_pItem->SetRemoveCallback([=](int _key){
         emit sigRemove(_key);
     });
+
+    m_pItem->SetRotateCallback([=](qreal anchor_x, qreal anchor_y, qreal _angle){
+        emit sigRotate(anchor_x, anchor_y, _angle);
+    });
     m_pItem->setZValue(INT_MAX);
+
     return key;
 }
 
@@ -36,7 +41,7 @@ void MultiSelector::UpdateRect(const QPointF &leftTop, const QPointF &rightBotto
     m_pItem->UpdateSize(width*2, height*2);
 }
 
-void MultiSelector::CreateEnd(){
+void MultiSelector::CreateEnd(GraphicsScene *pScene){
     m_pItem->Created();
 }
 
@@ -67,7 +72,7 @@ void MultiSelector::RotateBegin(){
     m_rAngle = m_pItem->rotation();
 }
 
-void MultiSelector::Rotate(qreal angle){
+void MultiSelector::Rotate(qreal x, qreal y, qreal angle){
     QPointF pos = m_pItem->pos();
     qreal ang = trimAngle(angle);
     m_pItem->setTransformOriginPoint(m_pItem->sceneBoundingRect().center());

@@ -1,14 +1,17 @@
-#ifndef ELLIPSE_H
-#define ELLIPSE_H
+#ifndef PENCIL_H
+#define PENCIL_H
 
 #include "ShapeBase.h"
+#include <QPainterPath>
+#include <QPixmap>
 
-class EllipseItem;
+class PencilItem;
 
-class Ellipse : public ShapeBase
+class Pencil : public ShapeBase
 {
+    Q_OBJECT
 public:
-    Ellipse(QObject *parent = nullptr);
+    Pencil(QObject *parent = nullptr);
 protected:
     int Create(const QPointF &leftTop, const QPointF &rightBottom, GraphicsScene *pScene) override;
     void UpdateRect(const QPointF &leftTop, const QPointF &rightBottom, GraphicsScene *pScene) override;
@@ -31,7 +34,9 @@ protected:
 
     void HideControls(bool hide) override;
 private:
-    EllipseItem *m_pItem;
+    PencilItem *m_pItem;
+    QPainterPath m_path;
+    QPixmap m_pixmap;
 };
 
-#endif // ELLIPSE_H
+#endif // PENCIL_H

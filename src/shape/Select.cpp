@@ -39,11 +39,11 @@ void Select::UpdateRect(const QPointF &leftTop, const QPointF &rightBottom, Grap
     qreal height = abs(rightBottom.y() - leftTop.y());
 
     QRectF rc = QRectF(x, y, width,  height);
-    qDebug() << "Select::UpdateRect " << rc;
+    //qDebug() << "Select::UpdateRect " << rc;
     m_pItem->setRect(rc);
 }
 
-void Select::CreateEnd(){
+void Select::CreateEnd(GraphicsScene *pScene){
     //m_pItem->Created();
 }
 
@@ -74,7 +74,7 @@ void Select::RotateBegin(){
     m_rAngle = m_pItem->rotation();
 }
 
-void Select::Rotate(qreal angle){
+void Select::Rotate(qreal x, qreal y, qreal angle){
     QPointF pos = m_pItem->pos();
     qreal ang = trimAngle(angle);
     m_pItem->setTransformOriginPoint(m_pItem->sceneBoundingRect().center());

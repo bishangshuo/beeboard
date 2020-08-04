@@ -34,7 +34,7 @@ void Rectangle::UpdateRect(const QPointF &leftTop, const QPointF &rightBottom, G
     m_pItem->UpdateSize(width*2, height*2);
 }
 
-void Rectangle::CreateEnd(){
+void Rectangle::CreateEnd(GraphicsScene *pScene){
     m_pItem->Created();
 }
 
@@ -65,12 +65,14 @@ void Rectangle::RotateBegin(){
     m_rAngle = m_pItem->rotation();
 }
 
-void Rectangle::Rotate(qreal angle){
-    QPointF pos = m_pItem->pos();
-    qreal ang = trimAngle(angle);
-    m_pItem->setTransformOriginPoint(m_pItem->sceneBoundingRect().center());
-    m_pItem->setRotation(ang + m_rAngle);
-    m_pItem->setPos(pos);
+void Rectangle::Rotate(qreal x, qreal y, qreal angle){
+    //QPointF pos = m_pItem->scenePos();
+    //qreal ang = trimAngle(angle);
+    m_pItem->setTransformOriginPoint(QPointF(x, y));
+    m_pItem->setRotation(angle);
+    //m_pItem->setPos(pos);
+    //m_pItem->setTransformOriginPoint(QPointF(0, 0));
+    m_pItem->resetTransform();
 }
 
 void Rectangle::RotateEnd(){

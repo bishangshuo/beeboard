@@ -17,12 +17,12 @@ public:
 
     virtual int Create(const QPointF &leftTop, const QPointF &rightBottom, GraphicsScene *pScene) = 0;
     virtual void UpdateRect(const QPointF &leftTop, const QPointF &rightBottom, GraphicsScene *pScene) = 0;
-    virtual void CreateEnd() = 0;
+    virtual void CreateEnd(GraphicsScene *pScene) = 0;
     virtual void SetSelected(bool selected) = 0;
     virtual void SetEditable(bool editable) = 0;
     virtual void Remove(GraphicsScene *pScene) = 0;
     virtual void RotateBegin() = 0;
-    virtual void Rotate(qreal angle) = 0;
+    virtual void Rotate(qreal x, qreal y, qreal angle) = 0;
     virtual void RotateEnd() = 0;
 
     virtual QRect GetRect() = 0;
@@ -84,6 +84,7 @@ public:
 
 signals:
     void sigRemove(int key);
+    void sigRotate(qreal anchor_x, qreal anchor_y, qreal angle);
 protected:
     qreal m_rAngle;
 };

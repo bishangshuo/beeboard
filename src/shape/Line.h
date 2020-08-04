@@ -11,13 +11,13 @@ public:
 protected:
     int Create(const QPointF &leftTop, const QPointF &rightBottom, GraphicsScene *pScene) override;
     void UpdateRect(const QPointF &leftTop, const QPointF &rightBottom, GraphicsScene *pScene) override;
-    void CreateEnd() override;
+    void CreateEnd(GraphicsScene *pScene) override;
     void SetSelected(bool selected) override;
     void SetEditable(bool editable) override;
     void Remove(GraphicsScene *pScene) override;
 
     void RotateBegin() override;
-    void Rotate(qreal angle) override;
+    void Rotate(qreal x, qreal y, qreal angle) override;
     void RotateEnd() override;
 
     QRect GetRect() override;
