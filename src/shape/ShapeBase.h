@@ -2,6 +2,8 @@
 #define SHAPEBASE_H
 
 #include <QObject>
+#include <QPen>
+#include "src/property/PropObj.h"
 
 class GraphicsScene;
 class QGraphicsItem;
@@ -17,7 +19,7 @@ public:
 
     virtual int Create(const QPointF &leftTop, const QPointF &rightBottom, GraphicsScene *pScene) = 0;
     virtual void UpdateRect(const QPointF &leftTop, const QPointF &rightBottom, GraphicsScene *pScene) = 0;
-    virtual void CreateEnd(GraphicsScene *pScene) = 0;
+    virtual void CreateEnd(const QPointF &pos, GraphicsScene *pScene) = 0;
     virtual void SetSelected(bool selected) = 0;
     virtual void SetEditable(bool editable) = 0;
     virtual void Remove(GraphicsScene *pScene) = 0;
@@ -80,6 +82,14 @@ public:
 
     qreal GetAngle() const{
         return m_rAngle;
+    }
+
+    QPen pen(){
+        QPen temp;
+        temp.setWidth(PropObj::GetInstance()->PenWidth());
+        temp.setColor(PropObj::GetInstance()->PenColor());
+        temp.setStyle(PropObj::GetInstance()->PenStyle());
+        return temp;
     }
 
 signals:

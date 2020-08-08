@@ -35,7 +35,7 @@ void Triangle::UpdateRect(const QPointF &leftTop, const QPointF &rightBottom, Gr
     m_pItem->UpdateSize(width*2, height*2);
 }
 
-void Triangle::CreateEnd(GraphicsScene *pScene){
+void Triangle::CreateEnd(const QPointF &pos, GraphicsScene *pScene){
     m_pItem->Created();
 }
 

@@ -32,7 +32,7 @@ void Ellipse::UpdateRect(const QPointF &leftTop, const QPointF &rightBottom, Gra
     m_pItem->UpdateSize(width*2, height*2);
 }
 
-void Ellipse::CreateEnd(GraphicsScene *pScene){
+void Ellipse::CreateEnd(const QPointF &pos, GraphicsScene *pScene){
     m_pItem->Created();
 }
 

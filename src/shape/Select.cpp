@@ -43,7 +43,7 @@ void Select::UpdateRect(const QPointF &leftTop, const QPointF &rightBottom, Grap
     m_pItem->setRect(rc);
 }
 
-void Select::CreateEnd(GraphicsScene *pScene){
+void Select::CreateEnd(const QPointF &pos, GraphicsScene *pScene){
     //m_pItem->Created();
 }
 

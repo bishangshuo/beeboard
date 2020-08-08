@@ -10,8 +10,9 @@ inline QPixmap RenderPath(const QPainterPath &path){
     QPixmap pixmap(rc.width(), rc.height());
     pixmap.fill(Qt::transparent);
     QPainter painter(&pixmap);
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform | QPainter::TextAntialiasing);
     QPen pen;
-    pen.setWidth(4);
+    pen.setWidth(2);
     pen.setColor(Qt::red);
     pen.setJoinStyle(Qt::RoundJoin);
     pen.setCapStyle(Qt::RoundCap);
@@ -32,6 +33,8 @@ int Pencil::Create(const QPointF &leftTop, const QPointF &rightBottom, GraphicsS
     QPen pen;
     pen.setWidth(2);
     pen.setColor(Qt::red);
+    pen.setJoinStyle(Qt::RoundJoin);
+    pen.setCapStyle(Qt::RoundCap);
     m_pItem->setPen(pen);
     pScene->addItem(m_pItem);
     int key = reinterpret_cast<int>(m_pItem);
@@ -42,18 +45,75 @@ int Pencil::Create(const QPointF &leftTop, const QPointF &rightBottom, GraphicsS
     });
 
     m_path.moveTo(leftTop);
+    m_path.lineTo(leftTop+QPointF(1,1));
+    m_point = leftTop;
     m_pItem->setPath(m_path);
+
+    QRectF rc = m_path.boundingRect();
+    qDebug() << "Pencil::UpdateRect rect(path)="<<rc;
+
+
+    QPixmap pixmap(rc.width(), rc.height());
+    pixmap.fill(Qt::transparent);
+    QPainter painter(&pixmap);
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform | QPainter::TextAntialiasing);
+    painter.setPen(pen);
+    painter.drawPath(m_path);
+    painter.end();
+
+    m_pPixmapItem = new PencilImageItem(QRectF(leftTop.x(), leftTop.y(), 1, 1));
+    pScene->addItem(m_pPixmapItem);
+    m_pPixmapItem->setPos(m_pItem->scenePos());
+    m_pPixmapItem->setRect(rc);
+    m_pPixmapItem->setPixmap(pixmap);
+
     return key;
 }
 void Pencil::UpdateRect(const QPointF &leftTop, const QPointF &rightBottom, GraphicsScene *pScene) {
-    m_path.lineTo(rightBottom);
+//    m_path.lineTo(rightBottom);
+
+    QPointF pos = (leftTop+rightBottom)/2;
+    m_path.quadTo(m_point, pos);
+    m_point = rightBottom;
+
 
     m_pItem->setPath(m_path);
+
 }
 
-void Pencil::CreateEnd(GraphicsScene *pScene) {
+void Pencil::CreateEnd(const QPointF &pos, GraphicsScene *pScene) {
+    if(m_pItem == nullptr){
+        return;
+    }
     m_pItem->Created();
+
+    QRectF rc = m_path.boundingRect();
+    qDebug() << "Pencil::UpdateRect rect(path)="<<rc;
+
+    QSizeF szView = pScene->GetViewSize();
+    QPixmap pixmap(szView.width(), szView.height());
+    pixmap.fill(Qt::transparent);
+    QPainter painter(&pixmap);
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform | QPainter::TextAntialiasing);
+    QPen pen;
+    pen.setWidth(2);
+    pen.setColor(Qt::red);
+    pen.setJoinStyle(Qt::RoundJoin);
+    pen.setCapStyle(Qt::RoundCap);
+    painter.setPen(pen);
+    painter.drawPath(m_path);
+    painter.end();
+
+    m_pPixmapItem->setPos(m_pItem->scenePos());
+    m_pPixmapItem->setRect(rc);
+    pixmap = pixmap.copy(rc.x(), rc.y(), rc.width(), rc.height());
+    m_pPixmapItem->setPixmap(pixmap);
+
+    pScene->removeItem(m_pItem);
+    delete m_pItem;
+    m_pItem = nullptr;
 }
+
 void Pencil::SetSelected(bool selected) {
     if(m_pItem == nullptr){
         return;

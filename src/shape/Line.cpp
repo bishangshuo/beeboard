@@ -37,7 +37,7 @@ void Line::UpdateRect(const QPointF &leftTop, const QPointF &rightBottom, Graphi
     m_pItem->setLine(QLineF(leftTop, rightBottom));
 }
 
-void Line::CreateEnd(GraphicsScene *pScene){
+void Line::CreateEnd(const QPointF &pos, GraphicsScene *pScene){
 
     m_pItem->update();
 }

@@ -34,7 +34,7 @@ void Rectangle::UpdateRect(const QPointF &leftTop, const QPointF &rightBottom, G
     m_pItem->UpdateSize(width*2, height*2);
 }
 
-void Rectangle::CreateEnd(GraphicsScene *pScene){
+void Rectangle::CreateEnd(const QPointF &pos, GraphicsScene *pScene){
     m_pItem->Created();
 }
 

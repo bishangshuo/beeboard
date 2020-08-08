@@ -13,6 +13,9 @@ public:
 
     int PenWidth() const;
     QColor PenColor() const;
+    Qt::PenStyle PenStyle() const;
+    Qt::PenCapStyle PenCapStyle() const;
+    Qt::PenJoinStyle PenJoinStyle() const;
     QColor BrushColor() const;
 signals:
 private:

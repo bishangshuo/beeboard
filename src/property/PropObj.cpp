@@ -21,6 +21,18 @@ QColor PropObj::PenColor() const{
     return  Qt::red;
 }
 
+Qt::PenStyle PropObj::PenStyle() const{
+    return  Qt::SolidLine;
+}
+
+Qt::PenCapStyle PropObj::PenCapStyle() const{
+    return  Qt::RoundCap;
+}
+
+Qt::PenJoinStyle PropObj::PenJoinStyle() const{
+    return  Qt::RoundJoin;
+}
+
 QColor PropObj::BrushColor() const{
     return Qt::blue;
 }

@@ -7,9 +7,11 @@
 #include "src/shape/Triangle.h"
 #include "src/shape/Line.h"
 #include "src/shape/Pencil.h"
+#include "src/shape/HPencil.h"
 #include "src/shape/MultiSelector.h"
 #include "src/graphics/GraphicsView.h"
 #include <QDebug>
+#include <QPixmapCache>
 
 const qreal PI = 3.1415926;
 const qreal ARC = PI/180;
@@ -29,6 +31,9 @@ GraphicsScene::GraphicsScene(QObject *parent)
     , m_pSelect(NULL)
     , m_multiSelector(NULL)
 {
+    QPixmapCache::setCacheLimit(4096000);
+    setItemIndexMethod(ItemIndexMethod::NoIndex);
+    setBspTreeDepth(4096);
 }
 
 void GraphicsScene::setToolType(const TOOL_TYPE::Type &toolType){
@@ -164,6 +169,8 @@ void GraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             break;
         }
         case TOOL_TYPE::PENCIL:
+            shape->UpdateRect(event->lastScenePos(), pos, this);
+            break;
         case TOOL_TYPE::RECTANGLE:
         case TOOL_TYPE::ELLIPSE:
         case TOOL_TYPE::LINE:
@@ -212,7 +219,7 @@ void GraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     if(shape == nullptr){
         return;
     }
-    shape->CreateEnd(this);
+    shape->CreateEnd(event->scenePos(), this);
     switch(m_eToolType){
         case TOOL_TYPE::SELECT:{
             break;
