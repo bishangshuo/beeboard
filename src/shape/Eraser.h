@@ -1,28 +1,18 @@
-#ifndef PENCIL_H
-#define PENCIL_H
+#ifndef ERASER_H
+#define ERASER_H
 
 #include "ShapeBase.h"
-#include <QPainterPath>
-#include <QPixmap>
-#include <QGraphicsPixmapItem>
-#include "src/shape/PencilItem.h"
-
-class Eraser;
-
-class Pencil : public ShapeBase
+class Eraser : public ShapeBase
 {
-    Q_OBJECT
 public:
-    Pencil(QObject *parent = nullptr);
+    Eraser(QObject *parent = nullptr);
 
-    QPointF MapFromScene(const QPointF &p);
-
-signals:
-    void sigShouldRemovePencil(int key);
-public slots:
-    void slotEraserPressed();
-    void slotEraserMove(const QPointF &prevPos, const QPointF &pos, Eraser *eraser);
-    void slotEraserRelease();
+    void setWidth(int width){
+        m_width = width;
+    }
+    int Width() const{
+        return m_width;
+    }
 protected:
     int Create(const QPointF &leftTop, const QPointF &rightBottom, GraphicsScene *pScene) override;
     void UpdateRect(const QPointF &leftTop, const QPointF &rightBottom, GraphicsScene *pScene) override;
@@ -45,12 +35,7 @@ protected:
 
     void HideControls(bool hide) override;
 private:
-    PencilItem *m_pItem;
-    QPainterPath m_path;
-    QPixmap m_pixmap;
-    QPointF m_point;
-//    MapEraserPath m_mapEraserPathUndo;
-//    MapEraserPath m_mapEraserPathRedo;
+    int m_width;
 };
 
-#endif // PENCIL_H
+#endif // ERASER_H

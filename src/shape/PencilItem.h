@@ -5,13 +5,25 @@
 #include <QVector2D>
 #include "src/shape/ItemCtrl.h"
 
-const qreal PI = 3.141592653;
-const qreal AnglePerPI = 180.0 / PI;
+typedef struct _ERASER_PATH{
+    _ERASER_PATH(QPainterPath *_path, int _width){
+        path = _path;
+        width = _width;
+    }
+    QPainterPath *path;
+    int width;
+}ERASER_PATH;
+
+typedef QVector<ERASER_PATH *> VectorPath;
+typedef QMap<int, VectorPath *> MapEraserPath;
+
+typedef std::function<void(int)> CBPencilRemove;
 
 class PencilItem : public QGraphicsPathItem, public ItemCtrl
 {
 public:
     PencilItem(QGraphicsItem *parent = nullptr);
+    ~PencilItem();
 
     bool IsCreating() const{
         return m_isCreating;
@@ -19,46 +31,37 @@ public:
 
     void Created();
 
-    void HideRotate(bool hide){
-        m_hideRotate = hide;
-    }
-
     void HideClose(bool hide){
         m_hideClose = hide;
     }
 
-    void HideResize(bool hide){
-        m_hideResize = hide;
+    void setShouldRemoveCallback(const CBPencilRemove &callback){
+        m_cbRemove = callback;
     }
+    void setEraser(int key, QPainterPath *path, int width);
+    void onEraserRelease();
 
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+
+    QPainterPath shape() const override;
 
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     void hoverMoveEvent(QGraphicsSceneHoverEvent *event) override;
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 
-    bool isInResizeArea(const QPointF &pos) const;
-    bool isInRotateArea(const QPointF &pos) const;
     bool isInCloseArea(const QPointF &pos) const;
 
-    inline qreal GetDegreeAngle(QVector2D vector2d) const
-    {
-        return fmod((atan2((qreal)vector2d.y(), (qreal)vector2d.x()) * AnglePerPI + 360.0), 360.0 );
-    }
+public:
+    MapEraserPath m_mapEraserPathUndo;
+    MapEraserPath m_mapEraserPathRedo;
 
 private:
     QPainterPath mPath;
-
-    bool        m_isResizing;
-    bool        m_isRotating;
-    bool        m_isCreating;
-
-    bool m_hideRotate;
+    bool m_isCreating;
     bool m_hideClose;
-    bool m_hideResize;
-
+    CBPencilRemove m_cbRemove;
 };
 
 #endif // PENCILITEM_H

@@ -2,7 +2,7 @@
 #define RECTANGLE_H
 
 #include "ShapeBase.h"
-class RectItem;
+class RectangleItem;
 
 class Rectangle : public ShapeBase
 {
@@ -31,7 +31,7 @@ protected:
 
     void HideControls(bool hide) override;
 private:
-    RectItem *m_pItem;
+    RectangleItem *m_pItem;
 };
 
 #endif // RECTANGLE_H

@@ -43,6 +43,8 @@ public:
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
         MainWindow->resize(800, 600);
+        MainWindow->setAutoFillBackground(true);
+        MainWindow->setStyleSheet(QString::fromUtf8(""));
         actionSelect = new QAction(MainWindow);
         actionSelect->setObjectName(QString::fromUtf8("actionSelect"));
         actionSelect->setCheckable(true);

@@ -10,39 +10,80 @@
 #include <qmath.h>
 #include <QDebug>
 #include <QRandomGenerator>
+#include <QtConcurrent>
 
 PencilItem::PencilItem(QGraphicsItem *parent)
     : QGraphicsPathItem(parent)
-    , m_isResizing(false)
-    , m_isRotating(false)
     , m_isCreating(true)
-    , m_hideRotate(false)
     , m_hideClose(false)
-    , m_hideResize(false)
+    , m_cbRemove(NULL)
 
 {
     setFlag(QGraphicsItem::ItemIsMovable, true);
     setFlag(QGraphicsItem::ItemIsSelectable, true);
-    //setFlag(QGraphicsItem::ItemIsFocusable, true);
+    setFlag(QGraphicsItem::ItemIsFocusable, true);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
     setAcceptHoverEvents(true);
-    HideResize(true);
-    HideRotate(true);
+}
+
+PencilItem::~PencilItem(){
+
 }
 
 void PencilItem::Created(){
     m_isCreating = false;
-    QRectF rc = path().boundingRect();
+    mPath = path();
+}
 
-//    setPos(0, 0);
+QPainterPath PencilItem::shape() const{
+    QRectF rc = path().boundingRect();
+    QPainterPath shapePath;
+    shapePath.moveTo(rc.topLeft());
+    shapePath.lineTo(rc.topRight());
+    shapePath.lineTo(rc.bottomRight());
+    shapePath.lineTo(rc.bottomLeft());
+    shapePath.lineTo(rc.topLeft());
+    return shapePath;
+}
+
+void PencilItem::setEraser(int key, QPainterPath *path, int width){
+
 }
 
 void PencilItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     painter->setRenderHint(QPainter::Antialiasing, true);
 
-    QRectF rc = path().boundingRect();
+    QPen p = pen();
+    painter->setPen(p);
+    painter->drawPath(path());
 
+    //绘制橡皮擦
+    if(m_mapEraserPathUndo.size() > 0){
+        QPainter::CompositionMode oldMode = painter->compositionMode();
+        painter->setCompositionMode(QPainter::CompositionMode_SourceOver);
+        for(MapEraserPath::iterator it = m_mapEraserPathUndo.begin(); it != m_mapEraserPathUndo.end(); it ++){
+            VectorPath *vectorPath = it.value();
+            for(VectorPath::Iterator itV = vectorPath->begin(); itV != vectorPath->end(); itV++){
+                ERASER_PATH *path_data = *itV;
+                int width = path_data->width;
+                QPainterPath *path = path_data->path;
+                QPen pen;
+                pen.setWidth(width);
+                pen.setCapStyle(Qt::RoundCap);
+                pen.setJoinStyle(Qt::RoundJoin);
+                pen.setColor(Qt::white);
+                painter->setPen(pen);
+                if(path->elementCount() > 1){
+                    painter->drawPath(*path);
+                }
+            }
+        }
+
+        painter->setCompositionMode(oldMode);
+    }
+
+    QRectF rc = path().boundingRect();
     QColor color(255, 0, 0, 128);
 
     if (option->state & QStyle::State_Selected)
@@ -55,24 +96,7 @@ void PencilItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
             pen_r.setWidth(1);
             pen_r.setStyle(Qt::DashLine);
             painter->setPen(pen_r);
-            //选中边框
             painter->drawRect(rc);
-        }
-
-        if(!m_hideResize)
-        {
-            //缩放按钮区域
-            QPixmap px_m(":/resources/images/move.png");
-            px_m = px_m.scaled(20, 20);
-            painter->drawPixmap(rc.bottomRight()-QPointF(20, 20), px_m);
-        }
-
-        if(!m_hideRotate)
-        {
-            //旋转按钮区域
-            QPixmap px_r(":/resources/images/rotate-left.png");
-            px_r = px_r.scaled(20, 20);
-            painter->drawPixmap((rc.topLeft()+rc.topRight())/2, px_r);
         }
 
         if(!m_hideClose)
@@ -85,100 +109,25 @@ void PencilItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 
     }
 
-    QGraphicsPathItem::paint(painter, option, widget);
+    //不要调用父类的paint，因为path已经自绘，否则出现默认黑色选择框
+    //QGraphicsPathItem::paint(painter, option, widget);
 }
 
 void PencilItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 {
-    if (isInResizeArea(event->pos())){
-        setCursor(Qt::SizeAllCursor);
-    }else if (isInRotateArea(event->pos()))
-    {
-        QCursor rotateCursor(QPixmap(":/resources/images/rotate-left-cur.png"));
-        setCursor(rotateCursor);
-    }
-    else
-        setCursor(Qt::ArrowCursor);
     QGraphicsItem::hoverMoveEvent(event);
 }
 
 void PencilItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    QRectF rc = path().boundingRect();
-    if (m_isResizing && !m_hideResize)
-    {
-        int dx = int(2.0 * event->pos().x());
-        int dy = int(2.0 * event->pos().y());
-        prepareGeometryChange();
-
-//        m_width = dx;
-//        m_height = dy;
-//        if (m_width < MIN_ITEM_SIZE){
-//            m_width = MIN_ITEM_SIZE;
-//        }else if (m_width > MAX_ITEM_SIZE){
-//            m_width = MAX_ITEM_SIZE;
-//        }
-//        if (m_height < MIN_ITEM_SIZE){
-//            m_height = MIN_ITEM_SIZE;
-//        }else if (m_height > MAX_ITEM_SIZE){
-//            m_height = MAX_ITEM_SIZE;
-//        }
-
-        qDebug()<<"resize, scenePos="<<scenePos();
-    }
-    else if (m_isRotating && !m_hideRotate)
-    {
-        QPointF cursorPos = event->pos();
-        QVector2D vectorStart = QVector2D(QPointF(0.0, -rc.width() / 2) - QPointF(0.0, 0.0));           // 起始向量
-        QVector2D vectorEnd = QVector2D(cursorPos - QPointF(0.0, 0.0));                             // 结束向量
-        // 计算起始向量和结束向量之间的角度
-        qreal angle = 0.0;
-        qreal angleEnd = GetDegreeAngle(vectorEnd);
-        qreal angleStart = GetDegreeAngle(vectorStart);
-        angle = angleEnd - angleStart + rotation();
-        if (angle > 360.0)
-        {
-            while(1)
-            {
-                angle -= 360.0;
-                if (angle < 360.0) break;
-            }
-        }
-        else if (angle < 0.0)
-        {
-            while(1)
-            {
-                angle += 360.0;
-                if (angle > 0.0) break;
-            }
-        }
-        setRotation(angle);
-
-//        if(m_pCBRotate){
-//            QPointF _scenePos = scenePos();
-//            m_pCBRotate(_scenePos.x(), _scenePos.y(), angle);
-//        }
-    }
-    else
-    {
-        QGraphicsItem::mouseMoveEvent(event);
-    }
+    QGraphicsItem::mouseMoveEvent(event);
 }
 
 void PencilItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     static qreal z = 0.0;
     setZValue(z += 1.0);
-    if (event->button() == Qt::LeftButton && isInResizeArea(event->pos())  && !m_hideResize)
-    {
-        qDebug()<<"before resize, scenePos="<<scenePos();
-        m_isResizing = true;
-    }
-    else if (event->button() == Qt::LeftButton && isInRotateArea(event->pos())  && !m_hideRotate)
-    {
-        m_isRotating = true;
-    }
-    else if (event->button() == Qt::LeftButton && isInCloseArea(event->pos())  && !m_hideClose)
+    if (event->button() == Qt::LeftButton && isInCloseArea(event->pos())  && !m_hideClose)
     {
         if(m_pCBRemove){
             m_pCBRemove(reinterpret_cast<int>(this));
@@ -190,33 +139,7 @@ void PencilItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void PencilItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (event->button() == Qt::LeftButton && m_isResizing)
-    {
-        m_isResizing = false;
-    }
-    else if (event->button() == Qt::LeftButton && m_isRotating)
-    {
-        m_isRotating = false;
-    }
-    else
-    {
-        QGraphicsItem::mouseReleaseEvent(event);
-    }
-}
-
-bool PencilItem::isInResizeArea(const QPointF &pos) const
-{
-    QRectF rc = path().boundingRect();
-    return QRectF(rc.bottomRight()-QPointF(20, 20), rc.bottomRight()).contains(pos);
-}
-
-bool PencilItem::isInRotateArea(const QPointF &pos) const
-{
-    QRectF rc = path().boundingRect();
-    QPointF pt = (rc.topLeft()+rc.topRight())/2;
-    QRectF rcS = QRectF(pt.x(), pt.y(), 20, 20);
-    //qDebug() << rcS << "--" << pt;
-    return rcS.contains(pos);
+    QGraphicsItem::mouseReleaseEvent(event);
 }
 
 bool PencilItem::isInCloseArea(const QPointF &pos) const
@@ -224,4 +147,71 @@ bool PencilItem::isInCloseArea(const QPointF &pos) const
     QRectF rc = path().boundingRect();
     QPointF pt = rc.topRight();
     return QRectF(pt.x()-20, pt.y(), 20, 20).contains(pos);
+}
+
+void PencilItem::onEraserRelease(){
+    //将所有path画到pixmap, 但不要包括选择焦点边框和关闭按钮
+    QRectF rc = boundingRect();
+    QPixmap pixmap(rc.width(), rc.height());
+    pixmap.fill(Qt::transparent);
+
+    QPainter painter(&pixmap);
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform | QPainter::TextAntialiasing);
+    QPen p = pen();
+    painter.setPen(p);
+    painter.drawPath(mPath);
+
+    //绘制橡皮擦
+    if(m_mapEraserPathUndo.size() > 0){
+        //QPainter::CompositionMode oldMode = painter.compositionMode();
+        painter.setCompositionMode(QPainter::CompositionMode_DestinationOut);
+        for(MapEraserPath::const_iterator it = m_mapEraserPathUndo.constBegin(); it != m_mapEraserPathUndo.constEnd(); it ++){
+            VectorPath *vectorPath = it.value();
+            for(VectorPath::Iterator itV = vectorPath->begin(); itV != vectorPath->end(); itV++){
+                ERASER_PATH *path_data = *itV;
+                int width = path_data->width;
+                QPainterPath *path = path_data->path;
+                QPen pen;
+                pen.setWidth(width);
+                pen.setCapStyle(Qt::RoundCap);
+                pen.setJoinStyle(Qt::RoundJoin);
+                pen.setColor(Qt::white);
+                painter.setPen(pen);
+                if(path->elementCount() > 1){
+                    painter.drawPath(*path);
+                }
+            }
+        }
+
+        //painter.setCompositionMode(oldMode);
+    }
+
+    painter.end();
+
+    int key = reinterpret_cast<int>(this);
+    QPixmap *pPixmap = new QPixmap();
+    *pPixmap = pixmap.copy();
+    QtConcurrent::run([this, key, pPixmap](){
+        QImage img = pPixmap->toImage();
+        QRgb *st = (QRgb *) img.bits();
+        quint64 pixelCount = img.width() * img.height();
+
+        bool b = false;
+        for (quint64 p = 0; p < pixelCount; p++) {
+            //st[p] = QColor(255, 128, 0).rgb();
+            QRgb rgb = st[p];
+            int alpha = qAlpha(rgb);
+            if(alpha > 0){
+                qDebug()<<"alpha="<<alpha;
+                b = true;
+                //break;
+            }
+        }
+        if(!b){
+            if(m_cbRemove != NULL){
+                m_cbRemove(key);
+            }
+        }
+        delete pPixmap;
+    });
 }

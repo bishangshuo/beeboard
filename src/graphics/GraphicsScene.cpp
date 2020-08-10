@@ -7,7 +7,7 @@
 #include "src/shape/Triangle.h"
 #include "src/shape/Line.h"
 #include "src/shape/Pencil.h"
-#include "src/shape/HPencil.h"
+#include "src/shape/Eraser.h"
 #include "src/shape/MultiSelector.h"
 #include "src/graphics/GraphicsView.h"
 #include <QDebug>
@@ -47,18 +47,11 @@ void GraphicsScene::setView(GraphicsView *view){
 void GraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     emit sigSceneClicked();
-
-    //SetAllEditable(false);
     deleteSelectItem();
-//    UnselectedAll();
-//    destroyMultiSelector();
 
     m_bPressed = true;
     QPointF pos = event->scenePos();
     m_ptPrev = pos;
-
-    //QPoint viewPos = m_pView->mapFromScene(pos);
-    //qDebug() << "GraphicsScene::mousePressEvent scene pos = " << pos << ", view pos = "<<viewPos;
 
     ShapeBase *shape = nullptr;
     switch(m_eToolType){
@@ -73,6 +66,13 @@ void GraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
         }
         case TOOL_TYPE::PENCIL:{
             shape = new Pencil(this);
+            Pencil *pencil = dynamic_cast<Pencil *>(shape);
+            connect(this, SIGNAL(sigEraserMove(const QPointF &, const QPointF &, Eraser *)),
+                    pencil, SLOT(slotEraserMove(const QPointF &, const QPointF &, Eraser *)));
+            connect(this, SIGNAL(sigEraserPressed()),
+                    pencil, SLOT(slotEraserPressed()));
+            connect(this, SIGNAL(sigEraserRelease()),
+                    pencil, SLOT(slotEraserRelease()));
             break;
         }
         case TOOL_TYPE::RECTANGLE:{
@@ -92,6 +92,12 @@ void GraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
             break;
         }
         case TOOL_TYPE::ERASER:{
+            qDebug() << "going to eraser pencil";
+            shape = new Eraser(this);
+            Eraser *eraser = dynamic_cast<Eraser *>(shape);
+            eraser->setWidth(40);
+            emit sigEraserMove(pos, pos, eraser);
+            emit sigEraserPressed();
             break;
         }
         case TOOL_TYPE::UNDO:{
@@ -179,6 +185,8 @@ void GraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             break;
         }
         case TOOL_TYPE::ERASER:{
+            Eraser *eraser = dynamic_cast<Eraser *>(shape);
+            emit sigEraserMove(event->lastScenePos(), event->scenePos(), eraser);
             break;
         }
         case TOOL_TYPE::UNDO:{
@@ -239,6 +247,7 @@ void GraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             break;
         }
         case TOOL_TYPE::ERASER:{
+            emit sigEraserRelease();
             break;
         }
         case TOOL_TYPE::UNDO:{

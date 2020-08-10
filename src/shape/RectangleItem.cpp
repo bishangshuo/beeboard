@@ -1,13 +1,13 @@
-#include "RectItem.h"
+#include "RectangleItem.h"
 #include <QPainter>
 
-RectItem::RectItem(int x, int y, int width, int height)
+RectangleItem::RectangleItem(int x, int y, int width, int height)
     : ItemBase(x, y, width, height)
 {
 
 }
 
-void RectItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void RectangleItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     painter->setRenderHint(QPainter::Antialiasing, true);
 
@@ -21,7 +21,7 @@ void RectItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     ItemBase::paint(painter, option, widget);
 }
 
-ItemBase *RectItem::createNew(int x, int y, int width, int height)
+ItemBase *RectangleItem::createNew(int x, int y, int width, int height)
 {
-    return new RectItem(x, y, width, height);
+    return new RectangleItem(x, y, width, height);
 }

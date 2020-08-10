@@ -7,6 +7,7 @@
 #include "src/shape/ShapeBase.h"
 #include "src/shape/Select.h"
 
+class Eraser;
 class GraphicsView;
 
 typedef struct _SHAPE_DATA{
@@ -57,6 +58,10 @@ signals:
     void sigItemSelected(int key, TOOL_TYPE::Type toolType, const QRect &rc, const QPointF &p1, const QPointF &p2);
     void sigItemResizeCompleted(int key, TOOL_TYPE::Type toolType, const QRect &rc, const QPointF &p1, const QPointF &p2);
     void sigItemPointsChanged(int key, TOOL_TYPE::Type toolType, const QRect &rc, const QPointF &p1, const QPointF &p2);
+
+    void sigEraserPressed();
+    void sigEraserMove(const QPointF &prePos, const QPointF &pos, Eraser *eraser);
+    void sigEraserRelease();
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;

@@ -3,17 +3,17 @@
 
 #include "ItemBase.h"
 
-class RectItem : public ItemBase
+class RectangleItem : public ItemBase
 {
 public:
     /**
-     * @brief RectItem 构造函数
+     * @brief RectangleItem 构造函数
      * @param x 中心点x坐标
      * @param y 中心点y坐标
      * @param width 矩形宽
      * @param height 矩形搞
      */
-    RectItem(int x, int y, int width, int height);
+    RectangleItem(int x, int y, int width, int height);
 
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;

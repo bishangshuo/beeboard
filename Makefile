@@ -291,12 +291,14 @@ Makefile: BBoard.pro F:\Qt\Qt5.14.0\5.14.0\msvc2017\mkspecs\win32-msvc\qmake.con
 		BBoard.pro \
 		F:\Qt\Qt5.14.0\5.14.0\msvc2017\lib\Qt5Widgets.prl \
 		F:\Qt\Qt5.14.0\5.14.0\msvc2017\lib\Qt5Gui.prl \
+		F:\Qt\Qt5.14.0\5.14.0\msvc2017\lib\Qt5Concurrent.prl \
 		F:\Qt\Qt5.14.0\5.14.0\msvc2017\lib\Qt5Core.prl \
 		F:\Qt\Qt5.14.0\5.14.0\msvc2017\lib\qtmain.prl \
 		F:\Qt\Qt5.14.0\5.14.0\msvc2017\mkspecs\features\build_pass.prf \
 		Resources.qrc \
 		F:\Qt\Qt5.14.0\5.14.0\msvc2017\lib\Qt5Widgetsd.prl \
 		F:\Qt\Qt5.14.0\5.14.0\msvc2017\lib\Qt5Guid.prl \
+		F:\Qt\Qt5.14.0\5.14.0\msvc2017\lib\Qt5Concurrentd.prl \
 		F:\Qt\Qt5.14.0\5.14.0\msvc2017\lib\Qt5Cored.prl \
 		F:\Qt\Qt5.14.0\5.14.0\msvc2017\lib\qtmaind.prl
 	$(QMAKE) -o Makefile BBoard.pro -spec win32-msvc "CONFIG+=debug" "CONFIG+=qml_debug"
@@ -507,12 +509,14 @@ F:\Qt\Qt5.14.0\5.14.0\msvc2017\mkspecs\features\lex.prf:
 BBoard.pro:
 F:\Qt\Qt5.14.0\5.14.0\msvc2017\lib\Qt5Widgets.prl:
 F:\Qt\Qt5.14.0\5.14.0\msvc2017\lib\Qt5Gui.prl:
+F:\Qt\Qt5.14.0\5.14.0\msvc2017\lib\Qt5Concurrent.prl:
 F:\Qt\Qt5.14.0\5.14.0\msvc2017\lib\Qt5Core.prl:
 F:\Qt\Qt5.14.0\5.14.0\msvc2017\lib\qtmain.prl:
 F:\Qt\Qt5.14.0\5.14.0\msvc2017\mkspecs\features\build_pass.prf:
 Resources.qrc:
 F:\Qt\Qt5.14.0\5.14.0\msvc2017\lib\Qt5Widgetsd.prl:
 F:\Qt\Qt5.14.0\5.14.0\msvc2017\lib\Qt5Guid.prl:
+F:\Qt\Qt5.14.0\5.14.0\msvc2017\lib\Qt5Concurrentd.prl:
 F:\Qt\Qt5.14.0\5.14.0\msvc2017\lib\Qt5Cored.prl:
 F:\Qt\Qt5.14.0\5.14.0\msvc2017\lib\qtmaind.prl:
 qmake: FORCE

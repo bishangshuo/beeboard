@@ -1,7 +1,7 @@
 #include "Rectangle.h"
 #include <QGraphicsRectItem>
 #include "src/graphics/GraphicsScene.h"
-#include "src/shape/RectItem.h"
+#include "src/shape/RectangleItem.h"
 #include "src/property/PropObj.h"
 #include <QDebug>
 
@@ -13,7 +13,7 @@ Rectangle::Rectangle(QObject *parent)
 }
 
 int Rectangle::Create(const QPointF &leftTop, const QPointF &rightBottom, GraphicsScene *pScene){
-    m_pItem = new RectItem(leftTop.x(), leftTop.y(), rightBottom.x()-leftTop.x(), rightBottom.y()-leftTop.y());
+    m_pItem = new RectangleItem(leftTop.x(), leftTop.y(), rightBottom.x()-leftTop.x(), rightBottom.y()-leftTop.y());
     pScene->addItem(m_pItem);
     int key = reinterpret_cast<int>(m_pItem);
     m_pItem->setData(ITEM_DATA_KEY, key);
