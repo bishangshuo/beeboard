@@ -25,7 +25,7 @@ Pencil::Pencil(QObject *parent)
 int Pencil::Create(const QPointF &leftTop, const QPointF &rightBottom, GraphicsScene *pScene) {
     m_pItem = new PencilItem();
     QPen pen;
-    pen.setWidth(2);
+    pen.setWidth(4);
     pen.setColor(Qt::red);
     pen.setJoinStyle(Qt::RoundJoin);
     pen.setCapStyle(Qt::RoundCap);

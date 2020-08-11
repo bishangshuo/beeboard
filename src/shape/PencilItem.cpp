@@ -11,6 +11,7 @@
 #include <QDebug>
 #include <QRandomGenerator>
 #include <QtConcurrent>
+#include <QPainterPathStroker>
 
 PencilItem::PencilItem(QGraphicsItem *parent)
     : QGraphicsPathItem(parent)
@@ -46,41 +47,108 @@ QPainterPath PencilItem::shape() const{
     return shapePath;
 }
 
+//QRectF PencilItem::boundingRect() const{
+//    QRectF rc = path().boundingRect();
+//    QRectF bRc = QRectF(rc.x()-1, rc.y()-1, rc.width()+2, rc.height()+2);
+//    return bRc;
+//}
+
 void PencilItem::setEraser(int key, QPainterPath *path, int width){
 
 }
 
-void PencilItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-{
-    painter->setRenderHint(QPainter::Antialiasing, true);
+void PencilItem::RenderPathToPixmap(){
 
-    QPen p = pen();
-    painter->setPen(p);
-    painter->drawPath(path());
+    QPainterPath orgPath = path();
 
-    //绘制橡皮擦
+    QPen p(pen());
+    QPainterPathStroker stroker;
+    stroker.setWidth(p.width());
+    QPainterPath strokerPath = stroker.createStroke(orgPath);
+
+    QRectF rc = strokerPath.boundingRect();
+    QPixmap pixmap(rc.width(), rc.height());
+    pixmap.fill(Qt::transparent);
+
+    QPainter painter(&pixmap);
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform | QPainter::TextAntialiasing);
+
+    //绘制原来path到pixmap
+    painter.setPen(p);
+    painter.translate(-rc.topLeft());
+    painter.drawPath(orgPath);
+
+    painter.end();
+
+    m_pixmap = pixmap.copy();
+}
+
+void PencilItem::RenderEraserToPixmap(){
+
+    QPainterPath orgPath = path();
+
+    QPen p(pen());
+    QPainterPathStroker stroker;
+    stroker.setWidth(p.width());
+    QPainterPath strokerPath = stroker.createStroke(orgPath);
+
+    QRectF rc = strokerPath.boundingRect();
+
+    QPixmap pixmap = m_pixmap;
+
+    QPainter painter(&pixmap);
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform | QPainter::TextAntialiasing);
+    painter.translate(-rc.topLeft());
+
+    //绘制橡皮擦到pixmap
     if(m_mapEraserPathUndo.size() > 0){
-        QPainter::CompositionMode oldMode = painter->compositionMode();
-        painter->setCompositionMode(QPainter::CompositionMode_SourceOver);
         for(MapEraserPath::iterator it = m_mapEraserPathUndo.begin(); it != m_mapEraserPathUndo.end(); it ++){
             VectorPath *vectorPath = it.value();
             for(VectorPath::Iterator itV = vectorPath->begin(); itV != vectorPath->end(); itV++){
                 ERASER_PATH *path_data = *itV;
-                int width = path_data->width;
                 QPainterPath *path = path_data->path;
-                QPen pen;
-                pen.setWidth(width);
-                pen.setCapStyle(Qt::RoundCap);
-                pen.setJoinStyle(Qt::RoundJoin);
-                pen.setColor(Qt::white);
-                painter->setPen(pen);
                 if(path->elementCount() > 1){
-                    painter->drawPath(*path);
+                    int width = path_data->width;
+                    QPen pen;
+                    pen.setWidth(width);
+                    pen.setCapStyle(Qt::RoundCap);
+                    pen.setJoinStyle(Qt::RoundJoin);
+                    pen.setColor(Qt::white);
+                    painter.setPen(pen);
+
+                    QPainter::CompositionMode oldMode = painter.compositionMode();
+                    painter.setCompositionMode(QPainter::CompositionMode_DestinationOut);
+                    painter.drawPath(*path);
+                    painter.setCompositionMode(oldMode);
                 }
             }
         }
+    }
 
-        painter->setCompositionMode(oldMode);
+    painter.end();
+
+    m_pixmap = pixmap.copy();
+}
+
+void PencilItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    Q_UNUSED(widget)
+
+    painter->setRenderHint(QPainter::Antialiasing, true);
+
+    if(m_isCreating){
+        RenderPathToPixmap();
+    }
+
+    RenderEraserToPixmap();
+
+    if(!m_pixmap.isNull()){
+        QPen p = pen();
+        QPainterPathStroker stroker;
+        stroker.setWidth(p.width());
+        QPainterPath strokerPath = stroker.createStroke(path());
+        QRectF rc = strokerPath.boundingRect();
+        painter->drawPixmap(rc, m_pixmap, QRectF(0, 0, rc.width(), rc.height()));
     }
 
     QRectF rc = path().boundingRect();
@@ -89,7 +157,6 @@ void PencilItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     if (option->state & QStyle::State_Selected)
     {
         //绘制选中边框
-        //if (option->state & QStyle::State_HasFocus)
         {
             QPen pen_r;
             pen_r.setColor(color);
@@ -201,10 +268,10 @@ void PencilItem::onEraserRelease(){
             //st[p] = QColor(255, 128, 0).rgb();
             QRgb rgb = st[p];
             int alpha = qAlpha(rgb);
-            if(alpha > 0){
+            if(alpha > 32){
                 qDebug()<<"alpha="<<alpha;
                 b = true;
-                //break;
+                break;
             }
         }
         if(!b){

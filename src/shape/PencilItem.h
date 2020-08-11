@@ -41,10 +41,12 @@ public:
     void setEraser(int key, QPainterPath *path, int width);
     void onEraserRelease();
 
+    QPainterPath shape() const override;
+//    QRectF boundingRect() const override;
+
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
-    QPainterPath shape() const override;
 
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     void hoverMoveEvent(QGraphicsSceneHoverEvent *event) override;
@@ -52,6 +54,9 @@ protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 
     bool isInCloseArea(const QPointF &pos) const;
+
+    void RenderPathToPixmap();
+    void RenderEraserToPixmap();
 
 public:
     MapEraserPath m_mapEraserPathUndo;
@@ -62,6 +67,8 @@ private:
     bool m_isCreating;
     bool m_hideClose;
     CBPencilRemove m_cbRemove;
+
+    QPixmap m_pixmap;
 };
 
 #endif // PENCILITEM_H
