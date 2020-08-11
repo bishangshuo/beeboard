@@ -6,8 +6,14 @@
 
 Ellipse::Ellipse(QObject *parent)
     : ShapeBase(parent)
+    , m_pItem(NULL)
 {
+    m_type = TOOL_TYPE::ELLIPSE;
+}
 
+Ellipse::~Ellipse(){
+    if(m_pItem)
+        delete m_pItem;
 }
 
 int Ellipse::Create(const QPointF &leftTop, const QPointF &rightBottom, GraphicsScene *pScene){
@@ -19,6 +25,7 @@ int Ellipse::Create(const QPointF &leftTop, const QPointF &rightBottom, Graphics
     m_pItem->SetRemoveCallback([=](int _key){
         emit sigRemove(_key);
     });
+
     return key;
 }
 
@@ -70,6 +77,10 @@ void Ellipse::RotateEnd(){
     m_rAngle = m_pItem->rotation();
 }
 
+int Ellipse::GetItemKey() const{
+    return reinterpret_cast<int>(m_pItem);
+}
+
 QRect Ellipse::GetRect(){
     return m_pItem->sceneBoundingRect().toRect();
 }
@@ -102,4 +113,20 @@ void Ellipse::HideControls(bool hide){
     m_pItem->HideRotate(hide);
     m_pItem->HideClose(hide);
     m_pItem->HideResize(hide);
+}
+
+void Ellipse::SetPen(QPen pen) {
+    m_pItem->SetPen(pen);
+}
+
+void Ellipse::SetBrush(QBrush brush) {
+    m_pItem->SetBrush(brush);
+}
+
+QPen Ellipse::GetPen() const{
+    return m_pItem->GetPen();
+}
+
+QBrush Ellipse::GetBrush() const{
+    return m_pItem->GetBrush();
 }

@@ -8,8 +8,15 @@
 
 Line::Line(QObject *parent)
     : ShapeBase(parent)
+    , m_pItem(NULL)
 {
+    m_type = TOOL_TYPE::LINE;
+}
 
+Line::~Line(){
+    if(m_pItem){
+        delete m_pItem;
+    }
 }
 
 int Line::Create(const QPointF &leftTop, const QPointF &rightBottom, GraphicsScene *pScene){
@@ -17,10 +24,6 @@ int Line::Create(const QPointF &leftTop, const QPointF &rightBottom, GraphicsSce
     pScene->addItem(m_pItem);
     int key = reinterpret_cast<int>(m_pItem);
     m_pItem->setData(ITEM_DATA_KEY, key);
-    QPen pen;
-    pen.setWidth(4);
-    pen.setColor(Qt::red);
-    m_pItem->setPen(pen);
     m_pItem->setLine(QLineF(leftTop, rightBottom));
 
     m_pItem->SetRemoveCallback([=](int _key){
@@ -80,6 +83,10 @@ void Line::RotateEnd(){
     m_rAngle = trimAngle(m_pItem->rotation());
 }
 
+int Line::GetItemKey() const{
+    return reinterpret_cast<int>(m_pItem);
+}
+
 QRect Line::GetRect(){
     return m_pItem->sceneBoundingRect().toRect();
 }
@@ -114,4 +121,20 @@ void Line::ChangeSize(qreal dx, qreal dy){
 void Line::HideControls(bool hide){
     m_pItem->HideClose(hide);
     m_pItem->HideResize(hide);
+}
+
+void Line::SetPen(QPen pen) {
+    m_pItem->SetPen(pen);
+}
+
+void Line::SetBrush(QBrush brush) {
+    m_pItem->SetBrush(brush);
+}
+
+QPen Line::GetPen() const{
+    return m_pItem->GetPen();
+}
+
+QBrush Line::GetBrush() const{
+    return m_pItem->GetBrush();
 }

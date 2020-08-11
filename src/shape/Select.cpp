@@ -11,7 +11,12 @@ Select::Select(QObject *parent)
     : ShapeBase(parent)
     , m_pItem(nullptr)
 {
+    m_type = TOOL_TYPE::SELECT;
+}
 
+Select::~Select(){
+    if(m_pItem)
+        delete m_pItem;
 }
 
 int Select::Create(const QPointF &leftTop, const QPointF &rightBottom, GraphicsScene *pScene){
@@ -86,6 +91,10 @@ void Select::RotateEnd(){
     m_rAngle = m_pItem->rotation();
 }
 
+int Select::GetItemKey() const{
+    return reinterpret_cast<int>(m_pItem);
+}
+
 QRect Select::GetRect(){
     return m_pItem->sceneBoundingRect().toRect();
 }
@@ -125,4 +134,12 @@ void Select::ChangeSize(qreal dx, qreal dy){
 
 void Select::HideControls(bool hide){
     //m_pItem->HideBaseControls(hide);
+}
+
+QPen Select::GetPen() const{
+    return m_pItem->GetPen();
+}
+
+QBrush Select::GetBrush() const{
+    return m_pItem->GetBrush();
 }

@@ -8,6 +8,7 @@ HEADERS += \
     $$PWD/LineItem.h \
     $$PWD/MultiSelector.h \
     $$PWD/MultiSelectorItem.h \
+    $$PWD/PBShapeHelper.h \
     $$PWD/Pencil.h \
     $$PWD/PencilItem.h \
     $$PWD/Rectangle.h \
@@ -16,7 +17,8 @@ HEADERS += \
     $$PWD/SelectItem.h \
     $$PWD/ShapeBase.h \
     $$PWD/Triangle.h \
-    $$PWD/TriangleItem.h
+    $$PWD/TriangleItem.h \
+    $$PWD/pbshape.pb.h
 
 SOURCES += \
     $$PWD/Ellipse.cpp \
@@ -28,6 +30,7 @@ SOURCES += \
     $$PWD/LineItem.cpp \
     $$PWD/MultiSelector.cpp \
     $$PWD/MultiSelectorItem.cpp \
+    $$PWD/PBShapeHelper.cpp \
     $$PWD/Pencil.cpp \
     $$PWD/PencilItem.cpp \
     $$PWD/Rectangle.cpp \
@@ -36,4 +39,5 @@ SOURCES += \
     $$PWD/SelectItem.cpp \
     $$PWD/ShapeBase.cpp \
     $$PWD/Triangle.cpp \
-    $$PWD/TriangleItem.cpp
+    $$PWD/TriangleItem.cpp \
+    $$PWD/pbshape.pb.cc

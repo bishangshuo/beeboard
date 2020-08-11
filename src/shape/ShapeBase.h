@@ -4,11 +4,12 @@
 #include <QObject>
 #include <QPen>
 #include "src/property/PropObj.h"
+#include "src/common/ToolType.h"
 
 class GraphicsScene;
 class QGraphicsItem;
 
-const int ITEM_DATA_KEY =0x8001;
+const int ITEM_DATA_KEY = 0x8001;
 
 class ShapeBase : public QObject
 {
@@ -27,6 +28,7 @@ public:
     virtual void Rotate(qreal x, qreal y, qreal angle) = 0;
     virtual void RotateEnd() = 0;
 
+    virtual int GetItemKey() const = 0;
     virtual QRect GetRect() = 0;
     virtual QPointF GetP1() = 0;
     virtual QPointF GetP2() = 0;
@@ -34,6 +36,13 @@ public:
     virtual void ChangePos(qreal dx, qreal dy) = 0;
     virtual QGraphicsItem *GetGraphicsItem() = 0;
     virtual void ChangeSize(qreal dx, qreal dy) = 0;
+
+    virtual void SetPen(QPen pen) = 0;
+    virtual void SetBrush(QBrush brush) = 0;
+    virtual QPen GetPen() const = 0;
+    virtual QBrush GetBrush() const = 0;
+
+    virtual QPixmap GetPixmap() const = 0;
 
     virtual void HideControls(bool hide) = 0;
 
@@ -84,12 +93,8 @@ public:
         return m_rAngle;
     }
 
-    QPen pen(){
-        QPen temp;
-        temp.setWidth(PropObj::GetInstance()->PenWidth());
-        temp.setColor(PropObj::GetInstance()->PenColor());
-        temp.setStyle(PropObj::GetInstance()->PenStyle());
-        return temp;
+    TOOL_TYPE::Type GetType() const {
+        return m_type;
     }
 
 signals:
@@ -97,6 +102,7 @@ signals:
     void sigRotate(qreal anchor_x, qreal anchor_y, qreal angle);
 protected:
     qreal m_rAngle;
+    TOOL_TYPE::Type m_type;
 };
 
 #endif // SHAPEBASE_H

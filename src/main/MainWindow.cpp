@@ -82,12 +82,14 @@ void MainWindow::setupActions(){
         hideOperatorForm();
         m_pView->SetToolType(TOOL_TYPE::UNDO);
         m_pScene->UnselectedAll();
+        m_pScene->Undo();
     });
     connect(ui->actionRedo, &QAction::triggered, [=](){
         qDebug() << "on redo";
         hideOperatorForm();
         m_pView->SetToolType(TOOL_TYPE::REDO);
         m_pScene->UnselectedAll();
+        m_pScene->Redo();
     });
 
     connect(ui->actionMove, &QAction::triggered, [=](){
@@ -145,6 +147,12 @@ void MainWindow::initGraphics(){
     });
     connect(m_pScene, SIGNAL(sigItemResizeCompleted(int, TOOL_TYPE::Type, const QRect &, const QPointF &, const QPointF &)),
             this, SLOT(slotSceneItemSelected(int, TOOL_TYPE::Type, const QRect &, const QPointF &, const QPointF &)));
+    connect(m_pScene, &GraphicsScene::sigUndoAvailable, [=](bool available){
+        ui->actionUndo->setEnabled(available);
+    });
+    connect(m_pScene, &GraphicsScene::sigRedoAvailable, [=](bool available){
+        ui->actionRedo->setEnabled(available);
+    });
 //    connect(m_pScene, SIGNAL(sigItemPointsChanged(int, TOOL_TYPE::Type, const QRect &, const QPointF &, const QPointF &)),
 //            this, SLOT(slotSceneItemSelected(int, TOOL_TYPE::Type, const QRect &, const QPointF &, const QPointF &)));
 

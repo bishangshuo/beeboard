@@ -1,10 +1,12 @@
 #include "RectangleItem.h"
+#include "src/property/PropObj.h"
 #include <QPainter>
 
 RectangleItem::RectangleItem(int x, int y, int width, int height)
     : ItemBase(x, y, width, height)
 {
-
+    m_pen.setWidth(PropObj::GetInstance()->PenWidth());
+    m_pen.setColor(PropObj::GetInstance()->PenColor());
 }
 
 void RectangleItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -12,10 +14,8 @@ void RectangleItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
     painter->setRenderHint(QPainter::Antialiasing, true);
 
     QRectF rc = QRectF(-m_width/2, -m_height/2,  m_width, m_height);
-    QPen pen;
-    pen.setWidth(4);
-    pen.setColor(Qt::red);
-    painter->setPen(pen);
+
+    painter->setPen(m_pen);
     painter->drawRect(rc);
 
     ItemBase::paint(painter, option, widget);

@@ -3,6 +3,7 @@
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
 #include <QStyleOptionGraphicsItem>
+#include "src/property/PropObj.h"
 #include <QDebug>
 
 const int RZICON_LEN = 20;
@@ -59,20 +60,33 @@ LineItem::LineItem(QGraphicsItem *parent)
     setFlag(QGraphicsItem::ItemIsFocusable, true);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
     setAcceptHoverEvents(true);
+    m_pen.setWidth(PropObj::GetInstance()->PenWidth());
+    m_pen.setColor(PropObj::GetInstance()->PenColor());
+}
+
+LineItem::~LineItem(){
+    setFlag(QGraphicsItem::ItemIsMovable, false);
+    setFlag(QGraphicsItem::ItemIsSelectable, false);
+    setFlag(QGraphicsItem::ItemIsFocusable, false);
+    setFlag(QGraphicsItem::ItemSendsGeometryChanges, false);
+    setAcceptHoverEvents(false);
+    m_pressed = false;
+    m_isResizing = false;
+    m_hideClose = false;
+    m_hideResize = false;
 }
 
 void LineItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget){
     //QGraphicsLineItem::paint(painter, option, widget);
     QPointF p1 = line().p1();
     QPointF p2 = line().p2();
-    QPen p = this->pen();
-    painter->setPen(p);
+    painter->setPen(m_pen);
     painter->drawLine(QLineF(p1, p2));
 
     QColor color(255, 0, 0, 128);
 
     if(isSelected()){
-
+       QPen p;
        p.setColor(Qt::blue);
        painter->setPen(p);
        painter->drawPoint(p1);
@@ -232,7 +246,7 @@ void LineItem::mousePressEvent(QGraphicsSceneMouseEvent *event){
             m_pCBRemove(reinterpret_cast<int>(this));
         }
     }
-    QGraphicsItem::mousePressEvent(event);
+    //QGraphicsItem::mousePressEvent(event);
 }
 
 void LineItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event){

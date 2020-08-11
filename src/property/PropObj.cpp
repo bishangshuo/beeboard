@@ -14,11 +14,11 @@ PropObj *PropObj::GetInstance(){
 }
 
 int PropObj::PenWidth() const{
-    return 4;
+    return 2;
 }
 
 QColor PropObj::PenColor() const{
-    return  Qt::red;
+    return  Qt::blue;
 }
 
 Qt::PenStyle PropObj::PenStyle() const{

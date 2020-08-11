@@ -10,7 +10,13 @@ MultiSelector::MultiSelector(QObject *parent)
     : ShapeBase(parent)
     , m_pItem(nullptr)
 {
+    m_type = TOOL_TYPE::EMPTY;
+}
 
+MultiSelector::~MultiSelector(){
+    if(m_pItem){
+        delete m_pItem;
+    }
 }
 
 int MultiSelector::Create(const QPointF &leftTop, const QPointF &rightBottom, GraphicsScene *pScene){
@@ -84,6 +90,10 @@ void MultiSelector::RotateEnd(){
     m_rAngle = m_pItem->rotation();
 }
 
+int MultiSelector::GetItemKey() const{
+    return reinterpret_cast<int>(m_pItem);
+}
+
 QRect MultiSelector::GetRect(){
     return m_pItem->sceneBoundingRect().toRect();
 }
@@ -125,4 +135,12 @@ void MultiSelector::HideControls(bool hide){
     m_pItem->HideRotate(hide);
     m_pItem->HideClose(hide);
 //    m_pItem->HideResize(hide);
+}
+
+QPen MultiSelector::GetPen() const{
+    return m_pItem->GetPen();
+}
+
+QBrush MultiSelector::GetBrush() const{
+    return m_pItem->GetBrush();
 }

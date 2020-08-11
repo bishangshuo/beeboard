@@ -3,6 +3,7 @@
 #include <QPainter>
 #include <QDebug>
 #include "Eraser.h"
+#include "src/property/PropObj.h"
 #include <QStyleOptionGraphicsItem>
 #include <QtConcurrent>
 
@@ -18,18 +19,42 @@ static QPixmap QPixmapFromItem(QGraphicsItem *item){
 
 Pencil::Pencil(QObject *parent)
     : ShapeBase(parent)
+    , m_pItem(NULL)
 {
+        m_type = TOOL_TYPE::PENCIL;
+}
 
+Pencil::~Pencil(){
+    if(m_pItem){
+        delete m_pItem;
+    }
+}
+
+int Pencil::LoadFromPixmap(const QPixmap &pixmap, const QRect &rect, GraphicsScene *pScene){
+
+    if(m_pItem)
+    {
+        return 0;
+    }
+
+    m_pItem = new PencilItem();
+    pScene->addItem(m_pItem);
+    int key = reinterpret_cast<int>(m_pItem);
+    m_pItem->setData(ITEM_DATA_KEY, key);
+
+    m_pItem->SetRemoveCallback([=](int _key){
+        emit sigRemove(_key);
+    });
+
+    m_pItem->setShouldRemoveCallback([=](int _key){
+        emit sigRemove(_key);
+    });
+
+    return key;
 }
 
 int Pencil::Create(const QPointF &leftTop, const QPointF &rightBottom, GraphicsScene *pScene) {
     m_pItem = new PencilItem();
-    QPen pen;
-    pen.setWidth(4);
-    pen.setColor(Qt::red);
-    pen.setJoinStyle(Qt::RoundJoin);
-    pen.setCapStyle(Qt::RoundCap);
-    m_pItem->setPen(pen);
     pScene->addItem(m_pItem);
     int key = reinterpret_cast<int>(m_pItem);
     m_pItem->setData(ITEM_DATA_KEY, key);
@@ -74,9 +99,11 @@ void Pencil::SetSelected(bool selected) {
     }
     m_pItem->setSelected(selected);
 }
+
 void Pencil::SetEditable(bool editable) {
 
 }
+
 void Pencil::Remove(GraphicsScene *pScene) {
     pScene->removeItem(m_pItem);
 }
@@ -87,8 +114,13 @@ void Pencil::RotateBegin() {
 void Pencil::Rotate(qreal x, qreal y, qreal angle) {
 
 }
+
 void Pencil::RotateEnd() {
 
+}
+
+int Pencil::GetItemKey() const{
+    return reinterpret_cast<int>(m_pItem);
 }
 
 QRect Pencil::GetRect(){
@@ -290,4 +322,24 @@ void Pencil::slotEraserPressed(){
 
 void Pencil::slotEraserRelease(){
     m_pItem->onEraserRelease();
+}
+
+void Pencil::SetPen(QPen pen) {
+    m_pItem->SetPen(pen);
+}
+
+void Pencil::SetBrush(QBrush brush) {
+    m_pItem->SetBrush(brush);
+}
+
+QPen Pencil::GetPen() const{
+    return m_pItem->GetPen();
+}
+
+QBrush Pencil::GetBrush() const{
+    return m_pItem->GetBrush();
+}
+
+QPixmap Pencil::GetPixmap() const{
+    return m_pItem->GetPixmap();
 }

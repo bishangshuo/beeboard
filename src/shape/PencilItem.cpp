@@ -12,6 +12,8 @@
 #include <QRandomGenerator>
 #include <QtConcurrent>
 #include <QPainterPathStroker>
+#include <QDateTime>
+#include "src/property/PropObj.h"
 
 PencilItem::PencilItem(QGraphicsItem *parent)
     : QGraphicsPathItem(parent)
@@ -25,10 +27,27 @@ PencilItem::PencilItem(QGraphicsItem *parent)
     setFlag(QGraphicsItem::ItemIsFocusable, true);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
     setAcceptHoverEvents(true);
+    m_pen.setWidth(PropObj::GetInstance()->PenWidth());
+    m_pen.setColor(PropObj::GetInstance()->PenColor());
+    m_pen.setJoinStyle(PropObj::GetInstance()->PenJoinStyle());
+    m_pen.setCapStyle(PropObj::GetInstance()->PenCapStyle());
+    setPen(m_pen);
 }
 
 PencilItem::~PencilItem(){
-
+    if(m_mapEraserPathUndo.size() > 0){
+        for(MapEraserPath::iterator it = m_mapEraserPathUndo.begin(); it != m_mapEraserPathUndo.end(); ){
+            VectorPath *vectorPath = it.value();
+            for(VectorPath::Iterator itV = vectorPath->begin(); itV != vectorPath->end(); ){
+                ERASER_PATH *data = *itV;
+                delete data;
+                itV = vectorPath->erase(itV);
+            }
+            vectorPath->clear();
+            delete vectorPath;
+            it = m_mapEraserPathUndo.erase(it);
+        }
+    }
 }
 
 void PencilItem::Created(){
@@ -61,9 +80,8 @@ void PencilItem::RenderPathToPixmap(){
 
     QPainterPath orgPath = path();
 
-    QPen p(pen());
     QPainterPathStroker stroker;
-    stroker.setWidth(p.width());
+    stroker.setWidth(m_pen.width());
     QPainterPath strokerPath = stroker.createStroke(orgPath);
 
     QRectF rc = strokerPath.boundingRect();
@@ -74,7 +92,7 @@ void PencilItem::RenderPathToPixmap(){
     painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform | QPainter::TextAntialiasing);
 
     //绘制原来path到pixmap
-    painter.setPen(p);
+    painter.setPen(m_pen);
     painter.translate(-rc.topLeft());
     painter.drawPath(orgPath);
 
@@ -85,16 +103,19 @@ void PencilItem::RenderPathToPixmap(){
 
 void PencilItem::RenderEraserToPixmap(){
 
+    if(m_mapEraserPathUndo.size() <= 0){
+        return;
+    }
+
     QPainterPath orgPath = path();
 
-    QPen p(pen());
     QPainterPathStroker stroker;
-    stroker.setWidth(p.width());
+    stroker.setWidth(m_pen.width());
     QPainterPath strokerPath = stroker.createStroke(orgPath);
 
     QRectF rc = strokerPath.boundingRect();
 
-    QPixmap pixmap = m_pixmap;
+    QPixmap pixmap = m_pixmap.copy();
 
     QPainter painter(&pixmap);
     painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform | QPainter::TextAntialiasing);
@@ -107,7 +128,7 @@ void PencilItem::RenderEraserToPixmap(){
             for(VectorPath::Iterator itV = vectorPath->begin(); itV != vectorPath->end(); itV++){
                 ERASER_PATH *path_data = *itV;
                 QPainterPath *path = path_data->path;
-                if(path->elementCount() > 1){
+                if(path->elementCount() > 1 && !path_data->drawn){
                     int width = path_data->width;
                     QPen pen;
                     pen.setWidth(width);
@@ -216,69 +237,47 @@ bool PencilItem::isInCloseArea(const QPointF &pos) const
     return QRectF(pt.x()-20, pt.y(), 20, 20).contains(pos);
 }
 
+//遍历image所有点，如果发现有不透明的点，则说明不可移除
 void PencilItem::onEraserRelease(){
-    //将所有path画到pixmap, 但不要包括选择焦点边框和关闭按钮
-    QRectF rc = boundingRect();
-    QPixmap pixmap(rc.width(), rc.height());
-    pixmap.fill(Qt::transparent);
 
-    QPainter painter(&pixmap);
-    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform | QPainter::TextAntialiasing);
-    QPen p = pen();
-    painter.setPen(p);
-    painter.drawPath(mPath);
-
-    //绘制橡皮擦
     if(m_mapEraserPathUndo.size() > 0){
-        //QPainter::CompositionMode oldMode = painter.compositionMode();
-        painter.setCompositionMode(QPainter::CompositionMode_DestinationOut);
-        for(MapEraserPath::const_iterator it = m_mapEraserPathUndo.constBegin(); it != m_mapEraserPathUndo.constEnd(); it ++){
+        for(MapEraserPath::iterator it = m_mapEraserPathUndo.begin(); it != m_mapEraserPathUndo.end(); it ++){
             VectorPath *vectorPath = it.value();
             for(VectorPath::Iterator itV = vectorPath->begin(); itV != vectorPath->end(); itV++){
-                ERASER_PATH *path_data = *itV;
-                int width = path_data->width;
-                QPainterPath *path = path_data->path;
-                QPen pen;
-                pen.setWidth(width);
-                pen.setCapStyle(Qt::RoundCap);
-                pen.setJoinStyle(Qt::RoundJoin);
-                pen.setColor(Qt::white);
-                painter.setPen(pen);
-                if(path->elementCount() > 1){
-                    painter.drawPath(*path);
+                if(!(*itV)->drawn){
+                    (*itV)->drawn = true;
                 }
             }
         }
-
-        //painter.setCompositionMode(oldMode);
     }
-
-    painter.end();
 
     int key = reinterpret_cast<int>(this);
     QPixmap *pPixmap = new QPixmap();
-    *pPixmap = pixmap.copy();
-    QtConcurrent::run([this, key, pPixmap](){
-        QImage img = pPixmap->toImage();
-        QRgb *st = (QRgb *) img.bits();
-        quint64 pixelCount = img.width() * img.height();
+    *pPixmap = m_pixmap.copy();
+    QImage img = pPixmap->toImage();
+    QRgb *st = (QRgb *) img.bits();
+    quint64 pixelCount = img.width() * img.height();
+    bool b = false;
 
-        bool b = false;
-        for (quint64 p = 0; p < pixelCount; p++) {
-            //st[p] = QColor(255, 128, 0).rgb();
-            QRgb rgb = st[p];
-            int alpha = qAlpha(rgb);
-            if(alpha > 32){
-                qDebug()<<"alpha="<<alpha;
-                b = true;
-                break;
-            }
+    qint64 bt = QDateTime::currentMSecsSinceEpoch();
+    qDebug() << "end scan:"<<bt;
+    for (quint64 p = 0; p < pixelCount; p++) {
+        //st[p] = QColor(255, 128, 0).rgb();
+        QRgb rgb = st[p];
+        int alpha = qAlpha(rgb);
+        if(alpha > 32){
+            qDebug()<<"alpha="<<alpha;
+            b = true;
+            break;
         }
-        if(!b){
-            if(m_cbRemove != NULL){
-                m_cbRemove(key);
-            }
+    }
+    delete pPixmap;
+    qint64 et = QDateTime::currentMSecsSinceEpoch();
+    qDebug() << "end scan:"<<et<<", erasetime="<<et-bt;
+
+    if(!b){
+        if(m_cbRemove != NULL){
+            m_cbRemove(key);
         }
-        delete pPixmap;
-    });
+    }
 }

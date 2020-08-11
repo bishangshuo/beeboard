@@ -5,6 +5,8 @@
 #include <QTime>
 #include <QVector2D>
 #include <cmath>
+#include <QPen>
+#include <QBrush>
 #include "src/shape/ItemCtrl.h"
 
 const qreal PI = 3.141592653;
@@ -46,6 +48,22 @@ public:
         m_hideResize = hide;
     }
 
+    void SetPen(QPen pen){
+        m_pen = pen;
+    }
+
+    void SetBrush(QBrush brush){
+        m_brush = brush;
+    }
+
+    QPen GetPen() const{
+        return m_pen;
+    }
+
+    QBrush GetBrush() const {
+        return m_brush;
+    }
+
 protected:
     virtual ItemBase *createNew(int x, int y, int width, int height) = 0;
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
@@ -84,6 +102,9 @@ public:
     bool m_hideRotate;
     bool m_hideClose;
     bool m_hideResize;
+
+    QPen m_pen;
+    QBrush m_brush;
 };
 
 

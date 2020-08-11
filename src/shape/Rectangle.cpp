@@ -9,7 +9,12 @@ Rectangle::Rectangle(QObject *parent)
     : ShapeBase(parent)
     , m_pItem(nullptr)
 {
+    m_type = TOOL_TYPE::RECTANGLE;
+}
 
+Rectangle::~Rectangle(){
+    if(m_pItem)
+        delete m_pItem;
 }
 
 int Rectangle::Create(const QPointF &leftTop, const QPointF &rightBottom, GraphicsScene *pScene){
@@ -79,6 +84,10 @@ void Rectangle::RotateEnd(){
     m_rAngle = m_pItem->rotation();
 }
 
+int Rectangle::GetItemKey() const{
+    return reinterpret_cast<int>(m_pItem);
+}
+
 QRect Rectangle::GetRect(){
     return m_pItem->sceneBoundingRect().toRect();
 }
@@ -120,4 +129,20 @@ void Rectangle::HideControls(bool hide){
     m_pItem->HideRotate(hide);
     m_pItem->HideClose(hide);
     m_pItem->HideResize(hide);
+}
+
+void Rectangle::SetPen(QPen pen) {
+    m_pItem->SetPen(pen);
+}
+
+void Rectangle::SetBrush(QBrush brush) {
+    m_pItem->SetBrush(brush);
+}
+
+QPen Rectangle::GetPen() const{
+    return m_pItem->GetPen();
+}
+
+QBrush Rectangle::GetBrush() const{
+    return m_pItem->GetBrush();
 }

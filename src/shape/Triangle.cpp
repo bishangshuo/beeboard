@@ -10,7 +10,12 @@ Triangle::Triangle(QObject *parent)
     : ShapeBase(parent)
     , m_pItem(nullptr)
 {
+    m_type = TOOL_TYPE::TRIANGLE;
+}
 
+Triangle::~Triangle(){
+    if(m_pItem)
+        delete m_pItem;
 }
 
 int Triangle::Create(const QPointF &leftTop, const QPointF &rightBottom, GraphicsScene *pScene){
@@ -78,6 +83,10 @@ void Triangle::RotateEnd(){
     m_rAngle = m_pItem->rotation();
 }
 
+int Triangle::GetItemKey() const{
+    return reinterpret_cast<int>(m_pItem);
+}
+
 QRect Triangle::GetRect(){
     return m_pItem->sceneBoundingRect().toRect();
 }
@@ -109,4 +118,20 @@ void Triangle::HideControls(bool hide){
     m_pItem->HideRotate(hide);
     m_pItem->HideClose(hide);
     m_pItem->HideResize(hide);
+}
+
+void Triangle::SetPen(QPen pen) {
+    m_pItem->SetPen(pen);
+}
+
+void Triangle::SetBrush(QBrush brush) {
+    m_pItem->SetBrush(brush);
+}
+
+QPen Triangle::GetPen() const{
+    return m_pItem->GetPen();
+}
+
+QBrush Triangle::GetBrush() const{
+    return m_pItem->GetBrush();
 }

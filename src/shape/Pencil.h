@@ -14,9 +14,10 @@ class Pencil : public ShapeBase
     Q_OBJECT
 public:
     Pencil(QObject *parent = nullptr);
+    ~Pencil();
 
     QPointF MapFromScene(const QPointF &p);
-
+    int LoadFromPixmap(const QPixmap &pixmap, const QRect &rect, GraphicsScene *pScene);
 signals:
     void sigShouldRemovePencil(int key);
 public slots:
@@ -35,6 +36,7 @@ protected:
     void Rotate(qreal x, qreal y, qreal angle) override;
     void RotateEnd() override;
 
+    int GetItemKey() const override;
     QRect GetRect() override;
     QPointF GetP1() override;
     QPointF GetP2() override;
@@ -43,14 +45,18 @@ protected:
     QGraphicsItem *GetGraphicsItem() override;
     void ChangeSize(qreal dx, qreal dy) override;
 
+    void SetPen(QPen pen) override;
+    void SetBrush(QBrush brush) override;
+    QPen GetPen() const override;
+    QBrush GetBrush() const override;
+
+    QPixmap GetPixmap() const override;
+
     void HideControls(bool hide) override;
 private:
     PencilItem *m_pItem;
     QPainterPath m_path;
-    QPixmap m_pixmap;
     QPointF m_point;
-//    MapEraserPath m_mapEraserPathUndo;
-//    MapEraserPath m_mapEraserPathRedo;
 };
 
 #endif // PENCIL_H

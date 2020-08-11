@@ -3,6 +3,7 @@
 
 typedef struct _TOOL_TYPE{
     enum Type{
+        EMPTY = 0,
         SELECT = 1,
         PENCIL,
         RECTANGLE,

@@ -6,17 +6,15 @@
 SelectItem::SelectItem(qreal x, qreal y, qreal w, qreal h, QGraphicsItem *parent)
     : QGraphicsRectItem(x, y, w, h, parent)
 {
+    m_pen.setColor(QColor(255,0, 0, 128));
+    m_pen.setWidth(1);
+    m_pen.setStyle(Qt::DashDotLine);
 }
 
 void SelectItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     painter->setRenderHint(QPainter::Antialiasing, true);
-
-    QPen pen;
-    pen.setColor(QColor(255,0, 0, 128));
-    pen.setWidth(1);
-    pen.setStyle(Qt::DashDotLine);
-    painter->setPen(pen);
+    painter->setPen(m_pen);
     painter->drawRect(rect());
 
     QGraphicsRectItem::paint(painter, option, widget);

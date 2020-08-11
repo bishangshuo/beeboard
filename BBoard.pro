@@ -21,6 +21,13 @@ include(src/graphics/graphics.pri)
 include(src/shape/shape.pri)
 include(src/common/common.pri)
 include(src/property/property.pri)
+include(src/docman/docman.pri)
+
+INCLUDEPATH += $$PWD/protobuf/include
+DEPENDPATH += $$PWD/protobuf/include
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/protobuf/lib/Release/ -llibprotobuf
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/protobuf/lib/Debug/ -llibprotobufd
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

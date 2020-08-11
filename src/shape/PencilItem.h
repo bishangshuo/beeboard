@@ -3,15 +3,19 @@
 
 #include <QGraphicsPathItem>
 #include <QVector2D>
+#include <QPen>
+#include <QBrush>
 #include "src/shape/ItemCtrl.h"
 
 typedef struct _ERASER_PATH{
     _ERASER_PATH(QPainterPath *_path, int _width){
         path = _path;
         width = _width;
+        drawn = false;
     }
     QPainterPath *path;
     int width;
+    bool drawn;
 }ERASER_PATH;
 
 typedef QVector<ERASER_PATH *> VectorPath;
@@ -44,6 +48,26 @@ public:
     QPainterPath shape() const override;
 //    QRectF boundingRect() const override;
 
+    void SetPen(QPen pen){
+        m_pen = pen;
+    }
+
+    void SetBrush(QBrush brush){
+        m_brush = brush;
+    }
+
+    QPen GetPen() const{
+        return m_pen;
+    }
+
+    QBrush GetBrush() const {
+        return m_brush;
+    }
+
+    QPixmap GetPixmap() const {
+        return m_pixmap;
+    }
+
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
@@ -69,6 +93,9 @@ private:
     CBPencilRemove m_cbRemove;
 
     QPixmap m_pixmap;
+
+    QPen m_pen;
+    QBrush m_brush;
 };
 
 #endif // PENCILITEM_H

@@ -269,6 +269,7 @@ Makefile: BBoard.pro F:\Qt\Qt5.14.0\5.14.0\msvc2017\mkspecs\win32-msvc\qmake.con
 		src\shape\shape.pri \
 		src\common\common.pri \
 		src\property\property.pri \
+		src\docman\docman.pri \
 		F:\Qt\Qt5.14.0\5.14.0\msvc2017\mkspecs\features\resolve_config.prf \
 		F:\Qt\Qt5.14.0\5.14.0\msvc2017\mkspecs\features\exclusive_builds_post.prf \
 		F:\Qt\Qt5.14.0\5.14.0\msvc2017\mkspecs\features\default_post.prf \
@@ -487,6 +488,7 @@ src\graphics\graphics.pri:
 src\shape\shape.pri:
 src\common\common.pri:
 src\property\property.pri:
+src\docman\docman.pri:
 F:\Qt\Qt5.14.0\5.14.0\msvc2017\mkspecs\features\resolve_config.prf:
 F:\Qt\Qt5.14.0\5.14.0\msvc2017\mkspecs\features\exclusive_builds_post.prf:
 F:\Qt\Qt5.14.0\5.14.0\msvc2017\mkspecs\features\default_post.prf:

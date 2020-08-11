@@ -3,6 +3,10 @@
 Eraser::Eraser(QObject *parent)
     : ShapeBase(parent)
 {
+    m_type = TOOL_TYPE::ERASER;
+}
+
+Eraser::~Eraser(){
 
 }
 
@@ -34,6 +38,10 @@ void Eraser::Rotate(qreal x, qreal y, qreal angle){
 void Eraser::RotateEnd(){
 }
 
+int Eraser::GetItemKey() const{
+    return 0;
+}
+
 QRect Eraser::GetRect(){
     return QRect();
 }
@@ -62,4 +70,12 @@ void Eraser::ChangeSize(qreal dx, qreal dy){
 }
 
 void Eraser::HideControls(bool hide){
+}
+
+QPen Eraser::GetPen() const{
+    return QPen();
+}
+
+QBrush Eraser::GetBrush() const{
+    return QBrush();
 }
