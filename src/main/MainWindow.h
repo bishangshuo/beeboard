@@ -42,6 +42,8 @@ private:
     void showOperatorForm(int key, TOOL_TYPE::Type toolType, const QRect &rc, const QPointF &p1, const QPointF &p2);
     void hideOperatorForm();
     QRect MapSceneToView(const QRect &rc);
+
+    void OpenBoardFile();
 private:
     Ui::MainWindow *ui;
     TOOL_TYPE::Type m_eToolType;

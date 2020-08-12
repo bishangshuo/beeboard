@@ -65,6 +65,7 @@ public:
     void clearScene();
     void onItemPosChanged(int key, qreal dx, qreal dy);
     void onItemRemove(int key);
+    void onItemGeoChanged(int key);
     void onItemsRemoveByRubberBand();
     void onMultiSelectedItemsRotate(qreal anchor_x, qreal anchor_y, qreal angle);
 

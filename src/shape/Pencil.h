@@ -7,6 +7,13 @@
 #include <QGraphicsPixmapItem>
 #include "src/shape/PencilItem.h"
 
+typedef struct _ERASER_DATA{
+    _ERASER_DATA(QByteArray *_ba, int _width)
+        : ba(_ba), width(_width){}
+    QByteArray *ba;
+    int width;
+}ERASER_DATA;
+
 class Eraser;
 
 class Pencil : public ShapeBase
@@ -18,6 +25,18 @@ public:
 
     QPointF MapFromScene(const QPointF &p);
     int LoadFromPixmap(const QPixmap &pixmap, const QRect &rect, GraphicsScene *pScene);
+
+    //获取path序列化后的数据，由外部分配内存，返回数据长度
+    int GetPathData(QByteArray *ba) const;
+
+    //获取橡皮擦列表数据，由函数内部分配内存，使用一定要释放内存
+    QList<ERASER_DATA> *GetEraserData() const;
+    //释放已经使用的内存
+    void SafeDelete(QList<ERASER_DATA> *listEraser);
+
+    void SetPath(const QPainterPath &path);
+    void AddEraserPath(const QPainterPath &path, int width);
+    void SetPos(const QPointF &pos);
 signals:
     void sigShouldRemovePencil(int key);
 public slots:
@@ -41,6 +60,15 @@ protected:
     QPointF GetP1() override;
     QPointF GetP2() override;
     QPointF GetPos() override;
+    qreal GetAngle() const override{
+        return 0.0;
+    }
+    int GetItemWidth() const override{
+        return 0;
+    }
+    int GetItemHeight() const override{
+        return 0;
+    }
     void ChangePos(qreal dx, qreal dy) override;
     QGraphicsItem *GetGraphicsItem() override;
     void ChangeSize(qreal dx, qreal dy) override;

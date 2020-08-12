@@ -26,6 +26,10 @@ int Ellipse::Create(const QPointF &leftTop, const QPointF &rightBottom, Graphics
         emit sigRemove(_key);
     });
 
+    connect(m_pItem, &ItemBase::sigItemChanged, [=](){
+        emit sigGeoChanged(reinterpret_cast<int>(m_pItem));
+    });
+
     return key;
 }
 
@@ -95,6 +99,18 @@ QPointF Ellipse::GetP2(){
 
 QPointF Ellipse::GetPos(){
     return m_pItem->scenePos();
+}
+
+qreal Ellipse::GetAngle() const{
+    return  m_pItem->rotation();
+}
+
+int Ellipse::GetItemWidth() const{
+    return m_pItem->Width();
+}
+
+int Ellipse::GetItemHeight() const{
+    return m_pItem->Height();
 }
 
 void Ellipse::ChangePos(qreal dx, qreal dy){

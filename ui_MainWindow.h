@@ -35,6 +35,7 @@ public:
     QAction *actionReset;
     QAction *actionMove;
     QAction *actionTriangle;
+    QAction *actionOpenFile;
     QWidget *centralwidget;
     QToolBar *toolbar;
 
@@ -42,7 +43,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(800, 600);
+        MainWindow->resize(903, 637);
         MainWindow->setAutoFillBackground(true);
         MainWindow->setStyleSheet(QString::fromUtf8(""));
         actionSelect = new QAction(MainWindow);
@@ -144,6 +145,11 @@ public:
         icon13.addFile(QString::fromUtf8(":/resources/images/triangle.png"), QSize(), QIcon::Normal, QIcon::Off);
         icon13.addFile(QString::fromUtf8(":/resources/images/triangle-selected.png"), QSize(), QIcon::Normal, QIcon::On);
         actionTriangle->setIcon(icon13);
+        actionOpenFile = new QAction(MainWindow);
+        actionOpenFile->setObjectName(QString::fromUtf8("actionOpenFile"));
+        QIcon icon14;
+        icon14.addFile(QString::fromUtf8(":/resources/images/icon_open_file.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionOpenFile->setIcon(icon14);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         MainWindow->setCentralWidget(centralwidget);
@@ -172,6 +178,8 @@ public:
         toolbar->addAction(actionReset);
         toolbar->addSeparator();
         toolbar->addAction(actionClear);
+        toolbar->addSeparator();
+        toolbar->addAction(actionOpenFile);
 
         retranslateUi(MainWindow);
 
@@ -195,6 +203,10 @@ public:
         actionReset->setText(QCoreApplication::translate("MainWindow", "Reset", nullptr));
         actionMove->setText(QCoreApplication::translate("MainWindow", "Move", nullptr));
         actionTriangle->setText(QCoreApplication::translate("MainWindow", "Triangle", nullptr));
+        actionOpenFile->setText(QCoreApplication::translate("MainWindow", "Open", nullptr));
+#if QT_CONFIG(tooltip)
+        actionOpenFile->setToolTip(QCoreApplication::translate("MainWindow", "Open", nullptr));
+#endif // QT_CONFIG(tooltip)
     } // retranslateUi
 
 };

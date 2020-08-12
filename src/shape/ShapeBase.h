@@ -33,6 +33,9 @@ public:
     virtual QPointF GetP1() = 0;
     virtual QPointF GetP2() = 0;
     virtual QPointF GetPos() = 0;
+    virtual qreal GetAngle() const = 0;
+    virtual int GetItemWidth() const = 0;
+    virtual int GetItemHeight() const = 0;
     virtual void ChangePos(qreal dx, qreal dy) = 0;
     virtual QGraphicsItem *GetGraphicsItem() = 0;
     virtual void ChangeSize(qreal dx, qreal dy) = 0;
@@ -89,10 +92,6 @@ public:
         return ang;
     }
 
-    qreal GetAngle() const{
-        return m_rAngle;
-    }
-
     TOOL_TYPE::Type GetType() const {
         return m_type;
     }
@@ -100,6 +99,7 @@ public:
 signals:
     void sigRemove(int key);
     void sigRotate(qreal anchor_x, qreal anchor_y, qreal angle);
+    void sigGeoChanged(int key);
 protected:
     qreal m_rAngle;
     TOOL_TYPE::Type m_type;

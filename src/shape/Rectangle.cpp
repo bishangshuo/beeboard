@@ -26,6 +26,10 @@ int Rectangle::Create(const QPointF &leftTop, const QPointF &rightBottom, Graphi
     m_pItem->SetRemoveCallback([=](int _key){
         emit sigRemove(_key);
     });
+
+    connect(m_pItem, &ItemBase::sigItemChanged, [=](){
+        emit sigGeoChanged(reinterpret_cast<int>(m_pItem));
+    });
     return key;
 }
 
@@ -73,11 +77,13 @@ void Rectangle::RotateBegin(){
 void Rectangle::Rotate(qreal x, qreal y, qreal angle){
     //QPointF pos = m_pItem->scenePos();
     //qreal ang = trimAngle(angle);
-    m_pItem->setTransformOriginPoint(QPointF(x, y));
-    m_pItem->setRotation(angle);
+    //m_pItem->setTransformOriginPoint(QPointF(x, y));
+    //m_pItem->setRotation(angle);
     //m_pItem->setPos(pos);
     //m_pItem->setTransformOriginPoint(QPointF(0, 0));
-    m_pItem->resetTransform();
+    //m_pItem->resetTransform();
+
+    m_pItem->Rotate(angle);
 }
 
 void Rectangle::RotateEnd(){
@@ -89,7 +95,9 @@ int Rectangle::GetItemKey() const{
 }
 
 QRect Rectangle::GetRect(){
-    return m_pItem->sceneBoundingRect().toRect();
+    //不要获取boundingrect，而是获取item内的rect
+    return m_pItem->GetRect().toRect();
+//    return m_pItem->sceneBoundingRect().toRect();
 }
 
 QPointF Rectangle::GetP1(){
@@ -102,6 +110,18 @@ QPointF Rectangle::GetP2(){
 
 QPointF Rectangle::GetPos(){
     return m_pItem->scenePos();
+}
+
+qreal Rectangle::GetAngle() const{
+    return  m_pItem->rotation();
+}
+
+int Rectangle::GetItemWidth() const{
+    return m_pItem->Width();
+}
+
+int Rectangle::GetItemHeight() const{
+    return m_pItem->Height();
 }
 
 void Rectangle::ChangePos(qreal dx, qreal dy){

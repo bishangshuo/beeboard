@@ -248,23 +248,7 @@ void ItemBase::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         qreal angleEnd = GetDegreeAngle(vectorEnd);
         qreal angleStart = GetDegreeAngle(vectorStart);
         angle = angleEnd - angleStart + rotation();
-        if (angle > 360.0)
-        {
-            while(1)
-            {
-                angle -= 360.0;
-                if (angle < 360.0) break;
-            }
-        }
-        else if (angle < 0.0)
-        {
-            while(1)
-            {
-                angle += 360.0;
-                if (angle > 0.0) break;
-            }
-        }
-        setRotation(angle);
+        Rotate(angle);
 
         if(m_pCBRotate){
             QPointF _scenePos = scenePos();
@@ -314,6 +298,7 @@ void ItemBase::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     {
         QGraphicsItem::mouseReleaseEvent(event);
     }
+    emit sigItemChanged();
 }
 
 void ItemBase::keyPressEvent(QKeyEvent *event)
@@ -369,4 +354,25 @@ bool ItemBase::isInRotateArea(const QPointF &pos) const
 bool ItemBase::isInCloseArea(const QPointF &pos) const
 {
     return QRectF(m_width/2-20, -m_height/2, 20, 20).contains(pos);
+}
+
+
+void ItemBase::Rotate(qreal angle){
+    if (angle > 360.0)
+    {
+        while(1)
+        {
+            angle -= 360.0;
+            if (angle < 360.0) break;
+        }
+    }
+    else if (angle < 0.0)
+    {
+        while(1)
+        {
+            angle += 360.0;
+            if (angle > 0.0) break;
+        }
+    }
+    setRotation(angle);
 }

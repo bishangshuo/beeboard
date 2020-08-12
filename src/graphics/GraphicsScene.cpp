@@ -193,6 +193,9 @@ void GraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
         connect(shape, &ShapeBase::sigRemove, [=](int _key){
             onItemRemove(_key);
         });
+        connect(shape, &ShapeBase::sigGeoChanged, [=](int _key){
+            onItemGeoChanged(_key);
+        });
         //创建新元素，清空所有redo
         m_stRedo.clear();
         m_stUndo.push(ACTION_NODE(act_type_create_item, shape));
@@ -448,10 +451,21 @@ void GraphicsScene::onItemRemove(int key){
         SHAPE_DATA *data = it.value();
         ShapeBase *shape = data->shape;
         RemoveItemFromProtobuf(shape);
+        SaveProtobufToFile();
         removeItem(shape->GetGraphicsItem());
         delete shape;
         delete data;
         it = m_mapShape.erase(it);
+    }
+}
+
+void GraphicsScene::onItemGeoChanged(int key){
+    qDebug()<<"GraphicsScene::onItemGeoChanged key="<<key;
+    MapShape::iterator it = m_mapShape.find(key);
+    if(it != m_mapShape.end()){
+        SHAPE_DATA *data = it.value();
+        ShapeBase *shape = data->shape;
+        ModifyItemInProtobuf(shape);
         SaveProtobufToFile();
     }
 }
@@ -690,31 +704,37 @@ void GraphicsScene::SaveItemToProtobuf(ShapeBase *shape){
         PBShape::Line *line = PBShapeHelper::CreateLine(shape->GetP1().toPoint(), shape->GetP2().toPoint(), shape->GetPen());
         (*m_pScenePb->mutable_mapline())[itemKey] = *line;
     }else if(type ==TOOL_TYPE::RECTANGLE){
-        QRect rc = shape->GetRect();
-        PBShape::Rectangle *rectagle = PBShapeHelper::CreateRectangle(rc.x(), rc.y(), rc.width(), rc.height(),
+        QPointF pos = shape->GetPos();
+        int width = shape->GetItemWidth();
+        int height = shape->GetItemHeight();
+        PBShape::Rectangle *rectagle = PBShapeHelper::CreateRectangle(pos.x(), pos.y(), width, height,
                                                                       shape->GetPen(), shape->GetBrush());
         (*m_pScenePb->mutable_maprectangle())[itemKey] = *rectagle;
     }else if(type ==TOOL_TYPE::ELLIPSE){
-        QRect rc = shape->GetRect();
-        PBShape::Ellipse *ellipse = PBShapeHelper::CreateEllipse(rc.x(), rc.y(), rc.width(), rc.height(),
+        QPointF pos = shape->GetPos();
+        int width = shape->GetItemWidth();
+        int height = shape->GetItemHeight();
+        PBShape::Ellipse *ellipse = PBShapeHelper::CreateEllipse(pos.x(), pos.y(), width, height,
                                                                       shape->GetPen(), shape->GetBrush());
         (*m_pScenePb->mutable_mapellipse())[itemKey] = *ellipse;
     }else if(type ==TOOL_TYPE::TRIANGLE){
-        QRect rc = shape->GetRect();
-        PBShape::Triangle *triangle = PBShapeHelper::CreateTriangle(rc.x(), rc.y(), rc.width(), rc.height(),
+        QPointF pos = shape->GetPos();
+        int width = shape->GetItemWidth();
+        int height = shape->GetItemHeight();
+        PBShape::Triangle *triangle = PBShapeHelper::CreateTriangle(pos.x(), pos.y(), width, height,
                                                                       shape->GetPen(), shape->GetBrush());
         (*m_pScenePb->mutable_maptriangle())[itemKey] = *triangle;
     }else if(type ==TOOL_TYPE::PENCIL){
+        Pencil *pencil = dynamic_cast<Pencil *>(shape);
         QRect rc = shape->GetRect();
-        QPixmap pixmap = shape->GetPixmap();
-        QByteArray byteArray = QByteArray();
-        QBuffer buffer(&byteArray);
-        buffer.open(QIODevice::WriteOnly);
-        pixmap.save(&buffer,"png",0);
-//        QDataStream out;
-//        out<<shape->GetRect();
-        PBShape::Scribble *scribble = PBShapeHelper::CreateScribble(rc.x(), rc.y(), rc.width(), rc.height(), byteArray);
+        QPen p = shape->GetPen();
+        QPointF pos = shape->GetPos();
+        QByteArray pathBa;
+        pencil->GetPathData(&pathBa);
+        QList<ERASER_DATA> *listEraser = pencil->GetEraserData();
+        PBShape::Scribble *scribble = PBShapeHelper::CreateScribble(rc.x(), rc.y(), rc.width(), rc.height(), pos, p, pathBa, *listEraser);
         (*m_pScenePb->mutable_mapscribble())[itemKey] = *scribble;
+        pencil->SafeDelete(listEraser);
     }
 }
 
@@ -734,29 +754,47 @@ void GraphicsScene::ModifyItemInProtobuf(ShapeBase *shape){
     }else if(type ==TOOL_TYPE::RECTANGLE){
         auto it = m_pScenePb->mutable_maprectangle()->find(itemKey);
         if(it != m_pScenePb->mutable_maprectangle()->end()){
-            QRect rc = shape->GetRect();
-            it->second.mutable_rect()->set_x(rc.x());
-            it->second.mutable_rect()->set_y(rc.y());
-            it->second.mutable_rect()->set_w(rc.width());
-            it->second.mutable_rect()->set_h(rc.height());
+            QPointF p = shape->GetPos();
+            int width = shape->GetItemWidth();
+            int height = shape->GetItemHeight();
+            qreal angle = shape->GetAngle();
+            PBShape::Pos *pos = new PBShape::Pos();
+            pos->set_x(p.x());
+            pos->set_y(p.y());
+            it->second.set_allocated_pos(pos);
+            it->second.set_width(width);
+            it->second.set_height(height);
+            it->second.set_angle(angle);
         }
     }else if(type ==TOOL_TYPE::ELLIPSE){
         auto it = m_pScenePb->mutable_mapellipse()->find(itemKey);
         if(it != m_pScenePb->mutable_mapellipse()->end()){
-            QRect rc = shape->GetRect();
-            it->second.mutable_rect()->set_x(rc.x());
-            it->second.mutable_rect()->set_y(rc.y());
-            it->second.mutable_rect()->set_w(rc.width());
-            it->second.mutable_rect()->set_h(rc.height());
+            QPointF p = shape->GetPos();
+            int width = shape->GetItemWidth();
+            int height = shape->GetItemHeight();
+            qreal angle = shape->GetAngle();
+            PBShape::Pos *pos = new PBShape::Pos();
+            pos->set_x(p.x());
+            pos->set_y(p.y());
+            it->second.set_allocated_pos(pos);
+            it->second.set_width(width);
+            it->second.set_height(height);
+            it->second.set_angle(angle);
         }
     }else if(type ==TOOL_TYPE::TRIANGLE){
         auto it = m_pScenePb->mutable_maptriangle()->find(itemKey);
         if(it != m_pScenePb->mutable_maptriangle()->end()){
-            QRect rc = shape->GetRect();
-            it->second.mutable_rect()->set_x(rc.x());
-            it->second.mutable_rect()->set_y(rc.y());
-            it->second.mutable_rect()->set_w(rc.width());
-            it->second.mutable_rect()->set_h(rc.height());
+            QPointF p = shape->GetPos();
+            int width = shape->GetItemWidth();
+            int height = shape->GetItemHeight();
+            qreal angle = shape->GetAngle();
+            PBShape::Pos *pos = new PBShape::Pos();
+            pos->set_x(p.x());
+            pos->set_y(p.y());
+            it->second.set_allocated_pos(pos);
+            it->second.set_width(width);
+            it->second.set_height(height);
+            it->second.set_angle(angle);
         }
     }else if(type ==TOOL_TYPE::PENCIL){
         auto it = m_pScenePb->mutable_mapscribble()->find(itemKey);
@@ -767,11 +805,29 @@ void GraphicsScene::ModifyItemInProtobuf(ShapeBase *shape){
             it->second.mutable_rect()->set_w(rc.width());
             it->second.mutable_rect()->set_h(rc.height());
 
-            QPixmap pixmap = shape->GetPixmap();
-            QByteArray ba = QByteArray();
-            QBuffer buff(&ba);
-            pixmap.save(&buff, "png", 100);
-            it->second.set_pixmap(ba.data(), ba.size());
+            QPointF pos = shape->GetPos();
+            it->second.mutable_pos()->set_x(pos.x());
+            it->second.mutable_pos()->set_y(pos.y());
+
+            Pencil *pencil = dynamic_cast<Pencil *>(shape);
+            QPen p = shape->GetPen();
+            QByteArray pathBa;
+            pencil->GetPathData(&pathBa);
+            QList<ERASER_DATA> *listEraser = pencil->GetEraserData();
+
+            PBShape::Scribble *scribble = &(it->second);
+            it->second.set_path(pathBa.toStdString());
+            it->second.mutable_maperaser()->clear();
+            int i = 1;
+            for(QList<ERASER_DATA>::const_iterator it = listEraser->constBegin(); it != listEraser->constEnd(); it++){
+                ERASER_DATA edata = *it;
+                PBShape::Eraser *eraser = new PBShape::Eraser();
+                eraser->set_width(edata.width);
+                QByteArray *eba = edata.ba;
+                eraser->set_allocated_path(new std::string(eba->toStdString()));
+                (*scribble->mutable_maperaser())[i++] = *eraser;
+            }
+            pencil->SafeDelete(listEraser);
         }
     }
 }
@@ -792,7 +848,7 @@ void GraphicsScene::RemoveItemFromProtobuf(ShapeBase *shape){
         auto it = m_pScenePb->mutable_maprectangle()->find(itemKey);
         if(it != m_pScenePb->mutable_maprectangle()->end()){
             it->second.mutable_pen()->Clear();
-            it->second.mutable_rect()->Clear();
+            it->second.mutable_pos()->Clear();
             it->second.mutable_brush()->Clear();
             it->second.Clear();
             it  = m_pScenePb->mutable_maprectangle()->erase(it);
@@ -801,7 +857,7 @@ void GraphicsScene::RemoveItemFromProtobuf(ShapeBase *shape){
         auto it = m_pScenePb->mutable_mapellipse()->find(itemKey);
         if(it != m_pScenePb->mutable_mapellipse()->end()){
             it->second.mutable_pen()->Clear();
-            it->second.mutable_rect()->Clear();
+            it->second.mutable_pos()->Clear();
             it->second.mutable_brush()->Clear();
             it->second.Clear();
             it  = m_pScenePb->mutable_mapellipse()->erase(it);
@@ -810,7 +866,7 @@ void GraphicsScene::RemoveItemFromProtobuf(ShapeBase *shape){
         auto it = m_pScenePb->mutable_maptriangle()->find(itemKey);
         if(it != m_pScenePb->mutable_maptriangle()->end()){
             it->second.mutable_pen()->Clear();
-            it->second.mutable_rect()->Clear();
+            it->second.mutable_pos()->Clear();
             it->second.mutable_brush()->Clear();
             it->second.Clear();
             it  = m_pScenePb->mutable_maptriangle()->erase(it);
@@ -819,7 +875,9 @@ void GraphicsScene::RemoveItemFromProtobuf(ShapeBase *shape){
         auto it = m_pScenePb->mutable_mapscribble()->find(itemKey);
         if(it != m_pScenePb->mutable_mapscribble()->end()){
             it->second.mutable_rect()->Clear();
-            it->second.mutable_pixmap()->clear();
+            it->second.mutable_path()->clear();
+            it->second.mutable_pos()->Clear();
+            it->second.mutable_maperaser()->clear();
             it = m_pScenePb->mutable_mapscribble()->erase(it);
         }
     }
@@ -876,6 +934,9 @@ void GraphicsScene::LoadSceneFromFile(const QString &fileName){
 
 void GraphicsScene::LoadLineObject(const PBShape::Line &line){
     ShapeBase *shape = new Line(this);
+    QPointF beginPoint = QPointF(line.p0().x(), line.p0().y());
+    QPointF endPoint = QPointF(line.p1().x(), line.p1().y());
+    m_nCurKey = shape->Create(beginPoint, endPoint, this);
 
     QColor penColor = QColor(line.pen().r(), line.pen().g(), line.pen().b(), line.pen().a());
     int penWidth = line.pen().width();
@@ -890,21 +951,22 @@ void GraphicsScene::LoadLineObject(const PBShape::Line &line){
     pen.setJoinStyle(joinstyle);
     shape->SetPen(pen);
 
-    QPointF beginPoint = QPointF(line.p0().x(), line.p0().y());
-    QPointF endPoint = QPointF(line.p1().x(), line.p1().y());
 
-    int itemKey = shape->Create(beginPoint, endPoint, this);
-    m_mapShape[itemKey] = new SHAPE_DATA(m_nCurKey, m_eToolType, shape, m_mapShape.size()+1);
+    m_mapShape[m_nCurKey] = new SHAPE_DATA(m_nCurKey, m_eToolType, shape, m_mapShape.size()+1);
     connect(shape, &ShapeBase::sigRemove, [=](int _key){
         onItemRemove(_key);
     });
-    (*m_pScenePb->mutable_mapline())[itemKey] = line;
+    (*m_pScenePb->mutable_mapline())[m_nCurKey] = line;
 
     shape->UpdateRect(beginPoint, endPoint, this);
 }
 
 void GraphicsScene::LoadRectangleObject(const PBShape::Rectangle &rectangle){
     ShapeBase *shape = new Rectangle(this);
+
+    QPointF p1 = QPointF(rectangle.pos().x(), rectangle.pos().y());
+    m_nCurKey = shape->Create(p1, p1+QPointF(1,1), this);
+
     QColor penColor = QColor(rectangle.pen().r(), rectangle.pen().g(), rectangle.pen().b(), rectangle.pen().a());
     int penWidth = rectangle.pen().width();
     Qt::PenStyle style = (Qt::PenStyle)rectangle.pen().style();
@@ -924,25 +986,30 @@ void GraphicsScene::LoadRectangleObject(const PBShape::Rectangle &rectangle){
     brush.setStyle(brushStyle);
     shape->SetBrush(brush);
 
-    QPointF beginPoint = QPointF(rectangle.rect().x(), rectangle.rect().y());
-    QPointF endPoint = QPointF(rectangle.rect().x() + rectangle.rect().w(), rectangle.rect().y() + rectangle.rect().h());
-
-    int itemKey = shape->Create(beginPoint, endPoint, this);
-    m_mapShape[itemKey] = new SHAPE_DATA(m_nCurKey, m_eToolType, shape, m_mapShape.size()+1);
+    m_mapShape[m_nCurKey] = new SHAPE_DATA(m_nCurKey, m_eToolType, shape, m_mapShape.size()+1);
     connect(shape, &ShapeBase::sigRemove, [=](int _key){
         onItemRemove(_key);
     });
-    (*m_pScenePb->mutable_maprectangle())[itemKey] = rectangle;
+    connect(shape, &ShapeBase::sigGeoChanged, [=](int _key){
+        onItemGeoChanged(_key);
+    });
+    (*m_pScenePb->mutable_maprectangle())[m_nCurKey] = rectangle;
 
+    qreal rWidth = rectangle.width()/2;
+    qreal rHeight = rectangle.height()/2;
+    QPointF beginPoint = QPointF(p1.x()-rWidth/2, p1.y()-rHeight/2);
+    QPointF endPoint = QPointF(p1.x()+rWidth/2, p1.y()+rHeight/2);
     shape->UpdateRect(beginPoint, endPoint, this);
 
     qreal angle = rectangle.angle();
-    shape->RotateBegin();
-    //shape->Rotate(angle, this);
+    shape->Rotate(0, 0, angle);
 }
 
 void GraphicsScene::LoadEllipseObject(const PBShape::Ellipse &ellipse){
     ShapeBase *shape = new Ellipse(this);
+    QPointF p1 = QPointF(ellipse.pos().x(), ellipse.pos().y());
+    m_nCurKey = shape->Create(p1, p1+QPointF(1,1), this);
+
     QColor penColor = QColor(ellipse.pen().r(), ellipse.pen().g(), ellipse.pen().b(), ellipse.pen().a());
     int penWidth = ellipse.pen().width();
     Qt::PenStyle style = (Qt::PenStyle)ellipse.pen().style();
@@ -962,26 +1029,31 @@ void GraphicsScene::LoadEllipseObject(const PBShape::Ellipse &ellipse){
     brush.setStyle(brushStyle);
     shape->SetBrush(brush);
 
-    QPointF beginPoint = QPointF(ellipse.rect().x(), ellipse.rect().y());
-    QPointF endPoint = QPointF(ellipse.rect().x() + ellipse.rect().w(), ellipse.rect().y() + ellipse.rect().h());
-
-    int itemKey = shape->Create(beginPoint, endPoint, this);
-    m_mapShape[itemKey] = new SHAPE_DATA(m_nCurKey, m_eToolType, shape, m_mapShape.size()+1);
+    m_mapShape[m_nCurKey] = new SHAPE_DATA(m_nCurKey, m_eToolType, shape, m_mapShape.size()+1);
     connect(shape, &ShapeBase::sigRemove, [=](int _key){
         onItemRemove(_key);
     });
+    connect(shape, &ShapeBase::sigGeoChanged, [=](int _key){
+        onItemGeoChanged(_key);
+    });
 
-    (*m_pScenePb->mutable_mapellipse())[itemKey] = ellipse;
+    (*m_pScenePb->mutable_mapellipse())[m_nCurKey] = ellipse;
 
+    qreal rWidth = ellipse.width()/2;
+    qreal rHeight = ellipse.height()/2;
+    QPointF beginPoint = QPointF(p1.x()-rWidth/2, p1.y()-rHeight/2);
+    QPointF endPoint = QPointF(p1.x()+rWidth/2, p1.y()+rHeight/2);
     shape->UpdateRect(beginPoint, endPoint, this);
 
     qreal angle = ellipse.angle();
-    shape->RotateBegin();
-    //shape->Rotate(angle, this);
+    shape->Rotate(0, 0, angle);
 }
 
 void GraphicsScene::LoadTriangleObject(const PBShape::Triangle &triangle){
     ShapeBase *shape = new Triangle(this);
+    QPointF p1 = QPointF(triangle.pos().x(), triangle.pos().y());
+    m_nCurKey = shape->Create(p1, p1+QPointF(1,1), this);
+
     QColor penColor = QColor(triangle.pen().r(), triangle.pen().g(), triangle.pen().b(), triangle.pen().a());
     int penWidth = triangle.pen().width();
     Qt::PenStyle style = (Qt::PenStyle)triangle.pen().style();
@@ -1001,37 +1073,66 @@ void GraphicsScene::LoadTriangleObject(const PBShape::Triangle &triangle){
     brush.setStyle(brushStyle);
     shape->SetBrush(brush);
 
-    QPointF beginPoint = QPointF(triangle.rect().x(), triangle.rect().y());
-    QPointF endPoint = QPointF(triangle.rect().x() + triangle.rect().w(), triangle.rect().y() + triangle.rect().h());
-
-    int itemKey = shape->Create(beginPoint, endPoint, this);
-    m_mapShape[itemKey] = new SHAPE_DATA(m_nCurKey, m_eToolType, shape, m_mapShape.size()+1);
+    m_mapShape[m_nCurKey] = new SHAPE_DATA(m_nCurKey, m_eToolType, shape, m_mapShape.size()+1);
     connect(shape, &ShapeBase::sigRemove, [=](int _key){
         onItemRemove(_key);
     });
+    connect(shape, &ShapeBase::sigGeoChanged, [=](int _key){
+        onItemGeoChanged(_key);
+    });
+    (*m_pScenePb->mutable_maptriangle())[m_nCurKey] = triangle;
 
-    (*m_pScenePb->mutable_maptriangle())[itemKey] = triangle;
-
+    qreal rWidth = triangle.width()/2;
+    qreal rHeight = triangle.height()/2;
+    QPointF beginPoint = QPointF(p1.x()-rWidth/2, p1.y()-rHeight/2);
+    QPointF endPoint = QPointF(p1.x()+rWidth/2, p1.y()+rHeight/2);
     shape->UpdateRect(beginPoint, endPoint, this);
 
     qreal angle = triangle.angle();
-    shape->RotateBegin();
-    //shape->Rotate(angle, this);
+    shape->Rotate(0, 0, angle);
 }
 
 void GraphicsScene::LoadScribbleObject(const PBShape::Scribble &scribble){
     ShapeBase *shape = new Pencil(this);
-    std::string pixData = scribble.pixmap();
-    QPixmap pixmap;
-    //pixmap.loadFromData(pixData.c_str(), pixData.size(), "png");
-    QByteArray ba(pixData.data(), pixData.size());
-    pixmap.loadFromData(ba, "png");
+    Pencil *pencil = dynamic_cast<Pencil *>(shape);
     QRect rect = QRect(scribble.rect().x(), scribble.rect().y(), scribble.rect().w(),scribble.rect().h());
-    int itemKey = 0;//shape->LoadFromPixmap(pixmap, rect, this);
-    m_mapShape[itemKey] = new SHAPE_DATA(m_nCurKey, m_eToolType, shape, m_mapShape.size()+1);
+    m_nCurKey = shape->Create(rect.topLeft(), rect.bottomRight(), this);
+
+    QColor penColor = QColor(scribble.pen().r(), scribble.pen().g(), scribble.pen().b(), scribble.pen().a());
+    int penWidth = scribble.pen().width();
+    Qt::PenStyle style = (Qt::PenStyle)scribble.pen().style();
+    Qt::PenCapStyle capstyle = (Qt::PenCapStyle)scribble.pen().capstyle();
+    Qt::PenJoinStyle joinstyle = (Qt::PenJoinStyle)scribble.pen().joinstyle();
+    QPen pen;
+    pen.setColor(penColor);
+    pen.setWidth(penWidth);
+    pen.setStyle(style);
+    pen.setCapStyle(capstyle);
+    pen.setJoinStyle(joinstyle);
+    shape->SetPen(pen);
+
+    QByteArray pathBa = QByteArray::fromStdString(scribble.path());
+    QDataStream in(pathBa);
+    QPainterPath path;
+    in >> path;
+    pencil->SetPath(path);
+
+    QPointF pos = QPointF(scribble.pos().x(), scribble.pos().y());
+    pencil->SetPos(pos);
+
+    for(auto it = scribble.maperaser().begin(); it != scribble.maperaser().end(); it++){
+        QByteArray eraserBa = QByteArray::fromStdString(it->second.path());
+        int eraserWidth = it->second.width();
+        QDataStream in_e(eraserBa);
+        QPainterPath path_e;
+        in_e >> path_e;
+        pencil->AddEraserPath(path_e, eraserWidth);
+    }
+
+    m_mapShape[m_nCurKey] = new SHAPE_DATA(m_nCurKey, m_eToolType, shape, m_mapShape.size()+1);
     connect(shape, &ShapeBase::sigRemove, [=](int _key){
         onItemRemove(_key);
     });
 
-    (*m_pScenePb->mutable_mapscribble())[itemKey] = scribble;
+    (*m_pScenePb->mutable_mapscribble())[m_nCurKey] = scribble;
 }

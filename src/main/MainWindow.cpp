@@ -7,6 +7,7 @@
 #include "src/common/ToolType.h"
 
 #include <QRandomGenerator>
+#include <QFileDialog>
 
 const qreal PI = 3.1415926;
 const qreal ARC = PI/180;
@@ -63,6 +64,7 @@ void MainWindow::setupActions(){
     ui->actionZoomout->setData(QVariant(TOOL_TYPE::ZOOMOUT));
 
     ui->actionClear->setData(QVariant(TOOL_TYPE::CLEAR));
+    ui->actionOpenFile->setData(QVariant(TOOL_TYPE::OPENFILE));
 
     m_pActionGroup = new QActionGroup(this);
     m_pActionGroup->addAction(ui->actionSelect);
@@ -114,6 +116,14 @@ void MainWindow::setupActions(){
         m_pView->SetToolType(TOOL_TYPE::CLEAR);
         m_pScene->clearScene();
         m_pScene->UnselectedAll();
+    });
+
+    connect(ui->actionOpenFile, &QAction::triggered, [=](){
+        qDebug() << "on open file";
+        hideOperatorForm();
+        m_pView->SetToolType(TOOL_TYPE::OPENFILE);
+        m_pScene->UnselectedAll();
+        OpenBoardFile();
     });
 
     ui->actionSelect->setChecked(true);
@@ -283,4 +293,28 @@ void MainWindow::slotItemRotate(int key, qreal angle){
 
 void MainWindow::slotItemRotateEnd(int key){
     m_pScene->onItemRotateEnd(key);
+}
+
+void MainWindow::OpenBoardFile(){
+    QFileDialog fileDialog;
+
+    QDir dir;
+    QString dirStr = "files/";
+    if(!dir.exists(dirStr)){
+        dir.mkdir(dirStr);
+    }
+    dirStr += "docs/";
+    if(!dir.exists(dirStr)){
+        dir.mkdir(dirStr);
+    }
+    QString filePath = fileDialog.getOpenFileName(this,
+                                                  tr("Open the whiteboard"),
+                                                  dirStr,
+                                                  QStringLiteral("hd file(*.hd)"));
+    if(filePath == "")
+    {
+        return;
+    }
+
+    m_pScene->LoadSceneFromFile(filePath);
 }

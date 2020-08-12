@@ -50,7 +50,7 @@ struct TableStruct_pbshape_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[15]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[17]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -64,6 +64,9 @@ extern BrushDefaultTypeInternal _Brush_default_instance_;
 class Ellipse;
 class EllipseDefaultTypeInternal;
 extern EllipseDefaultTypeInternal _Ellipse_default_instance_;
+class Eraser;
+class EraserDefaultTypeInternal;
+extern EraserDefaultTypeInternal _Eraser_default_instance_;
 class Line;
 class LineDefaultTypeInternal;
 extern LineDefaultTypeInternal _Line_default_instance_;
@@ -100,6 +103,9 @@ extern Scene_MapTriangleEntry_DoNotUseDefaultTypeInternal _Scene_MapTriangleEntr
 class Scribble;
 class ScribbleDefaultTypeInternal;
 extern ScribbleDefaultTypeInternal _Scribble_default_instance_;
+class Scribble_MaperaserEntry_DoNotUse;
+class Scribble_MaperaserEntry_DoNotUseDefaultTypeInternal;
+extern Scribble_MaperaserEntry_DoNotUseDefaultTypeInternal _Scribble_MaperaserEntry_DoNotUse_default_instance_;
 class Triangle;
 class TriangleDefaultTypeInternal;
 extern TriangleDefaultTypeInternal _Triangle_default_instance_;
@@ -107,6 +113,7 @@ extern TriangleDefaultTypeInternal _Triangle_default_instance_;
 PROTOBUF_NAMESPACE_OPEN
 template<> ::PBShape::Brush* Arena::CreateMaybeMessage<::PBShape::Brush>(Arena*);
 template<> ::PBShape::Ellipse* Arena::CreateMaybeMessage<::PBShape::Ellipse>(Arena*);
+template<> ::PBShape::Eraser* Arena::CreateMaybeMessage<::PBShape::Eraser>(Arena*);
 template<> ::PBShape::Line* Arena::CreateMaybeMessage<::PBShape::Line>(Arena*);
 template<> ::PBShape::Pen* Arena::CreateMaybeMessage<::PBShape::Pen>(Arena*);
 template<> ::PBShape::Pos* Arena::CreateMaybeMessage<::PBShape::Pos>(Arena*);
@@ -119,6 +126,7 @@ template<> ::PBShape::Scene_MapRectangleEntry_DoNotUse* Arena::CreateMaybeMessag
 template<> ::PBShape::Scene_MapScribbleEntry_DoNotUse* Arena::CreateMaybeMessage<::PBShape::Scene_MapScribbleEntry_DoNotUse>(Arena*);
 template<> ::PBShape::Scene_MapTriangleEntry_DoNotUse* Arena::CreateMaybeMessage<::PBShape::Scene_MapTriangleEntry_DoNotUse>(Arena*);
 template<> ::PBShape::Scribble* Arena::CreateMaybeMessage<::PBShape::Scribble>(Arena*);
+template<> ::PBShape::Scribble_MaperaserEntry_DoNotUse* Arena::CreateMaybeMessage<::PBShape::Scribble_MaperaserEntry_DoNotUse>(Arena*);
 template<> ::PBShape::Triangle* Arena::CreateMaybeMessage<::PBShape::Triangle>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace PBShape {
@@ -1223,27 +1231,29 @@ class Rectangle :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kRectFieldNumber = 1,
-    kPenFieldNumber = 2,
-    kBrushFieldNumber = 3,
-    kAngleFieldNumber = 4,
+    kPosFieldNumber = 1,
+    kPenFieldNumber = 4,
+    kBrushFieldNumber = 5,
+    kWidthFieldNumber = 2,
+    kHeightFieldNumber = 3,
+    kAngleFieldNumber = 6,
   };
-  // required .PBShape.Rect rect = 1;
-  bool has_rect() const;
+  // required .PBShape.Pos pos = 1;
+  bool has_pos() const;
   private:
-  bool _internal_has_rect() const;
+  bool _internal_has_pos() const;
   public:
-  void clear_rect();
-  const ::PBShape::Rect& rect() const;
-  ::PBShape::Rect* release_rect();
-  ::PBShape::Rect* mutable_rect();
-  void set_allocated_rect(::PBShape::Rect* rect);
+  void clear_pos();
+  const ::PBShape::Pos& pos() const;
+  ::PBShape::Pos* release_pos();
+  ::PBShape::Pos* mutable_pos();
+  void set_allocated_pos(::PBShape::Pos* pos);
   private:
-  const ::PBShape::Rect& _internal_rect() const;
-  ::PBShape::Rect* _internal_mutable_rect();
+  const ::PBShape::Pos& _internal_pos() const;
+  ::PBShape::Pos* _internal_mutable_pos();
   public:
 
-  // optional .PBShape.Pen pen = 2;
+  // optional .PBShape.Pen pen = 4;
   bool has_pen() const;
   private:
   bool _internal_has_pen() const;
@@ -1258,7 +1268,7 @@ class Rectangle :
   ::PBShape::Pen* _internal_mutable_pen();
   public:
 
-  // optional .PBShape.Brush brush = 3;
+  // optional .PBShape.Brush brush = 5;
   bool has_brush() const;
   private:
   bool _internal_has_brush() const;
@@ -1273,7 +1283,33 @@ class Rectangle :
   ::PBShape::Brush* _internal_mutable_brush();
   public:
 
-  // optional float angle = 4 [default = 0];
+  // required int32 width = 2;
+  bool has_width() const;
+  private:
+  bool _internal_has_width() const;
+  public:
+  void clear_width();
+  ::PROTOBUF_NAMESPACE_ID::int32 width() const;
+  void set_width(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_width() const;
+  void _internal_set_width(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // required int32 height = 3;
+  bool has_height() const;
+  private:
+  bool _internal_has_height() const;
+  public:
+  void clear_height();
+  ::PROTOBUF_NAMESPACE_ID::int32 height() const;
+  void set_height(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_height() const;
+  void _internal_set_height(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // optional float angle = 6 [default = 0];
   bool has_angle() const;
   private:
   bool _internal_has_angle() const;
@@ -1290,12 +1326,17 @@ class Rectangle :
  private:
   class _Internal;
 
+  // helper for ByteSizeLong()
+  size_t RequiredFieldsByteSizeFallback() const;
+
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
   ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  ::PBShape::Rect* rect_;
+  ::PBShape::Pos* pos_;
   ::PBShape::Pen* pen_;
   ::PBShape::Brush* brush_;
+  ::PROTOBUF_NAMESPACE_ID::int32 width_;
+  ::PROTOBUF_NAMESPACE_ID::int32 height_;
   float angle_;
   friend struct ::TableStruct_pbshape_2eproto;
 };
@@ -1414,27 +1455,29 @@ class Ellipse :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kRectFieldNumber = 1,
-    kPenFieldNumber = 2,
-    kBrushFieldNumber = 3,
-    kAngleFieldNumber = 4,
+    kPosFieldNumber = 1,
+    kPenFieldNumber = 4,
+    kBrushFieldNumber = 5,
+    kWidthFieldNumber = 2,
+    kHeightFieldNumber = 3,
+    kAngleFieldNumber = 6,
   };
-  // required .PBShape.Rect rect = 1;
-  bool has_rect() const;
+  // required .PBShape.Pos pos = 1;
+  bool has_pos() const;
   private:
-  bool _internal_has_rect() const;
+  bool _internal_has_pos() const;
   public:
-  void clear_rect();
-  const ::PBShape::Rect& rect() const;
-  ::PBShape::Rect* release_rect();
-  ::PBShape::Rect* mutable_rect();
-  void set_allocated_rect(::PBShape::Rect* rect);
+  void clear_pos();
+  const ::PBShape::Pos& pos() const;
+  ::PBShape::Pos* release_pos();
+  ::PBShape::Pos* mutable_pos();
+  void set_allocated_pos(::PBShape::Pos* pos);
   private:
-  const ::PBShape::Rect& _internal_rect() const;
-  ::PBShape::Rect* _internal_mutable_rect();
+  const ::PBShape::Pos& _internal_pos() const;
+  ::PBShape::Pos* _internal_mutable_pos();
   public:
 
-  // optional .PBShape.Pen pen = 2;
+  // optional .PBShape.Pen pen = 4;
   bool has_pen() const;
   private:
   bool _internal_has_pen() const;
@@ -1449,7 +1492,7 @@ class Ellipse :
   ::PBShape::Pen* _internal_mutable_pen();
   public:
 
-  // optional .PBShape.Brush brush = 3;
+  // optional .PBShape.Brush brush = 5;
   bool has_brush() const;
   private:
   bool _internal_has_brush() const;
@@ -1464,7 +1507,33 @@ class Ellipse :
   ::PBShape::Brush* _internal_mutable_brush();
   public:
 
-  // optional float angle = 4 [default = 0];
+  // required int32 width = 2;
+  bool has_width() const;
+  private:
+  bool _internal_has_width() const;
+  public:
+  void clear_width();
+  ::PROTOBUF_NAMESPACE_ID::int32 width() const;
+  void set_width(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_width() const;
+  void _internal_set_width(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // required int32 height = 3;
+  bool has_height() const;
+  private:
+  bool _internal_has_height() const;
+  public:
+  void clear_height();
+  ::PROTOBUF_NAMESPACE_ID::int32 height() const;
+  void set_height(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_height() const;
+  void _internal_set_height(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // optional float angle = 6 [default = 0];
   bool has_angle() const;
   private:
   bool _internal_has_angle() const;
@@ -1481,12 +1550,17 @@ class Ellipse :
  private:
   class _Internal;
 
+  // helper for ByteSizeLong()
+  size_t RequiredFieldsByteSizeFallback() const;
+
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
   ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  ::PBShape::Rect* rect_;
+  ::PBShape::Pos* pos_;
   ::PBShape::Pen* pen_;
   ::PBShape::Brush* brush_;
+  ::PROTOBUF_NAMESPACE_ID::int32 width_;
+  ::PROTOBUF_NAMESPACE_ID::int32 height_;
   float angle_;
   friend struct ::TableStruct_pbshape_2eproto;
 };
@@ -1605,27 +1679,29 @@ class Triangle :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kRectFieldNumber = 1,
-    kPenFieldNumber = 2,
-    kBrushFieldNumber = 3,
-    kAngleFieldNumber = 4,
+    kPosFieldNumber = 1,
+    kPenFieldNumber = 4,
+    kBrushFieldNumber = 5,
+    kWidthFieldNumber = 2,
+    kHeightFieldNumber = 3,
+    kAngleFieldNumber = 6,
   };
-  // required .PBShape.Rect rect = 1;
-  bool has_rect() const;
+  // required .PBShape.Pos pos = 1;
+  bool has_pos() const;
   private:
-  bool _internal_has_rect() const;
+  bool _internal_has_pos() const;
   public:
-  void clear_rect();
-  const ::PBShape::Rect& rect() const;
-  ::PBShape::Rect* release_rect();
-  ::PBShape::Rect* mutable_rect();
-  void set_allocated_rect(::PBShape::Rect* rect);
+  void clear_pos();
+  const ::PBShape::Pos& pos() const;
+  ::PBShape::Pos* release_pos();
+  ::PBShape::Pos* mutable_pos();
+  void set_allocated_pos(::PBShape::Pos* pos);
   private:
-  const ::PBShape::Rect& _internal_rect() const;
-  ::PBShape::Rect* _internal_mutable_rect();
+  const ::PBShape::Pos& _internal_pos() const;
+  ::PBShape::Pos* _internal_mutable_pos();
   public:
 
-  // optional .PBShape.Pen pen = 2;
+  // optional .PBShape.Pen pen = 4;
   bool has_pen() const;
   private:
   bool _internal_has_pen() const;
@@ -1640,7 +1716,7 @@ class Triangle :
   ::PBShape::Pen* _internal_mutable_pen();
   public:
 
-  // optional .PBShape.Brush brush = 3;
+  // optional .PBShape.Brush brush = 5;
   bool has_brush() const;
   private:
   bool _internal_has_brush() const;
@@ -1655,7 +1731,33 @@ class Triangle :
   ::PBShape::Brush* _internal_mutable_brush();
   public:
 
-  // optional float angle = 4 [default = 0];
+  // required int32 width = 2;
+  bool has_width() const;
+  private:
+  bool _internal_has_width() const;
+  public:
+  void clear_width();
+  ::PROTOBUF_NAMESPACE_ID::int32 width() const;
+  void set_width(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_width() const;
+  void _internal_set_width(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // required int32 height = 3;
+  bool has_height() const;
+  private:
+  bool _internal_has_height() const;
+  public:
+  void clear_height();
+  ::PROTOBUF_NAMESPACE_ID::int32 height() const;
+  void set_height(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_height() const;
+  void _internal_set_height(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // optional float angle = 6 [default = 0];
   bool has_angle() const;
   private:
   bool _internal_has_angle() const;
@@ -1672,15 +1774,215 @@ class Triangle :
  private:
   class _Internal;
 
+  // helper for ByteSizeLong()
+  size_t RequiredFieldsByteSizeFallback() const;
+
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
   ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  ::PBShape::Rect* rect_;
+  ::PBShape::Pos* pos_;
   ::PBShape::Pen* pen_;
   ::PBShape::Brush* brush_;
+  ::PROTOBUF_NAMESPACE_ID::int32 width_;
+  ::PROTOBUF_NAMESPACE_ID::int32 height_;
   float angle_;
   friend struct ::TableStruct_pbshape_2eproto;
 };
+// -------------------------------------------------------------------
+
+class Eraser :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:PBShape.Eraser) */ {
+ public:
+  Eraser();
+  virtual ~Eraser();
+
+  Eraser(const Eraser& from);
+  Eraser(Eraser&& from) noexcept
+    : Eraser() {
+    *this = ::std::move(from);
+  }
+
+  inline Eraser& operator=(const Eraser& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline Eraser& operator=(Eraser&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+  inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const Eraser& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const Eraser* internal_default_instance() {
+    return reinterpret_cast<const Eraser*>(
+               &_Eraser_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    8;
+
+  friend void swap(Eraser& a, Eraser& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(Eraser* other) {
+    if (other == this) return;
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline Eraser* New() const final {
+    return CreateMaybeMessage<Eraser>(nullptr);
+  }
+
+  Eraser* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<Eraser>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const Eraser& from);
+  void MergeFrom(const Eraser& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(Eraser* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "PBShape.Eraser";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_pbshape_2eproto);
+    return ::descriptor_table_pbshape_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kPathFieldNumber = 1,
+    kWidthFieldNumber = 2,
+  };
+  // required bytes path = 1;
+  bool has_path() const;
+  private:
+  bool _internal_has_path() const;
+  public:
+  void clear_path();
+  const std::string& path() const;
+  void set_path(const std::string& value);
+  void set_path(std::string&& value);
+  void set_path(const char* value);
+  void set_path(const void* value, size_t size);
+  std::string* mutable_path();
+  std::string* release_path();
+  void set_allocated_path(std::string* path);
+  private:
+  const std::string& _internal_path() const;
+  void _internal_set_path(const std::string& value);
+  std::string* _internal_mutable_path();
+  public:
+
+  // required int32 width = 2;
+  bool has_width() const;
+  private:
+  bool _internal_has_width() const;
+  public:
+  void clear_width();
+  ::PROTOBUF_NAMESPACE_ID::int32 width() const;
+  void set_width(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_width() const;
+  void _internal_set_width(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:PBShape.Eraser)
+ private:
+  class _Internal;
+
+  // helper for ByteSizeLong()
+  size_t RequiredFieldsByteSizeFallback() const;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr path_;
+  ::PROTOBUF_NAMESPACE_ID::int32 width_;
+  friend struct ::TableStruct_pbshape_2eproto;
+};
+// -------------------------------------------------------------------
+
+class Scribble_MaperaserEntry_DoNotUse : public ::PROTOBUF_NAMESPACE_ID::internal::MapEntry<Scribble_MaperaserEntry_DoNotUse, 
+    ::PROTOBUF_NAMESPACE_ID::int32, ::PBShape::Eraser,
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_INT32,
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_MESSAGE,
+    0 > {
+public:
+  typedef ::PROTOBUF_NAMESPACE_ID::internal::MapEntry<Scribble_MaperaserEntry_DoNotUse, 
+    ::PROTOBUF_NAMESPACE_ID::int32, ::PBShape::Eraser,
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_INT32,
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_MESSAGE,
+    0 > SuperType;
+  Scribble_MaperaserEntry_DoNotUse();
+  Scribble_MaperaserEntry_DoNotUse(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  void MergeFrom(const Scribble_MaperaserEntry_DoNotUse& other);
+  static const Scribble_MaperaserEntry_DoNotUse* internal_default_instance() { return reinterpret_cast<const Scribble_MaperaserEntry_DoNotUse*>(&_Scribble_MaperaserEntry_DoNotUse_default_instance_); }
+  static bool ValidateKey(void*) { return true; }
+  static bool ValidateValue(void*) { return true; }
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& other) final;
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_pbshape_2eproto);
+    return ::descriptor_table_pbshape_2eproto.file_level_metadata[9];
+  }
+
+  public:
+};
+
 // -------------------------------------------------------------------
 
 class Scribble :
@@ -1732,7 +2034,7 @@ class Scribble :
                &_Scribble_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    8;
+    10;
 
   friend void swap(Scribble& a, Scribble& b) {
     a.Swap(&b);
@@ -1793,31 +2095,52 @@ class Scribble :
 
   // nested types ----------------------------------------------------
 
+
   // accessors -------------------------------------------------------
 
   enum : int {
-    kPixmapFieldNumber = 2,
+    kMaperaserFieldNumber = 5,
+    kPathFieldNumber = 3,
     kRectFieldNumber = 1,
-    kAngleFieldNumber = 3,
+    kPosFieldNumber = 2,
+    kPenFieldNumber = 4,
+    kAngleFieldNumber = 6,
   };
-  // required bytes pixmap = 2;
-  bool has_pixmap() const;
+  // map<int32, .PBShape.Eraser> maperaser = 5;
+  int maperaser_size() const;
   private:
-  bool _internal_has_pixmap() const;
+  int _internal_maperaser_size() const;
   public:
-  void clear_pixmap();
-  const std::string& pixmap() const;
-  void set_pixmap(const std::string& value);
-  void set_pixmap(std::string&& value);
-  void set_pixmap(const char* value);
-  void set_pixmap(const void* value, size_t size);
-  std::string* mutable_pixmap();
-  std::string* release_pixmap();
-  void set_allocated_pixmap(std::string* pixmap);
+  void clear_maperaser();
   private:
-  const std::string& _internal_pixmap() const;
-  void _internal_set_pixmap(const std::string& value);
-  std::string* _internal_mutable_pixmap();
+  const ::PROTOBUF_NAMESPACE_ID::Map< ::PROTOBUF_NAMESPACE_ID::int32, ::PBShape::Eraser >&
+      _internal_maperaser() const;
+  ::PROTOBUF_NAMESPACE_ID::Map< ::PROTOBUF_NAMESPACE_ID::int32, ::PBShape::Eraser >*
+      _internal_mutable_maperaser();
+  public:
+  const ::PROTOBUF_NAMESPACE_ID::Map< ::PROTOBUF_NAMESPACE_ID::int32, ::PBShape::Eraser >&
+      maperaser() const;
+  ::PROTOBUF_NAMESPACE_ID::Map< ::PROTOBUF_NAMESPACE_ID::int32, ::PBShape::Eraser >*
+      mutable_maperaser();
+
+  // required bytes path = 3;
+  bool has_path() const;
+  private:
+  bool _internal_has_path() const;
+  public:
+  void clear_path();
+  const std::string& path() const;
+  void set_path(const std::string& value);
+  void set_path(std::string&& value);
+  void set_path(const char* value);
+  void set_path(const void* value, size_t size);
+  std::string* mutable_path();
+  std::string* release_path();
+  void set_allocated_path(std::string* path);
+  private:
+  const std::string& _internal_path() const;
+  void _internal_set_path(const std::string& value);
+  std::string* _internal_mutable_path();
   public:
 
   // required .PBShape.Rect rect = 1;
@@ -1835,7 +2158,37 @@ class Scribble :
   ::PBShape::Rect* _internal_mutable_rect();
   public:
 
-  // optional float angle = 3 [default = 0];
+  // required .PBShape.Pos pos = 2;
+  bool has_pos() const;
+  private:
+  bool _internal_has_pos() const;
+  public:
+  void clear_pos();
+  const ::PBShape::Pos& pos() const;
+  ::PBShape::Pos* release_pos();
+  ::PBShape::Pos* mutable_pos();
+  void set_allocated_pos(::PBShape::Pos* pos);
+  private:
+  const ::PBShape::Pos& _internal_pos() const;
+  ::PBShape::Pos* _internal_mutable_pos();
+  public:
+
+  // required .PBShape.Pen pen = 4;
+  bool has_pen() const;
+  private:
+  bool _internal_has_pen() const;
+  public:
+  void clear_pen();
+  const ::PBShape::Pen& pen() const;
+  ::PBShape::Pen* release_pen();
+  ::PBShape::Pen* mutable_pen();
+  void set_allocated_pen(::PBShape::Pen* pen);
+  private:
+  const ::PBShape::Pen& _internal_pen() const;
+  ::PBShape::Pen* _internal_mutable_pen();
+  public:
+
+  // optional float angle = 6 [default = 0];
   bool has_angle() const;
   private:
   bool _internal_has_angle() const;
@@ -1858,8 +2211,16 @@ class Scribble :
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
   ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr pixmap_;
+  ::PROTOBUF_NAMESPACE_ID::internal::MapField<
+      Scribble_MaperaserEntry_DoNotUse,
+      ::PROTOBUF_NAMESPACE_ID::int32, ::PBShape::Eraser,
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_INT32,
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_MESSAGE,
+      0 > maperaser_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr path_;
   ::PBShape::Rect* rect_;
+  ::PBShape::Pos* pos_;
+  ::PBShape::Pen* pen_;
   float angle_;
   friend struct ::TableStruct_pbshape_2eproto;
 };
@@ -1887,7 +2248,7 @@ public:
   private:
   static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
     ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_pbshape_2eproto);
-    return ::descriptor_table_pbshape_2eproto.file_level_metadata[9];
+    return ::descriptor_table_pbshape_2eproto.file_level_metadata[11];
   }
 
   public:
@@ -1917,7 +2278,7 @@ public:
   private:
   static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
     ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_pbshape_2eproto);
-    return ::descriptor_table_pbshape_2eproto.file_level_metadata[10];
+    return ::descriptor_table_pbshape_2eproto.file_level_metadata[12];
   }
 
   public:
@@ -1947,7 +2308,7 @@ public:
   private:
   static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
     ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_pbshape_2eproto);
-    return ::descriptor_table_pbshape_2eproto.file_level_metadata[11];
+    return ::descriptor_table_pbshape_2eproto.file_level_metadata[13];
   }
 
   public:
@@ -1977,7 +2338,7 @@ public:
   private:
   static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
     ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_pbshape_2eproto);
-    return ::descriptor_table_pbshape_2eproto.file_level_metadata[12];
+    return ::descriptor_table_pbshape_2eproto.file_level_metadata[14];
   }
 
   public:
@@ -2007,7 +2368,7 @@ public:
   private:
   static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
     ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_pbshape_2eproto);
-    return ::descriptor_table_pbshape_2eproto.file_level_metadata[13];
+    return ::descriptor_table_pbshape_2eproto.file_level_metadata[15];
   }
 
   public:
@@ -2064,7 +2425,7 @@ class Scene :
                &_Scene_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    14;
+    16;
 
   friend void swap(Scene& a, Scene& b) {
     a.Swap(&b);
@@ -3030,67 +3391,123 @@ inline void Line::set_angle(float value) {
 
 // Rectangle
 
-// required .PBShape.Rect rect = 1;
-inline bool Rectangle::_internal_has_rect() const {
+// required .PBShape.Pos pos = 1;
+inline bool Rectangle::_internal_has_pos() const {
   bool value = (_has_bits_[0] & 0x00000001u) != 0;
-  PROTOBUF_ASSUME(!value || rect_ != nullptr);
+  PROTOBUF_ASSUME(!value || pos_ != nullptr);
   return value;
 }
-inline bool Rectangle::has_rect() const {
-  return _internal_has_rect();
+inline bool Rectangle::has_pos() const {
+  return _internal_has_pos();
 }
-inline void Rectangle::clear_rect() {
-  if (rect_ != nullptr) rect_->Clear();
+inline void Rectangle::clear_pos() {
+  if (pos_ != nullptr) pos_->Clear();
   _has_bits_[0] &= ~0x00000001u;
 }
-inline const ::PBShape::Rect& Rectangle::_internal_rect() const {
-  const ::PBShape::Rect* p = rect_;
-  return p != nullptr ? *p : *reinterpret_cast<const ::PBShape::Rect*>(
-      &::PBShape::_Rect_default_instance_);
+inline const ::PBShape::Pos& Rectangle::_internal_pos() const {
+  const ::PBShape::Pos* p = pos_;
+  return p != nullptr ? *p : *reinterpret_cast<const ::PBShape::Pos*>(
+      &::PBShape::_Pos_default_instance_);
 }
-inline const ::PBShape::Rect& Rectangle::rect() const {
-  // @@protoc_insertion_point(field_get:PBShape.Rectangle.rect)
-  return _internal_rect();
+inline const ::PBShape::Pos& Rectangle::pos() const {
+  // @@protoc_insertion_point(field_get:PBShape.Rectangle.pos)
+  return _internal_pos();
 }
-inline ::PBShape::Rect* Rectangle::release_rect() {
-  // @@protoc_insertion_point(field_release:PBShape.Rectangle.rect)
+inline ::PBShape::Pos* Rectangle::release_pos() {
+  // @@protoc_insertion_point(field_release:PBShape.Rectangle.pos)
   _has_bits_[0] &= ~0x00000001u;
-  ::PBShape::Rect* temp = rect_;
-  rect_ = nullptr;
+  ::PBShape::Pos* temp = pos_;
+  pos_ = nullptr;
   return temp;
 }
-inline ::PBShape::Rect* Rectangle::_internal_mutable_rect() {
+inline ::PBShape::Pos* Rectangle::_internal_mutable_pos() {
   _has_bits_[0] |= 0x00000001u;
-  if (rect_ == nullptr) {
-    auto* p = CreateMaybeMessage<::PBShape::Rect>(GetArenaNoVirtual());
-    rect_ = p;
+  if (pos_ == nullptr) {
+    auto* p = CreateMaybeMessage<::PBShape::Pos>(GetArenaNoVirtual());
+    pos_ = p;
   }
-  return rect_;
+  return pos_;
 }
-inline ::PBShape::Rect* Rectangle::mutable_rect() {
-  // @@protoc_insertion_point(field_mutable:PBShape.Rectangle.rect)
-  return _internal_mutable_rect();
+inline ::PBShape::Pos* Rectangle::mutable_pos() {
+  // @@protoc_insertion_point(field_mutable:PBShape.Rectangle.pos)
+  return _internal_mutable_pos();
 }
-inline void Rectangle::set_allocated_rect(::PBShape::Rect* rect) {
+inline void Rectangle::set_allocated_pos(::PBShape::Pos* pos) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == nullptr) {
-    delete rect_;
+    delete pos_;
   }
-  if (rect) {
+  if (pos) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
     if (message_arena != submessage_arena) {
-      rect = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, rect, submessage_arena);
+      pos = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, pos, submessage_arena);
     }
     _has_bits_[0] |= 0x00000001u;
   } else {
     _has_bits_[0] &= ~0x00000001u;
   }
-  rect_ = rect;
-  // @@protoc_insertion_point(field_set_allocated:PBShape.Rectangle.rect)
+  pos_ = pos;
+  // @@protoc_insertion_point(field_set_allocated:PBShape.Rectangle.pos)
 }
 
-// optional .PBShape.Pen pen = 2;
+// required int32 width = 2;
+inline bool Rectangle::_internal_has_width() const {
+  bool value = (_has_bits_[0] & 0x00000008u) != 0;
+  return value;
+}
+inline bool Rectangle::has_width() const {
+  return _internal_has_width();
+}
+inline void Rectangle::clear_width() {
+  width_ = 0;
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 Rectangle::_internal_width() const {
+  return width_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 Rectangle::width() const {
+  // @@protoc_insertion_point(field_get:PBShape.Rectangle.width)
+  return _internal_width();
+}
+inline void Rectangle::_internal_set_width(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _has_bits_[0] |= 0x00000008u;
+  width_ = value;
+}
+inline void Rectangle::set_width(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_width(value);
+  // @@protoc_insertion_point(field_set:PBShape.Rectangle.width)
+}
+
+// required int32 height = 3;
+inline bool Rectangle::_internal_has_height() const {
+  bool value = (_has_bits_[0] & 0x00000010u) != 0;
+  return value;
+}
+inline bool Rectangle::has_height() const {
+  return _internal_has_height();
+}
+inline void Rectangle::clear_height() {
+  height_ = 0;
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 Rectangle::_internal_height() const {
+  return height_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 Rectangle::height() const {
+  // @@protoc_insertion_point(field_get:PBShape.Rectangle.height)
+  return _internal_height();
+}
+inline void Rectangle::_internal_set_height(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _has_bits_[0] |= 0x00000010u;
+  height_ = value;
+}
+inline void Rectangle::set_height(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_height(value);
+  // @@protoc_insertion_point(field_set:PBShape.Rectangle.height)
+}
+
+// optional .PBShape.Pen pen = 4;
 inline bool Rectangle::_internal_has_pen() const {
   bool value = (_has_bits_[0] & 0x00000002u) != 0;
   PROTOBUF_ASSUME(!value || pen_ != nullptr);
@@ -3150,7 +3567,7 @@ inline void Rectangle::set_allocated_pen(::PBShape::Pen* pen) {
   // @@protoc_insertion_point(field_set_allocated:PBShape.Rectangle.pen)
 }
 
-// optional .PBShape.Brush brush = 3;
+// optional .PBShape.Brush brush = 5;
 inline bool Rectangle::_internal_has_brush() const {
   bool value = (_has_bits_[0] & 0x00000004u) != 0;
   PROTOBUF_ASSUME(!value || brush_ != nullptr);
@@ -3210,9 +3627,9 @@ inline void Rectangle::set_allocated_brush(::PBShape::Brush* brush) {
   // @@protoc_insertion_point(field_set_allocated:PBShape.Rectangle.brush)
 }
 
-// optional float angle = 4 [default = 0];
+// optional float angle = 6 [default = 0];
 inline bool Rectangle::_internal_has_angle() const {
-  bool value = (_has_bits_[0] & 0x00000008u) != 0;
+  bool value = (_has_bits_[0] & 0x00000020u) != 0;
   return value;
 }
 inline bool Rectangle::has_angle() const {
@@ -3220,7 +3637,7 @@ inline bool Rectangle::has_angle() const {
 }
 inline void Rectangle::clear_angle() {
   angle_ = 0;
-  _has_bits_[0] &= ~0x00000008u;
+  _has_bits_[0] &= ~0x00000020u;
 }
 inline float Rectangle::_internal_angle() const {
   return angle_;
@@ -3230,7 +3647,7 @@ inline float Rectangle::angle() const {
   return _internal_angle();
 }
 inline void Rectangle::_internal_set_angle(float value) {
-  _has_bits_[0] |= 0x00000008u;
+  _has_bits_[0] |= 0x00000020u;
   angle_ = value;
 }
 inline void Rectangle::set_angle(float value) {
@@ -3242,67 +3659,123 @@ inline void Rectangle::set_angle(float value) {
 
 // Ellipse
 
-// required .PBShape.Rect rect = 1;
-inline bool Ellipse::_internal_has_rect() const {
+// required .PBShape.Pos pos = 1;
+inline bool Ellipse::_internal_has_pos() const {
   bool value = (_has_bits_[0] & 0x00000001u) != 0;
-  PROTOBUF_ASSUME(!value || rect_ != nullptr);
+  PROTOBUF_ASSUME(!value || pos_ != nullptr);
   return value;
 }
-inline bool Ellipse::has_rect() const {
-  return _internal_has_rect();
+inline bool Ellipse::has_pos() const {
+  return _internal_has_pos();
 }
-inline void Ellipse::clear_rect() {
-  if (rect_ != nullptr) rect_->Clear();
+inline void Ellipse::clear_pos() {
+  if (pos_ != nullptr) pos_->Clear();
   _has_bits_[0] &= ~0x00000001u;
 }
-inline const ::PBShape::Rect& Ellipse::_internal_rect() const {
-  const ::PBShape::Rect* p = rect_;
-  return p != nullptr ? *p : *reinterpret_cast<const ::PBShape::Rect*>(
-      &::PBShape::_Rect_default_instance_);
+inline const ::PBShape::Pos& Ellipse::_internal_pos() const {
+  const ::PBShape::Pos* p = pos_;
+  return p != nullptr ? *p : *reinterpret_cast<const ::PBShape::Pos*>(
+      &::PBShape::_Pos_default_instance_);
 }
-inline const ::PBShape::Rect& Ellipse::rect() const {
-  // @@protoc_insertion_point(field_get:PBShape.Ellipse.rect)
-  return _internal_rect();
+inline const ::PBShape::Pos& Ellipse::pos() const {
+  // @@protoc_insertion_point(field_get:PBShape.Ellipse.pos)
+  return _internal_pos();
 }
-inline ::PBShape::Rect* Ellipse::release_rect() {
-  // @@protoc_insertion_point(field_release:PBShape.Ellipse.rect)
+inline ::PBShape::Pos* Ellipse::release_pos() {
+  // @@protoc_insertion_point(field_release:PBShape.Ellipse.pos)
   _has_bits_[0] &= ~0x00000001u;
-  ::PBShape::Rect* temp = rect_;
-  rect_ = nullptr;
+  ::PBShape::Pos* temp = pos_;
+  pos_ = nullptr;
   return temp;
 }
-inline ::PBShape::Rect* Ellipse::_internal_mutable_rect() {
+inline ::PBShape::Pos* Ellipse::_internal_mutable_pos() {
   _has_bits_[0] |= 0x00000001u;
-  if (rect_ == nullptr) {
-    auto* p = CreateMaybeMessage<::PBShape::Rect>(GetArenaNoVirtual());
-    rect_ = p;
+  if (pos_ == nullptr) {
+    auto* p = CreateMaybeMessage<::PBShape::Pos>(GetArenaNoVirtual());
+    pos_ = p;
   }
-  return rect_;
+  return pos_;
 }
-inline ::PBShape::Rect* Ellipse::mutable_rect() {
-  // @@protoc_insertion_point(field_mutable:PBShape.Ellipse.rect)
-  return _internal_mutable_rect();
+inline ::PBShape::Pos* Ellipse::mutable_pos() {
+  // @@protoc_insertion_point(field_mutable:PBShape.Ellipse.pos)
+  return _internal_mutable_pos();
 }
-inline void Ellipse::set_allocated_rect(::PBShape::Rect* rect) {
+inline void Ellipse::set_allocated_pos(::PBShape::Pos* pos) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == nullptr) {
-    delete rect_;
+    delete pos_;
   }
-  if (rect) {
+  if (pos) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
     if (message_arena != submessage_arena) {
-      rect = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, rect, submessage_arena);
+      pos = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, pos, submessage_arena);
     }
     _has_bits_[0] |= 0x00000001u;
   } else {
     _has_bits_[0] &= ~0x00000001u;
   }
-  rect_ = rect;
-  // @@protoc_insertion_point(field_set_allocated:PBShape.Ellipse.rect)
+  pos_ = pos;
+  // @@protoc_insertion_point(field_set_allocated:PBShape.Ellipse.pos)
 }
 
-// optional .PBShape.Pen pen = 2;
+// required int32 width = 2;
+inline bool Ellipse::_internal_has_width() const {
+  bool value = (_has_bits_[0] & 0x00000008u) != 0;
+  return value;
+}
+inline bool Ellipse::has_width() const {
+  return _internal_has_width();
+}
+inline void Ellipse::clear_width() {
+  width_ = 0;
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 Ellipse::_internal_width() const {
+  return width_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 Ellipse::width() const {
+  // @@protoc_insertion_point(field_get:PBShape.Ellipse.width)
+  return _internal_width();
+}
+inline void Ellipse::_internal_set_width(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _has_bits_[0] |= 0x00000008u;
+  width_ = value;
+}
+inline void Ellipse::set_width(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_width(value);
+  // @@protoc_insertion_point(field_set:PBShape.Ellipse.width)
+}
+
+// required int32 height = 3;
+inline bool Ellipse::_internal_has_height() const {
+  bool value = (_has_bits_[0] & 0x00000010u) != 0;
+  return value;
+}
+inline bool Ellipse::has_height() const {
+  return _internal_has_height();
+}
+inline void Ellipse::clear_height() {
+  height_ = 0;
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 Ellipse::_internal_height() const {
+  return height_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 Ellipse::height() const {
+  // @@protoc_insertion_point(field_get:PBShape.Ellipse.height)
+  return _internal_height();
+}
+inline void Ellipse::_internal_set_height(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _has_bits_[0] |= 0x00000010u;
+  height_ = value;
+}
+inline void Ellipse::set_height(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_height(value);
+  // @@protoc_insertion_point(field_set:PBShape.Ellipse.height)
+}
+
+// optional .PBShape.Pen pen = 4;
 inline bool Ellipse::_internal_has_pen() const {
   bool value = (_has_bits_[0] & 0x00000002u) != 0;
   PROTOBUF_ASSUME(!value || pen_ != nullptr);
@@ -3362,7 +3835,7 @@ inline void Ellipse::set_allocated_pen(::PBShape::Pen* pen) {
   // @@protoc_insertion_point(field_set_allocated:PBShape.Ellipse.pen)
 }
 
-// optional .PBShape.Brush brush = 3;
+// optional .PBShape.Brush brush = 5;
 inline bool Ellipse::_internal_has_brush() const {
   bool value = (_has_bits_[0] & 0x00000004u) != 0;
   PROTOBUF_ASSUME(!value || brush_ != nullptr);
@@ -3422,9 +3895,9 @@ inline void Ellipse::set_allocated_brush(::PBShape::Brush* brush) {
   // @@protoc_insertion_point(field_set_allocated:PBShape.Ellipse.brush)
 }
 
-// optional float angle = 4 [default = 0];
+// optional float angle = 6 [default = 0];
 inline bool Ellipse::_internal_has_angle() const {
-  bool value = (_has_bits_[0] & 0x00000008u) != 0;
+  bool value = (_has_bits_[0] & 0x00000020u) != 0;
   return value;
 }
 inline bool Ellipse::has_angle() const {
@@ -3432,7 +3905,7 @@ inline bool Ellipse::has_angle() const {
 }
 inline void Ellipse::clear_angle() {
   angle_ = 0;
-  _has_bits_[0] &= ~0x00000008u;
+  _has_bits_[0] &= ~0x00000020u;
 }
 inline float Ellipse::_internal_angle() const {
   return angle_;
@@ -3442,7 +3915,7 @@ inline float Ellipse::angle() const {
   return _internal_angle();
 }
 inline void Ellipse::_internal_set_angle(float value) {
-  _has_bits_[0] |= 0x00000008u;
+  _has_bits_[0] |= 0x00000020u;
   angle_ = value;
 }
 inline void Ellipse::set_angle(float value) {
@@ -3454,67 +3927,123 @@ inline void Ellipse::set_angle(float value) {
 
 // Triangle
 
-// required .PBShape.Rect rect = 1;
-inline bool Triangle::_internal_has_rect() const {
+// required .PBShape.Pos pos = 1;
+inline bool Triangle::_internal_has_pos() const {
   bool value = (_has_bits_[0] & 0x00000001u) != 0;
-  PROTOBUF_ASSUME(!value || rect_ != nullptr);
+  PROTOBUF_ASSUME(!value || pos_ != nullptr);
   return value;
 }
-inline bool Triangle::has_rect() const {
-  return _internal_has_rect();
+inline bool Triangle::has_pos() const {
+  return _internal_has_pos();
 }
-inline void Triangle::clear_rect() {
-  if (rect_ != nullptr) rect_->Clear();
+inline void Triangle::clear_pos() {
+  if (pos_ != nullptr) pos_->Clear();
   _has_bits_[0] &= ~0x00000001u;
 }
-inline const ::PBShape::Rect& Triangle::_internal_rect() const {
-  const ::PBShape::Rect* p = rect_;
-  return p != nullptr ? *p : *reinterpret_cast<const ::PBShape::Rect*>(
-      &::PBShape::_Rect_default_instance_);
+inline const ::PBShape::Pos& Triangle::_internal_pos() const {
+  const ::PBShape::Pos* p = pos_;
+  return p != nullptr ? *p : *reinterpret_cast<const ::PBShape::Pos*>(
+      &::PBShape::_Pos_default_instance_);
 }
-inline const ::PBShape::Rect& Triangle::rect() const {
-  // @@protoc_insertion_point(field_get:PBShape.Triangle.rect)
-  return _internal_rect();
+inline const ::PBShape::Pos& Triangle::pos() const {
+  // @@protoc_insertion_point(field_get:PBShape.Triangle.pos)
+  return _internal_pos();
 }
-inline ::PBShape::Rect* Triangle::release_rect() {
-  // @@protoc_insertion_point(field_release:PBShape.Triangle.rect)
+inline ::PBShape::Pos* Triangle::release_pos() {
+  // @@protoc_insertion_point(field_release:PBShape.Triangle.pos)
   _has_bits_[0] &= ~0x00000001u;
-  ::PBShape::Rect* temp = rect_;
-  rect_ = nullptr;
+  ::PBShape::Pos* temp = pos_;
+  pos_ = nullptr;
   return temp;
 }
-inline ::PBShape::Rect* Triangle::_internal_mutable_rect() {
+inline ::PBShape::Pos* Triangle::_internal_mutable_pos() {
   _has_bits_[0] |= 0x00000001u;
-  if (rect_ == nullptr) {
-    auto* p = CreateMaybeMessage<::PBShape::Rect>(GetArenaNoVirtual());
-    rect_ = p;
+  if (pos_ == nullptr) {
+    auto* p = CreateMaybeMessage<::PBShape::Pos>(GetArenaNoVirtual());
+    pos_ = p;
   }
-  return rect_;
+  return pos_;
 }
-inline ::PBShape::Rect* Triangle::mutable_rect() {
-  // @@protoc_insertion_point(field_mutable:PBShape.Triangle.rect)
-  return _internal_mutable_rect();
+inline ::PBShape::Pos* Triangle::mutable_pos() {
+  // @@protoc_insertion_point(field_mutable:PBShape.Triangle.pos)
+  return _internal_mutable_pos();
 }
-inline void Triangle::set_allocated_rect(::PBShape::Rect* rect) {
+inline void Triangle::set_allocated_pos(::PBShape::Pos* pos) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == nullptr) {
-    delete rect_;
+    delete pos_;
   }
-  if (rect) {
+  if (pos) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
     if (message_arena != submessage_arena) {
-      rect = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, rect, submessage_arena);
+      pos = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, pos, submessage_arena);
     }
     _has_bits_[0] |= 0x00000001u;
   } else {
     _has_bits_[0] &= ~0x00000001u;
   }
-  rect_ = rect;
-  // @@protoc_insertion_point(field_set_allocated:PBShape.Triangle.rect)
+  pos_ = pos;
+  // @@protoc_insertion_point(field_set_allocated:PBShape.Triangle.pos)
 }
 
-// optional .PBShape.Pen pen = 2;
+// required int32 width = 2;
+inline bool Triangle::_internal_has_width() const {
+  bool value = (_has_bits_[0] & 0x00000008u) != 0;
+  return value;
+}
+inline bool Triangle::has_width() const {
+  return _internal_has_width();
+}
+inline void Triangle::clear_width() {
+  width_ = 0;
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 Triangle::_internal_width() const {
+  return width_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 Triangle::width() const {
+  // @@protoc_insertion_point(field_get:PBShape.Triangle.width)
+  return _internal_width();
+}
+inline void Triangle::_internal_set_width(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _has_bits_[0] |= 0x00000008u;
+  width_ = value;
+}
+inline void Triangle::set_width(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_width(value);
+  // @@protoc_insertion_point(field_set:PBShape.Triangle.width)
+}
+
+// required int32 height = 3;
+inline bool Triangle::_internal_has_height() const {
+  bool value = (_has_bits_[0] & 0x00000010u) != 0;
+  return value;
+}
+inline bool Triangle::has_height() const {
+  return _internal_has_height();
+}
+inline void Triangle::clear_height() {
+  height_ = 0;
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 Triangle::_internal_height() const {
+  return height_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 Triangle::height() const {
+  // @@protoc_insertion_point(field_get:PBShape.Triangle.height)
+  return _internal_height();
+}
+inline void Triangle::_internal_set_height(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _has_bits_[0] |= 0x00000010u;
+  height_ = value;
+}
+inline void Triangle::set_height(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_height(value);
+  // @@protoc_insertion_point(field_set:PBShape.Triangle.height)
+}
+
+// optional .PBShape.Pen pen = 4;
 inline bool Triangle::_internal_has_pen() const {
   bool value = (_has_bits_[0] & 0x00000002u) != 0;
   PROTOBUF_ASSUME(!value || pen_ != nullptr);
@@ -3574,7 +4103,7 @@ inline void Triangle::set_allocated_pen(::PBShape::Pen* pen) {
   // @@protoc_insertion_point(field_set_allocated:PBShape.Triangle.pen)
 }
 
-// optional .PBShape.Brush brush = 3;
+// optional .PBShape.Brush brush = 5;
 inline bool Triangle::_internal_has_brush() const {
   bool value = (_has_bits_[0] & 0x00000004u) != 0;
   PROTOBUF_ASSUME(!value || brush_ != nullptr);
@@ -3634,9 +4163,9 @@ inline void Triangle::set_allocated_brush(::PBShape::Brush* brush) {
   // @@protoc_insertion_point(field_set_allocated:PBShape.Triangle.brush)
 }
 
-// optional float angle = 4 [default = 0];
+// optional float angle = 6 [default = 0];
 inline bool Triangle::_internal_has_angle() const {
-  bool value = (_has_bits_[0] & 0x00000008u) != 0;
+  bool value = (_has_bits_[0] & 0x00000020u) != 0;
   return value;
 }
 inline bool Triangle::has_angle() const {
@@ -3644,7 +4173,7 @@ inline bool Triangle::has_angle() const {
 }
 inline void Triangle::clear_angle() {
   angle_ = 0;
-  _has_bits_[0] &= ~0x00000008u;
+  _has_bits_[0] &= ~0x00000020u;
 }
 inline float Triangle::_internal_angle() const {
   return angle_;
@@ -3654,13 +4183,118 @@ inline float Triangle::angle() const {
   return _internal_angle();
 }
 inline void Triangle::_internal_set_angle(float value) {
-  _has_bits_[0] |= 0x00000008u;
+  _has_bits_[0] |= 0x00000020u;
   angle_ = value;
 }
 inline void Triangle::set_angle(float value) {
   _internal_set_angle(value);
   // @@protoc_insertion_point(field_set:PBShape.Triangle.angle)
 }
+
+// -------------------------------------------------------------------
+
+// Eraser
+
+// required bytes path = 1;
+inline bool Eraser::_internal_has_path() const {
+  bool value = (_has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline bool Eraser::has_path() const {
+  return _internal_has_path();
+}
+inline void Eraser::clear_path() {
+  path_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline const std::string& Eraser::path() const {
+  // @@protoc_insertion_point(field_get:PBShape.Eraser.path)
+  return _internal_path();
+}
+inline void Eraser::set_path(const std::string& value) {
+  _internal_set_path(value);
+  // @@protoc_insertion_point(field_set:PBShape.Eraser.path)
+}
+inline std::string* Eraser::mutable_path() {
+  // @@protoc_insertion_point(field_mutable:PBShape.Eraser.path)
+  return _internal_mutable_path();
+}
+inline const std::string& Eraser::_internal_path() const {
+  return path_.GetNoArena();
+}
+inline void Eraser::_internal_set_path(const std::string& value) {
+  _has_bits_[0] |= 0x00000001u;
+  path_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+}
+inline void Eraser::set_path(std::string&& value) {
+  _has_bits_[0] |= 0x00000001u;
+  path_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:PBShape.Eraser.path)
+}
+inline void Eraser::set_path(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _has_bits_[0] |= 0x00000001u;
+  path_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:PBShape.Eraser.path)
+}
+inline void Eraser::set_path(const void* value, size_t size) {
+  _has_bits_[0] |= 0x00000001u;
+  path_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:PBShape.Eraser.path)
+}
+inline std::string* Eraser::_internal_mutable_path() {
+  _has_bits_[0] |= 0x00000001u;
+  return path_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* Eraser::release_path() {
+  // @@protoc_insertion_point(field_release:PBShape.Eraser.path)
+  if (!_internal_has_path()) {
+    return nullptr;
+  }
+  _has_bits_[0] &= ~0x00000001u;
+  return path_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void Eraser::set_allocated_path(std::string* path) {
+  if (path != nullptr) {
+    _has_bits_[0] |= 0x00000001u;
+  } else {
+    _has_bits_[0] &= ~0x00000001u;
+  }
+  path_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), path);
+  // @@protoc_insertion_point(field_set_allocated:PBShape.Eraser.path)
+}
+
+// required int32 width = 2;
+inline bool Eraser::_internal_has_width() const {
+  bool value = (_has_bits_[0] & 0x00000002u) != 0;
+  return value;
+}
+inline bool Eraser::has_width() const {
+  return _internal_has_width();
+}
+inline void Eraser::clear_width() {
+  width_ = 0;
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 Eraser::_internal_width() const {
+  return width_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 Eraser::width() const {
+  // @@protoc_insertion_point(field_get:PBShape.Eraser.width)
+  return _internal_width();
+}
+inline void Eraser::_internal_set_width(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _has_bits_[0] |= 0x00000002u;
+  width_ = value;
+}
+inline void Eraser::set_width(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_width(value);
+  // @@protoc_insertion_point(field_set:PBShape.Eraser.width)
+}
+
+// -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
 
@@ -3726,80 +4360,229 @@ inline void Scribble::set_allocated_rect(::PBShape::Rect* rect) {
   // @@protoc_insertion_point(field_set_allocated:PBShape.Scribble.rect)
 }
 
-// required bytes pixmap = 2;
-inline bool Scribble::_internal_has_pixmap() const {
+// required .PBShape.Pos pos = 2;
+inline bool Scribble::_internal_has_pos() const {
+  bool value = (_has_bits_[0] & 0x00000004u) != 0;
+  PROTOBUF_ASSUME(!value || pos_ != nullptr);
+  return value;
+}
+inline bool Scribble::has_pos() const {
+  return _internal_has_pos();
+}
+inline void Scribble::clear_pos() {
+  if (pos_ != nullptr) pos_->Clear();
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline const ::PBShape::Pos& Scribble::_internal_pos() const {
+  const ::PBShape::Pos* p = pos_;
+  return p != nullptr ? *p : *reinterpret_cast<const ::PBShape::Pos*>(
+      &::PBShape::_Pos_default_instance_);
+}
+inline const ::PBShape::Pos& Scribble::pos() const {
+  // @@protoc_insertion_point(field_get:PBShape.Scribble.pos)
+  return _internal_pos();
+}
+inline ::PBShape::Pos* Scribble::release_pos() {
+  // @@protoc_insertion_point(field_release:PBShape.Scribble.pos)
+  _has_bits_[0] &= ~0x00000004u;
+  ::PBShape::Pos* temp = pos_;
+  pos_ = nullptr;
+  return temp;
+}
+inline ::PBShape::Pos* Scribble::_internal_mutable_pos() {
+  _has_bits_[0] |= 0x00000004u;
+  if (pos_ == nullptr) {
+    auto* p = CreateMaybeMessage<::PBShape::Pos>(GetArenaNoVirtual());
+    pos_ = p;
+  }
+  return pos_;
+}
+inline ::PBShape::Pos* Scribble::mutable_pos() {
+  // @@protoc_insertion_point(field_mutable:PBShape.Scribble.pos)
+  return _internal_mutable_pos();
+}
+inline void Scribble::set_allocated_pos(::PBShape::Pos* pos) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == nullptr) {
+    delete pos_;
+  }
+  if (pos) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
+    if (message_arena != submessage_arena) {
+      pos = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, pos, submessage_arena);
+    }
+    _has_bits_[0] |= 0x00000004u;
+  } else {
+    _has_bits_[0] &= ~0x00000004u;
+  }
+  pos_ = pos;
+  // @@protoc_insertion_point(field_set_allocated:PBShape.Scribble.pos)
+}
+
+// required bytes path = 3;
+inline bool Scribble::_internal_has_path() const {
   bool value = (_has_bits_[0] & 0x00000001u) != 0;
   return value;
 }
-inline bool Scribble::has_pixmap() const {
-  return _internal_has_pixmap();
+inline bool Scribble::has_path() const {
+  return _internal_has_path();
 }
-inline void Scribble::clear_pixmap() {
-  pixmap_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+inline void Scribble::clear_path() {
+  path_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   _has_bits_[0] &= ~0x00000001u;
 }
-inline const std::string& Scribble::pixmap() const {
-  // @@protoc_insertion_point(field_get:PBShape.Scribble.pixmap)
-  return _internal_pixmap();
+inline const std::string& Scribble::path() const {
+  // @@protoc_insertion_point(field_get:PBShape.Scribble.path)
+  return _internal_path();
 }
-inline void Scribble::set_pixmap(const std::string& value) {
-  _internal_set_pixmap(value);
-  // @@protoc_insertion_point(field_set:PBShape.Scribble.pixmap)
+inline void Scribble::set_path(const std::string& value) {
+  _internal_set_path(value);
+  // @@protoc_insertion_point(field_set:PBShape.Scribble.path)
 }
-inline std::string* Scribble::mutable_pixmap() {
-  // @@protoc_insertion_point(field_mutable:PBShape.Scribble.pixmap)
-  return _internal_mutable_pixmap();
+inline std::string* Scribble::mutable_path() {
+  // @@protoc_insertion_point(field_mutable:PBShape.Scribble.path)
+  return _internal_mutable_path();
 }
-inline const std::string& Scribble::_internal_pixmap() const {
-  return pixmap_.GetNoArena();
+inline const std::string& Scribble::_internal_path() const {
+  return path_.GetNoArena();
 }
-inline void Scribble::_internal_set_pixmap(const std::string& value) {
+inline void Scribble::_internal_set_path(const std::string& value) {
   _has_bits_[0] |= 0x00000001u;
-  pixmap_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  path_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
 }
-inline void Scribble::set_pixmap(std::string&& value) {
+inline void Scribble::set_path(std::string&& value) {
   _has_bits_[0] |= 0x00000001u;
-  pixmap_.SetNoArena(
+  path_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:PBShape.Scribble.pixmap)
+  // @@protoc_insertion_point(field_set_rvalue:PBShape.Scribble.path)
 }
-inline void Scribble::set_pixmap(const char* value) {
+inline void Scribble::set_path(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
   _has_bits_[0] |= 0x00000001u;
-  pixmap_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:PBShape.Scribble.pixmap)
+  path_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:PBShape.Scribble.path)
 }
-inline void Scribble::set_pixmap(const void* value, size_t size) {
+inline void Scribble::set_path(const void* value, size_t size) {
   _has_bits_[0] |= 0x00000001u;
-  pixmap_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+  path_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:PBShape.Scribble.pixmap)
+  // @@protoc_insertion_point(field_set_pointer:PBShape.Scribble.path)
 }
-inline std::string* Scribble::_internal_mutable_pixmap() {
+inline std::string* Scribble::_internal_mutable_path() {
   _has_bits_[0] |= 0x00000001u;
-  return pixmap_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  return path_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline std::string* Scribble::release_pixmap() {
-  // @@protoc_insertion_point(field_release:PBShape.Scribble.pixmap)
-  if (!_internal_has_pixmap()) {
+inline std::string* Scribble::release_path() {
+  // @@protoc_insertion_point(field_release:PBShape.Scribble.path)
+  if (!_internal_has_path()) {
     return nullptr;
   }
   _has_bits_[0] &= ~0x00000001u;
-  return pixmap_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  return path_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline void Scribble::set_allocated_pixmap(std::string* pixmap) {
-  if (pixmap != nullptr) {
+inline void Scribble::set_allocated_path(std::string* path) {
+  if (path != nullptr) {
     _has_bits_[0] |= 0x00000001u;
   } else {
     _has_bits_[0] &= ~0x00000001u;
   }
-  pixmap_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), pixmap);
-  // @@protoc_insertion_point(field_set_allocated:PBShape.Scribble.pixmap)
+  path_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), path);
+  // @@protoc_insertion_point(field_set_allocated:PBShape.Scribble.path)
 }
 
-// optional float angle = 3 [default = 0];
+// required .PBShape.Pen pen = 4;
+inline bool Scribble::_internal_has_pen() const {
+  bool value = (_has_bits_[0] & 0x00000008u) != 0;
+  PROTOBUF_ASSUME(!value || pen_ != nullptr);
+  return value;
+}
+inline bool Scribble::has_pen() const {
+  return _internal_has_pen();
+}
+inline void Scribble::clear_pen() {
+  if (pen_ != nullptr) pen_->Clear();
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline const ::PBShape::Pen& Scribble::_internal_pen() const {
+  const ::PBShape::Pen* p = pen_;
+  return p != nullptr ? *p : *reinterpret_cast<const ::PBShape::Pen*>(
+      &::PBShape::_Pen_default_instance_);
+}
+inline const ::PBShape::Pen& Scribble::pen() const {
+  // @@protoc_insertion_point(field_get:PBShape.Scribble.pen)
+  return _internal_pen();
+}
+inline ::PBShape::Pen* Scribble::release_pen() {
+  // @@protoc_insertion_point(field_release:PBShape.Scribble.pen)
+  _has_bits_[0] &= ~0x00000008u;
+  ::PBShape::Pen* temp = pen_;
+  pen_ = nullptr;
+  return temp;
+}
+inline ::PBShape::Pen* Scribble::_internal_mutable_pen() {
+  _has_bits_[0] |= 0x00000008u;
+  if (pen_ == nullptr) {
+    auto* p = CreateMaybeMessage<::PBShape::Pen>(GetArenaNoVirtual());
+    pen_ = p;
+  }
+  return pen_;
+}
+inline ::PBShape::Pen* Scribble::mutable_pen() {
+  // @@protoc_insertion_point(field_mutable:PBShape.Scribble.pen)
+  return _internal_mutable_pen();
+}
+inline void Scribble::set_allocated_pen(::PBShape::Pen* pen) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == nullptr) {
+    delete pen_;
+  }
+  if (pen) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
+    if (message_arena != submessage_arena) {
+      pen = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, pen, submessage_arena);
+    }
+    _has_bits_[0] |= 0x00000008u;
+  } else {
+    _has_bits_[0] &= ~0x00000008u;
+  }
+  pen_ = pen;
+  // @@protoc_insertion_point(field_set_allocated:PBShape.Scribble.pen)
+}
+
+// map<int32, .PBShape.Eraser> maperaser = 5;
+inline int Scribble::_internal_maperaser_size() const {
+  return maperaser_.size();
+}
+inline int Scribble::maperaser_size() const {
+  return _internal_maperaser_size();
+}
+inline void Scribble::clear_maperaser() {
+  maperaser_.Clear();
+}
+inline const ::PROTOBUF_NAMESPACE_ID::Map< ::PROTOBUF_NAMESPACE_ID::int32, ::PBShape::Eraser >&
+Scribble::_internal_maperaser() const {
+  return maperaser_.GetMap();
+}
+inline const ::PROTOBUF_NAMESPACE_ID::Map< ::PROTOBUF_NAMESPACE_ID::int32, ::PBShape::Eraser >&
+Scribble::maperaser() const {
+  // @@protoc_insertion_point(field_map:PBShape.Scribble.maperaser)
+  return _internal_maperaser();
+}
+inline ::PROTOBUF_NAMESPACE_ID::Map< ::PROTOBUF_NAMESPACE_ID::int32, ::PBShape::Eraser >*
+Scribble::_internal_mutable_maperaser() {
+  return maperaser_.MutableMap();
+}
+inline ::PROTOBUF_NAMESPACE_ID::Map< ::PROTOBUF_NAMESPACE_ID::int32, ::PBShape::Eraser >*
+Scribble::mutable_maperaser() {
+  // @@protoc_insertion_point(field_mutable_map:PBShape.Scribble.maperaser)
+  return _internal_mutable_maperaser();
+}
+
+// optional float angle = 6 [default = 0];
 inline bool Scribble::_internal_has_angle() const {
-  bool value = (_has_bits_[0] & 0x00000004u) != 0;
+  bool value = (_has_bits_[0] & 0x00000010u) != 0;
   return value;
 }
 inline bool Scribble::has_angle() const {
@@ -3807,7 +4590,7 @@ inline bool Scribble::has_angle() const {
 }
 inline void Scribble::clear_angle() {
   angle_ = 0;
-  _has_bits_[0] &= ~0x00000004u;
+  _has_bits_[0] &= ~0x00000010u;
 }
 inline float Scribble::_internal_angle() const {
   return angle_;
@@ -3817,7 +4600,7 @@ inline float Scribble::angle() const {
   return _internal_angle();
 }
 inline void Scribble::_internal_set_angle(float value) {
-  _has_bits_[0] |= 0x00000004u;
+  _has_bits_[0] |= 0x00000010u;
   angle_ = value;
 }
 inline void Scribble::set_angle(float value) {
@@ -3987,6 +4770,10 @@ Scene::mutable_mapscribble() {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

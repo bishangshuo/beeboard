@@ -16,6 +16,7 @@
 #include <google/protobuf/port_def.inc>
 extern PROTOBUF_INTERNAL_EXPORT_pbshape_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Brush_pbshape_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_pbshape_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<3> scc_info_Ellipse_pbshape_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_pbshape_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Eraser_pbshape_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_pbshape_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<2> scc_info_Line_pbshape_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_pbshape_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Pen_pbshape_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_pbshape_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Pos_pbshape_2eproto;
@@ -26,7 +27,8 @@ extern PROTOBUF_INTERNAL_EXPORT_pbshape_2eproto ::PROTOBUF_NAMESPACE_ID::interna
 extern PROTOBUF_INTERNAL_EXPORT_pbshape_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_Scene_MapRectangleEntry_DoNotUse_pbshape_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_pbshape_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_Scene_MapScribbleEntry_DoNotUse_pbshape_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_pbshape_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_Scene_MapTriangleEntry_DoNotUse_pbshape_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_pbshape_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_Scribble_pbshape_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_pbshape_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<4> scc_info_Scribble_pbshape_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_pbshape_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_Scribble_MaperaserEntry_DoNotUse_pbshape_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_pbshape_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<3> scc_info_Triangle_pbshape_2eproto;
 namespace PBShape {
 class RectDefaultTypeInternal {
@@ -61,6 +63,14 @@ class TriangleDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Triangle> _instance;
 } _Triangle_default_instance_;
+class EraserDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Eraser> _instance;
+} _Eraser_default_instance_;
+class Scribble_MaperaserEntry_DoNotUseDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Scribble_MaperaserEntry_DoNotUse> _instance;
+} _Scribble_MaperaserEntry_DoNotUse_default_instance_;
 class ScribbleDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Scribble> _instance;
@@ -117,9 +127,23 @@ static void InitDefaultsscc_info_Ellipse_pbshape_2eproto() {
 
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<3> scc_info_Ellipse_pbshape_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 3, 0, InitDefaultsscc_info_Ellipse_pbshape_2eproto}, {
-      &scc_info_Rect_pbshape_2eproto.base,
+      &scc_info_Pos_pbshape_2eproto.base,
       &scc_info_Pen_pbshape_2eproto.base,
       &scc_info_Brush_pbshape_2eproto.base,}};
+
+static void InitDefaultsscc_info_Eraser_pbshape_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::PBShape::_Eraser_default_instance_;
+    new (ptr) ::PBShape::Eraser();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::PBShape::Eraser::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Eraser_pbshape_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_Eraser_pbshape_2eproto}, {}};
 
 static void InitDefaultsscc_info_Line_pbshape_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -192,7 +216,7 @@ static void InitDefaultsscc_info_Rectangle_pbshape_2eproto() {
 
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<3> scc_info_Rectangle_pbshape_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 3, 0, InitDefaultsscc_info_Rectangle_pbshape_2eproto}, {
-      &scc_info_Rect_pbshape_2eproto.base,
+      &scc_info_Pos_pbshape_2eproto.base,
       &scc_info_Pen_pbshape_2eproto.base,
       &scc_info_Brush_pbshape_2eproto.base,}};
 
@@ -296,9 +320,26 @@ static void InitDefaultsscc_info_Scribble_pbshape_2eproto() {
   ::PBShape::Scribble::InitAsDefaultInstance();
 }
 
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_Scribble_pbshape_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_Scribble_pbshape_2eproto}, {
-      &scc_info_Rect_pbshape_2eproto.base,}};
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<4> scc_info_Scribble_pbshape_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 4, 0, InitDefaultsscc_info_Scribble_pbshape_2eproto}, {
+      &scc_info_Rect_pbshape_2eproto.base,
+      &scc_info_Pos_pbshape_2eproto.base,
+      &scc_info_Pen_pbshape_2eproto.base,
+      &scc_info_Scribble_MaperaserEntry_DoNotUse_pbshape_2eproto.base,}};
+
+static void InitDefaultsscc_info_Scribble_MaperaserEntry_DoNotUse_pbshape_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::PBShape::_Scribble_MaperaserEntry_DoNotUse_default_instance_;
+    new (ptr) ::PBShape::Scribble_MaperaserEntry_DoNotUse();
+  }
+  ::PBShape::Scribble_MaperaserEntry_DoNotUse::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_Scribble_MaperaserEntry_DoNotUse_pbshape_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_Scribble_MaperaserEntry_DoNotUse_pbshape_2eproto}, {
+      &scc_info_Eraser_pbshape_2eproto.base,}};
 
 static void InitDefaultsscc_info_Triangle_pbshape_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -313,11 +354,11 @@ static void InitDefaultsscc_info_Triangle_pbshape_2eproto() {
 
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<3> scc_info_Triangle_pbshape_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 3, 0, InitDefaultsscc_info_Triangle_pbshape_2eproto}, {
-      &scc_info_Rect_pbshape_2eproto.base,
+      &scc_info_Pos_pbshape_2eproto.base,
       &scc_info_Pen_pbshape_2eproto.base,
       &scc_info_Brush_pbshape_2eproto.base,}};
 
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_pbshape_2eproto[15];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_pbshape_2eproto[17];
 static constexpr ::PROTOBUF_NAMESPACE_ID::EnumDescriptor const** file_level_enum_descriptors_pbshape_2eproto = nullptr;
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_pbshape_2eproto = nullptr;
 
@@ -398,51 +439,87 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_pbshape_2eproto::offsets[] PRO
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::PBShape::Rectangle, rect_),
+  PROTOBUF_FIELD_OFFSET(::PBShape::Rectangle, pos_),
+  PROTOBUF_FIELD_OFFSET(::PBShape::Rectangle, width_),
+  PROTOBUF_FIELD_OFFSET(::PBShape::Rectangle, height_),
   PROTOBUF_FIELD_OFFSET(::PBShape::Rectangle, pen_),
   PROTOBUF_FIELD_OFFSET(::PBShape::Rectangle, brush_),
   PROTOBUF_FIELD_OFFSET(::PBShape::Rectangle, angle_),
   0,
+  3,
+  4,
   1,
   2,
-  3,
+  5,
   PROTOBUF_FIELD_OFFSET(::PBShape::Ellipse, _has_bits_),
   PROTOBUF_FIELD_OFFSET(::PBShape::Ellipse, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::PBShape::Ellipse, rect_),
+  PROTOBUF_FIELD_OFFSET(::PBShape::Ellipse, pos_),
+  PROTOBUF_FIELD_OFFSET(::PBShape::Ellipse, width_),
+  PROTOBUF_FIELD_OFFSET(::PBShape::Ellipse, height_),
   PROTOBUF_FIELD_OFFSET(::PBShape::Ellipse, pen_),
   PROTOBUF_FIELD_OFFSET(::PBShape::Ellipse, brush_),
   PROTOBUF_FIELD_OFFSET(::PBShape::Ellipse, angle_),
   0,
+  3,
+  4,
   1,
   2,
-  3,
+  5,
   PROTOBUF_FIELD_OFFSET(::PBShape::Triangle, _has_bits_),
   PROTOBUF_FIELD_OFFSET(::PBShape::Triangle, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::PBShape::Triangle, rect_),
+  PROTOBUF_FIELD_OFFSET(::PBShape::Triangle, pos_),
+  PROTOBUF_FIELD_OFFSET(::PBShape::Triangle, width_),
+  PROTOBUF_FIELD_OFFSET(::PBShape::Triangle, height_),
   PROTOBUF_FIELD_OFFSET(::PBShape::Triangle, pen_),
   PROTOBUF_FIELD_OFFSET(::PBShape::Triangle, brush_),
   PROTOBUF_FIELD_OFFSET(::PBShape::Triangle, angle_),
   0,
+  3,
+  4,
   1,
   2,
-  3,
+  5,
+  PROTOBUF_FIELD_OFFSET(::PBShape::Eraser, _has_bits_),
+  PROTOBUF_FIELD_OFFSET(::PBShape::Eraser, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::PBShape::Eraser, path_),
+  PROTOBUF_FIELD_OFFSET(::PBShape::Eraser, width_),
+  0,
+  1,
+  PROTOBUF_FIELD_OFFSET(::PBShape::Scribble_MaperaserEntry_DoNotUse, _has_bits_),
+  PROTOBUF_FIELD_OFFSET(::PBShape::Scribble_MaperaserEntry_DoNotUse, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::PBShape::Scribble_MaperaserEntry_DoNotUse, key_),
+  PROTOBUF_FIELD_OFFSET(::PBShape::Scribble_MaperaserEntry_DoNotUse, value_),
+  0,
+  1,
   PROTOBUF_FIELD_OFFSET(::PBShape::Scribble, _has_bits_),
   PROTOBUF_FIELD_OFFSET(::PBShape::Scribble, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::PBShape::Scribble, rect_),
-  PROTOBUF_FIELD_OFFSET(::PBShape::Scribble, pixmap_),
+  PROTOBUF_FIELD_OFFSET(::PBShape::Scribble, pos_),
+  PROTOBUF_FIELD_OFFSET(::PBShape::Scribble, path_),
+  PROTOBUF_FIELD_OFFSET(::PBShape::Scribble, pen_),
+  PROTOBUF_FIELD_OFFSET(::PBShape::Scribble, maperaser_),
   PROTOBUF_FIELD_OFFSET(::PBShape::Scribble, angle_),
   1,
-  0,
   2,
+  0,
+  3,
+  ~0u,
+  4,
   PROTOBUF_FIELD_OFFSET(::PBShape::Scene_MapLineEntry_DoNotUse, _has_bits_),
   PROTOBUF_FIELD_OFFSET(::PBShape::Scene_MapLineEntry_DoNotUse, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -510,16 +587,18 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 34, 44, sizeof(::PBShape::Brush)},
   { 49, 56, sizeof(::PBShape::Pos)},
   { 58, 67, sizeof(::PBShape::Line)},
-  { 71, 80, sizeof(::PBShape::Rectangle)},
-  { 84, 93, sizeof(::PBShape::Ellipse)},
-  { 97, 106, sizeof(::PBShape::Triangle)},
-  { 110, 118, sizeof(::PBShape::Scribble)},
-  { 121, 128, sizeof(::PBShape::Scene_MapLineEntry_DoNotUse)},
-  { 130, 137, sizeof(::PBShape::Scene_MapRectangleEntry_DoNotUse)},
-  { 139, 146, sizeof(::PBShape::Scene_MapEllipseEntry_DoNotUse)},
-  { 148, 155, sizeof(::PBShape::Scene_MapTriangleEntry_DoNotUse)},
-  { 157, 164, sizeof(::PBShape::Scene_MapScribbleEntry_DoNotUse)},
-  { 166, 176, sizeof(::PBShape::Scene)},
+  { 71, 82, sizeof(::PBShape::Rectangle)},
+  { 88, 99, sizeof(::PBShape::Ellipse)},
+  { 105, 116, sizeof(::PBShape::Triangle)},
+  { 122, 129, sizeof(::PBShape::Eraser)},
+  { 131, 138, sizeof(::PBShape::Scribble_MaperaserEntry_DoNotUse)},
+  { 140, 151, sizeof(::PBShape::Scribble)},
+  { 157, 164, sizeof(::PBShape::Scene_MapLineEntry_DoNotUse)},
+  { 166, 173, sizeof(::PBShape::Scene_MapRectangleEntry_DoNotUse)},
+  { 175, 182, sizeof(::PBShape::Scene_MapEllipseEntry_DoNotUse)},
+  { 184, 191, sizeof(::PBShape::Scene_MapTriangleEntry_DoNotUse)},
+  { 193, 200, sizeof(::PBShape::Scene_MapScribbleEntry_DoNotUse)},
+  { 202, 212, sizeof(::PBShape::Scene)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -531,6 +610,8 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::PBShape::_Rectangle_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::PBShape::_Ellipse_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::PBShape::_Triangle_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::PBShape::_Eraser_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::PBShape::_Scribble_MaperaserEntry_DoNotUse_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::PBShape::_Scribble_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::PBShape::_Scene_MapLineEntry_DoNotUse_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::PBShape::_Scene_MapRectangleEntry_DoNotUse_default_instance_),
@@ -552,39 +633,47 @@ const char descriptor_table_protodef_pbshape_2eproto[] PROTOBUF_SECTION_VARIABLE
   "\001 \002(\005\022\t\n\001y\030\002 \002(\005\"g\n\004Line\022\030\n\002p0\030\001 \002(\0132\014.P"
   "BShape.Pos\022\030\n\002p1\030\002 \002(\0132\014.PBShape.Pos\022\031\n\003"
   "pen\030\003 \002(\0132\014.PBShape.Pen\022\020\n\005angle\030\004 \001(\002:\001"
-  "0\"t\n\tRectangle\022\033\n\004rect\030\001 \002(\0132\r.PBShape.R"
-  "ect\022\031\n\003pen\030\002 \001(\0132\014.PBShape.Pen\022\035\n\005brush\030"
-  "\003 \001(\0132\016.PBShape.Brush\022\020\n\005angle\030\004 \001(\002:\0010\""
-  "r\n\007Ellipse\022\033\n\004rect\030\001 \002(\0132\r.PBShape.Rect\022"
-  "\031\n\003pen\030\002 \001(\0132\014.PBShape.Pen\022\035\n\005brush\030\003 \001("
-  "\0132\016.PBShape.Brush\022\020\n\005angle\030\004 \001(\002:\0010\"s\n\010T"
-  "riangle\022\033\n\004rect\030\001 \002(\0132\r.PBShape.Rect\022\031\n\003"
-  "pen\030\002 \001(\0132\014.PBShape.Pen\022\035\n\005brush\030\003 \001(\0132\016"
-  ".PBShape.Brush\022\020\n\005angle\030\004 \001(\002:\0010\"I\n\010Scri"
-  "bble\022\033\n\004rect\030\001 \002(\0132\r.PBShape.Rect\022\016\n\006pix"
-  "map\030\002 \002(\014\022\020\n\005angle\030\003 \001(\002:\0010\"\350\004\n\005Scene\022,\n"
-  "\007mapLine\030\001 \003(\0132\033.PBShape.Scene.MapLineEn"
-  "try\0226\n\014mapRectangle\030\002 \003(\0132 .PBShape.Scen"
-  "e.MapRectangleEntry\0222\n\nmapEllipse\030\003 \003(\0132"
-  "\036.PBShape.Scene.MapEllipseEntry\0224\n\013mapTr"
-  "iangle\030\004 \003(\0132\037.PBShape.Scene.MapTriangle"
-  "Entry\0224\n\013mapScribble\030\005 \003(\0132\037.PBShape.Sce"
-  "ne.MapScribbleEntry\032=\n\014MapLineEntry\022\013\n\003k"
-  "ey\030\001 \001(\005\022\034\n\005value\030\002 \001(\0132\r.PBShape.Line:\002"
-  "8\001\032G\n\021MapRectangleEntry\022\013\n\003key\030\001 \001(\005\022!\n\005"
-  "value\030\002 \001(\0132\022.PBShape.Rectangle:\0028\001\032C\n\017M"
-  "apEllipseEntry\022\013\n\003key\030\001 \001(\005\022\037\n\005value\030\002 \001"
-  "(\0132\020.PBShape.Ellipse:\0028\001\032E\n\020MapTriangleE"
-  "ntry\022\013\n\003key\030\001 \001(\005\022 \n\005value\030\002 \001(\0132\021.PBSha"
-  "pe.Triangle:\0028\001\032E\n\020MapScribbleEntry\022\013\n\003k"
-  "ey\030\001 \001(\005\022 \n\005value\030\002 \001(\0132\021.PBShape.Scribb"
-  "le:\0028\001"
+  "0\"\221\001\n\tRectangle\022\031\n\003pos\030\001 \002(\0132\014.PBShape.P"
+  "os\022\r\n\005width\030\002 \002(\005\022\016\n\006height\030\003 \002(\005\022\031\n\003pen"
+  "\030\004 \001(\0132\014.PBShape.Pen\022\035\n\005brush\030\005 \001(\0132\016.PB"
+  "Shape.Brush\022\020\n\005angle\030\006 \001(\002:\0010\"\217\001\n\007Ellips"
+  "e\022\031\n\003pos\030\001 \002(\0132\014.PBShape.Pos\022\r\n\005width\030\002 "
+  "\002(\005\022\016\n\006height\030\003 \002(\005\022\031\n\003pen\030\004 \001(\0132\014.PBSha"
+  "pe.Pen\022\035\n\005brush\030\005 \001(\0132\016.PBShape.Brush\022\020\n"
+  "\005angle\030\006 \001(\002:\0010\"\220\001\n\010Triangle\022\031\n\003pos\030\001 \002("
+  "\0132\014.PBShape.Pos\022\r\n\005width\030\002 \002(\005\022\016\n\006height"
+  "\030\003 \002(\005\022\031\n\003pen\030\004 \001(\0132\014.PBShape.Pen\022\035\n\005bru"
+  "sh\030\005 \001(\0132\016.PBShape.Brush\022\020\n\005angle\030\006 \001(\002:"
+  "\0010\"%\n\006Eraser\022\014\n\004path\030\001 \002(\014\022\r\n\005width\030\002 \002("
+  "\005\"\365\001\n\010Scribble\022\033\n\004rect\030\001 \002(\0132\r.PBShape.R"
+  "ect\022\031\n\003pos\030\002 \002(\0132\014.PBShape.Pos\022\014\n\004path\030\003"
+  " \002(\014\022\031\n\003pen\030\004 \002(\0132\014.PBShape.Pen\0223\n\tmaper"
+  "aser\030\005 \003(\0132 .PBShape.Scribble.MaperaserE"
+  "ntry\022\020\n\005angle\030\006 \001(\002:\0010\032A\n\016MaperaserEntry"
+  "\022\013\n\003key\030\001 \001(\005\022\036\n\005value\030\002 \001(\0132\017.PBShape.E"
+  "raser:\0028\001\"\350\004\n\005Scene\022,\n\007mapLine\030\001 \003(\0132\033.P"
+  "BShape.Scene.MapLineEntry\0226\n\014mapRectangl"
+  "e\030\002 \003(\0132 .PBShape.Scene.MapRectangleEntr"
+  "y\0222\n\nmapEllipse\030\003 \003(\0132\036.PBShape.Scene.Ma"
+  "pEllipseEntry\0224\n\013mapTriangle\030\004 \003(\0132\037.PBS"
+  "hape.Scene.MapTriangleEntry\0224\n\013mapScribb"
+  "le\030\005 \003(\0132\037.PBShape.Scene.MapScribbleEntr"
+  "y\032=\n\014MapLineEntry\022\013\n\003key\030\001 \001(\005\022\034\n\005value\030"
+  "\002 \001(\0132\r.PBShape.Line:\0028\001\032G\n\021MapRectangle"
+  "Entry\022\013\n\003key\030\001 \001(\005\022!\n\005value\030\002 \001(\0132\022.PBSh"
+  "ape.Rectangle:\0028\001\032C\n\017MapEllipseEntry\022\013\n\003"
+  "key\030\001 \001(\005\022\037\n\005value\030\002 \001(\0132\020.PBShape.Ellip"
+  "se:\0028\001\032E\n\020MapTriangleEntry\022\013\n\003key\030\001 \001(\005\022"
+  " \n\005value\030\002 \001(\0132\021.PBShape.Triangle:\0028\001\032E\n"
+  "\020MapScribbleEntry\022\013\n\003key\030\001 \001(\005\022 \n\005value\030"
+  "\002 \001(\0132\021.PBShape.Scribble:\0028\001"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_pbshape_2eproto_deps[1] = {
 };
-static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_pbshape_2eproto_sccs[15] = {
+static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_pbshape_2eproto_sccs[17] = {
   &scc_info_Brush_pbshape_2eproto.base,
   &scc_info_Ellipse_pbshape_2eproto.base,
+  &scc_info_Eraser_pbshape_2eproto.base,
   &scc_info_Line_pbshape_2eproto.base,
   &scc_info_Pen_pbshape_2eproto.base,
   &scc_info_Pos_pbshape_2eproto.base,
@@ -597,15 +686,16 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_pbs
   &scc_info_Scene_MapScribbleEntry_DoNotUse_pbshape_2eproto.base,
   &scc_info_Scene_MapTriangleEntry_DoNotUse_pbshape_2eproto.base,
   &scc_info_Scribble_pbshape_2eproto.base,
+  &scc_info_Scribble_MaperaserEntry_DoNotUse_pbshape_2eproto.base,
   &scc_info_Triangle_pbshape_2eproto.base,
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_pbshape_2eproto_once;
 static bool descriptor_table_pbshape_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_pbshape_2eproto = {
-  &descriptor_table_pbshape_2eproto_initialized, descriptor_table_protodef_pbshape_2eproto, "pbshape.proto", 1486,
-  &descriptor_table_pbshape_2eproto_once, descriptor_table_pbshape_2eproto_sccs, descriptor_table_pbshape_2eproto_deps, 15, 0,
+  &descriptor_table_pbshape_2eproto_initialized, descriptor_table_protodef_pbshape_2eproto, "pbshape.proto", 1788,
+  &descriptor_table_pbshape_2eproto_once, descriptor_table_pbshape_2eproto_sccs, descriptor_table_pbshape_2eproto_deps, 17, 0,
   schemas, file_default_instances, TableStruct_pbshape_2eproto::offsets,
-  file_level_metadata_pbshape_2eproto, 15, file_level_enum_descriptors_pbshape_2eproto, file_level_service_descriptors_pbshape_2eproto,
+  file_level_metadata_pbshape_2eproto, 17, file_level_enum_descriptors_pbshape_2eproto, file_level_service_descriptors_pbshape_2eproto,
 };
 
 // Force running AddDescriptors() at dynamic initialization time.
@@ -2321,8 +2411,8 @@ void Line::InternalSwap(Line* other) {
 // ===================================================================
 
 void Rectangle::InitAsDefaultInstance() {
-  ::PBShape::_Rectangle_default_instance_._instance.get_mutable()->rect_ = const_cast< ::PBShape::Rect*>(
-      ::PBShape::Rect::internal_default_instance());
+  ::PBShape::_Rectangle_default_instance_._instance.get_mutable()->pos_ = const_cast< ::PBShape::Pos*>(
+      ::PBShape::Pos::internal_default_instance());
   ::PBShape::_Rectangle_default_instance_._instance.get_mutable()->pen_ = const_cast< ::PBShape::Pen*>(
       ::PBShape::Pen::internal_default_instance());
   ::PBShape::_Rectangle_default_instance_._instance.get_mutable()->brush_ = const_cast< ::PBShape::Brush*>(
@@ -2331,9 +2421,15 @@ void Rectangle::InitAsDefaultInstance() {
 class Rectangle::_Internal {
  public:
   using HasBits = decltype(std::declval<Rectangle>()._has_bits_);
-  static const ::PBShape::Rect& rect(const Rectangle* msg);
-  static void set_has_rect(HasBits* has_bits) {
+  static const ::PBShape::Pos& pos(const Rectangle* msg);
+  static void set_has_pos(HasBits* has_bits) {
     (*has_bits)[0] |= 1u;
+  }
+  static void set_has_width(HasBits* has_bits) {
+    (*has_bits)[0] |= 8u;
+  }
+  static void set_has_height(HasBits* has_bits) {
+    (*has_bits)[0] |= 16u;
   }
   static const ::PBShape::Pen& pen(const Rectangle* msg);
   static void set_has_pen(HasBits* has_bits) {
@@ -2344,13 +2440,13 @@ class Rectangle::_Internal {
     (*has_bits)[0] |= 4u;
   }
   static void set_has_angle(HasBits* has_bits) {
-    (*has_bits)[0] |= 8u;
+    (*has_bits)[0] |= 32u;
   }
 };
 
-const ::PBShape::Rect&
-Rectangle::_Internal::rect(const Rectangle* msg) {
-  return *msg->rect_;
+const ::PBShape::Pos&
+Rectangle::_Internal::pos(const Rectangle* msg) {
+  return *msg->pos_;
 }
 const ::PBShape::Pen&
 Rectangle::_Internal::pen(const Rectangle* msg) {
@@ -2370,10 +2466,10 @@ Rectangle::Rectangle(const Rectangle& from)
       _internal_metadata_(nullptr),
       _has_bits_(from._has_bits_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  if (from._internal_has_rect()) {
-    rect_ = new ::PBShape::Rect(*from.rect_);
+  if (from._internal_has_pos()) {
+    pos_ = new ::PBShape::Pos(*from.pos_);
   } else {
-    rect_ = nullptr;
+    pos_ = nullptr;
   }
   if (from._internal_has_pen()) {
     pen_ = new ::PBShape::Pen(*from.pen_);
@@ -2385,15 +2481,17 @@ Rectangle::Rectangle(const Rectangle& from)
   } else {
     brush_ = nullptr;
   }
-  angle_ = from.angle_;
+  ::memcpy(&width_, &from.width_,
+    static_cast<size_t>(reinterpret_cast<char*>(&angle_) -
+    reinterpret_cast<char*>(&width_)) + sizeof(angle_));
   // @@protoc_insertion_point(copy_constructor:PBShape.Rectangle)
 }
 
 void Rectangle::SharedCtor() {
   ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_Rectangle_pbshape_2eproto.base);
-  ::memset(&rect_, 0, static_cast<size_t>(
+  ::memset(&pos_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&angle_) -
-      reinterpret_cast<char*>(&rect_)) + sizeof(angle_));
+      reinterpret_cast<char*>(&pos_)) + sizeof(angle_));
 }
 
 Rectangle::~Rectangle() {
@@ -2402,7 +2500,7 @@ Rectangle::~Rectangle() {
 }
 
 void Rectangle::SharedDtor() {
-  if (this != internal_default_instance()) delete rect_;
+  if (this != internal_default_instance()) delete pos_;
   if (this != internal_default_instance()) delete pen_;
   if (this != internal_default_instance()) delete brush_;
 }
@@ -2425,8 +2523,8 @@ void Rectangle::Clear() {
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 0x00000007u) {
     if (cached_has_bits & 0x00000001u) {
-      GOOGLE_DCHECK(rect_ != nullptr);
-      rect_->Clear();
+      GOOGLE_DCHECK(pos_ != nullptr);
+      pos_->Clear();
     }
     if (cached_has_bits & 0x00000002u) {
       GOOGLE_DCHECK(pen_ != nullptr);
@@ -2437,7 +2535,11 @@ void Rectangle::Clear() {
       brush_->Clear();
     }
   }
-  angle_ = 0;
+  if (cached_has_bits & 0x00000038u) {
+    ::memset(&width_, 0, static_cast<size_t>(
+        reinterpret_cast<char*>(&angle_) -
+        reinterpret_cast<char*>(&width_)) + sizeof(angle_));
+  }
   _has_bits_.Clear();
   _internal_metadata_.Clear();
 }
@@ -2450,30 +2552,46 @@ const char* Rectangle::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
-      // required .PBShape.Rect rect = 1;
+      // required .PBShape.Pos pos = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
-          ptr = ctx->ParseMessage(_internal_mutable_rect(), ptr);
+          ptr = ctx->ParseMessage(_internal_mutable_pos(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // optional .PBShape.Pen pen = 2;
+      // required int32 width = 2;
       case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
+          _Internal::set_has_width(&has_bits);
+          width_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // required int32 height = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 24)) {
+          _Internal::set_has_height(&has_bits);
+          height_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // optional .PBShape.Pen pen = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 34)) {
           ptr = ctx->ParseMessage(_internal_mutable_pen(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // optional .PBShape.Brush brush = 3;
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
+      // optional .PBShape.Brush brush = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 42)) {
           ptr = ctx->ParseMessage(_internal_mutable_brush(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // optional float angle = 4 [default = 0];
-      case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 37)) {
+      // optional float angle = 6 [default = 0];
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 53)) {
           _Internal::set_has_angle(&has_bits);
           angle_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
@@ -2507,34 +2625,46 @@ failure:
   (void) cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
-  // required .PBShape.Rect rect = 1;
+  // required .PBShape.Pos pos = 1;
   if (cached_has_bits & 0x00000001u) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        1, _Internal::rect(this), target, stream);
+        1, _Internal::pos(this), target, stream);
   }
 
-  // optional .PBShape.Pen pen = 2;
+  // required int32 width = 2;
+  if (cached_has_bits & 0x00000008u) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_width(), target);
+  }
+
+  // required int32 height = 3;
+  if (cached_has_bits & 0x00000010u) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(3, this->_internal_height(), target);
+  }
+
+  // optional .PBShape.Pen pen = 4;
   if (cached_has_bits & 0x00000002u) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        2, _Internal::pen(this), target, stream);
+        4, _Internal::pen(this), target, stream);
   }
 
-  // optional .PBShape.Brush brush = 3;
+  // optional .PBShape.Brush brush = 5;
   if (cached_has_bits & 0x00000004u) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        3, _Internal::brush(this), target, stream);
+        5, _Internal::brush(this), target, stream);
   }
 
-  // optional float angle = 4 [default = 0];
-  if (cached_has_bits & 0x00000008u) {
+  // optional float angle = 6 [default = 0];
+  if (cached_has_bits & 0x00000020u) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(4, this->_internal_angle(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(6, this->_internal_angle(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -2545,42 +2675,82 @@ failure:
   return target;
 }
 
+size_t Rectangle::RequiredFieldsByteSizeFallback() const {
+// @@protoc_insertion_point(required_fields_byte_size_fallback_start:PBShape.Rectangle)
+  size_t total_size = 0;
+
+  if (_internal_has_pos()) {
+    // required .PBShape.Pos pos = 1;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *pos_);
+  }
+
+  if (_internal_has_width()) {
+    // required int32 width = 2;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_width());
+  }
+
+  if (_internal_has_height()) {
+    // required int32 height = 3;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_height());
+  }
+
+  return total_size;
+}
 size_t Rectangle::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:PBShape.Rectangle)
   size_t total_size = 0;
 
-  // required .PBShape.Rect rect = 1;
-  if (_internal_has_rect()) {
+  if (((_has_bits_[0] & 0x00000019) ^ 0x00000019) == 0) {  // All required fields are present.
+    // required .PBShape.Pos pos = 1;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *rect_);
+        *pos_);
+
+    // required int32 width = 2;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_width());
+
+    // required int32 height = 3;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_height());
+
+  } else {
+    total_size += RequiredFieldsByteSizeFallback();
   }
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
-  if (cached_has_bits & 0x0000000eu) {
-    // optional .PBShape.Pen pen = 2;
+  if (cached_has_bits & 0x00000006u) {
+    // optional .PBShape.Pen pen = 4;
     if (cached_has_bits & 0x00000002u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
           *pen_);
     }
 
-    // optional .PBShape.Brush brush = 3;
+    // optional .PBShape.Brush brush = 5;
     if (cached_has_bits & 0x00000004u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
           *brush_);
     }
 
-    // optional float angle = 4 [default = 0];
-    if (cached_has_bits & 0x00000008u) {
-      total_size += 1 + 4;
-    }
-
   }
+  // optional float angle = 6 [default = 0];
+  if (cached_has_bits & 0x00000020u) {
+    total_size += 1 + 4;
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
         _internal_metadata_, total_size, &_cached_size_);
@@ -2613,9 +2783,9 @@ void Rectangle::MergeFrom(const Rectangle& from) {
   (void) cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
-  if (cached_has_bits & 0x0000000fu) {
+  if (cached_has_bits & 0x0000003fu) {
     if (cached_has_bits & 0x00000001u) {
-      _internal_mutable_rect()->::PBShape::Rect::MergeFrom(from._internal_rect());
+      _internal_mutable_pos()->::PBShape::Pos::MergeFrom(from._internal_pos());
     }
     if (cached_has_bits & 0x00000002u) {
       _internal_mutable_pen()->::PBShape::Pen::MergeFrom(from._internal_pen());
@@ -2624,6 +2794,12 @@ void Rectangle::MergeFrom(const Rectangle& from) {
       _internal_mutable_brush()->::PBShape::Brush::MergeFrom(from._internal_brush());
     }
     if (cached_has_bits & 0x00000008u) {
+      width_ = from.width_;
+    }
+    if (cached_has_bits & 0x00000010u) {
+      height_ = from.height_;
+    }
+    if (cached_has_bits & 0x00000020u) {
       angle_ = from.angle_;
     }
     _has_bits_[0] |= cached_has_bits;
@@ -2645,9 +2821,9 @@ void Rectangle::CopyFrom(const Rectangle& from) {
 }
 
 bool Rectangle::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
-  if (_internal_has_rect()) {
-    if (!rect_->IsInitialized()) return false;
+  if ((_has_bits_[0] & 0x00000019) != 0x00000019) return false;
+  if (_internal_has_pos()) {
+    if (!pos_->IsInitialized()) return false;
   }
   return true;
 }
@@ -2656,9 +2832,11 @@ void Rectangle::InternalSwap(Rectangle* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
-  swap(rect_, other->rect_);
+  swap(pos_, other->pos_);
   swap(pen_, other->pen_);
   swap(brush_, other->brush_);
+  swap(width_, other->width_);
+  swap(height_, other->height_);
   swap(angle_, other->angle_);
 }
 
@@ -2670,8 +2848,8 @@ void Rectangle::InternalSwap(Rectangle* other) {
 // ===================================================================
 
 void Ellipse::InitAsDefaultInstance() {
-  ::PBShape::_Ellipse_default_instance_._instance.get_mutable()->rect_ = const_cast< ::PBShape::Rect*>(
-      ::PBShape::Rect::internal_default_instance());
+  ::PBShape::_Ellipse_default_instance_._instance.get_mutable()->pos_ = const_cast< ::PBShape::Pos*>(
+      ::PBShape::Pos::internal_default_instance());
   ::PBShape::_Ellipse_default_instance_._instance.get_mutable()->pen_ = const_cast< ::PBShape::Pen*>(
       ::PBShape::Pen::internal_default_instance());
   ::PBShape::_Ellipse_default_instance_._instance.get_mutable()->brush_ = const_cast< ::PBShape::Brush*>(
@@ -2680,9 +2858,15 @@ void Ellipse::InitAsDefaultInstance() {
 class Ellipse::_Internal {
  public:
   using HasBits = decltype(std::declval<Ellipse>()._has_bits_);
-  static const ::PBShape::Rect& rect(const Ellipse* msg);
-  static void set_has_rect(HasBits* has_bits) {
+  static const ::PBShape::Pos& pos(const Ellipse* msg);
+  static void set_has_pos(HasBits* has_bits) {
     (*has_bits)[0] |= 1u;
+  }
+  static void set_has_width(HasBits* has_bits) {
+    (*has_bits)[0] |= 8u;
+  }
+  static void set_has_height(HasBits* has_bits) {
+    (*has_bits)[0] |= 16u;
   }
   static const ::PBShape::Pen& pen(const Ellipse* msg);
   static void set_has_pen(HasBits* has_bits) {
@@ -2693,13 +2877,13 @@ class Ellipse::_Internal {
     (*has_bits)[0] |= 4u;
   }
   static void set_has_angle(HasBits* has_bits) {
-    (*has_bits)[0] |= 8u;
+    (*has_bits)[0] |= 32u;
   }
 };
 
-const ::PBShape::Rect&
-Ellipse::_Internal::rect(const Ellipse* msg) {
-  return *msg->rect_;
+const ::PBShape::Pos&
+Ellipse::_Internal::pos(const Ellipse* msg) {
+  return *msg->pos_;
 }
 const ::PBShape::Pen&
 Ellipse::_Internal::pen(const Ellipse* msg) {
@@ -2719,10 +2903,10 @@ Ellipse::Ellipse(const Ellipse& from)
       _internal_metadata_(nullptr),
       _has_bits_(from._has_bits_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  if (from._internal_has_rect()) {
-    rect_ = new ::PBShape::Rect(*from.rect_);
+  if (from._internal_has_pos()) {
+    pos_ = new ::PBShape::Pos(*from.pos_);
   } else {
-    rect_ = nullptr;
+    pos_ = nullptr;
   }
   if (from._internal_has_pen()) {
     pen_ = new ::PBShape::Pen(*from.pen_);
@@ -2734,15 +2918,17 @@ Ellipse::Ellipse(const Ellipse& from)
   } else {
     brush_ = nullptr;
   }
-  angle_ = from.angle_;
+  ::memcpy(&width_, &from.width_,
+    static_cast<size_t>(reinterpret_cast<char*>(&angle_) -
+    reinterpret_cast<char*>(&width_)) + sizeof(angle_));
   // @@protoc_insertion_point(copy_constructor:PBShape.Ellipse)
 }
 
 void Ellipse::SharedCtor() {
   ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_Ellipse_pbshape_2eproto.base);
-  ::memset(&rect_, 0, static_cast<size_t>(
+  ::memset(&pos_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&angle_) -
-      reinterpret_cast<char*>(&rect_)) + sizeof(angle_));
+      reinterpret_cast<char*>(&pos_)) + sizeof(angle_));
 }
 
 Ellipse::~Ellipse() {
@@ -2751,7 +2937,7 @@ Ellipse::~Ellipse() {
 }
 
 void Ellipse::SharedDtor() {
-  if (this != internal_default_instance()) delete rect_;
+  if (this != internal_default_instance()) delete pos_;
   if (this != internal_default_instance()) delete pen_;
   if (this != internal_default_instance()) delete brush_;
 }
@@ -2774,8 +2960,8 @@ void Ellipse::Clear() {
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 0x00000007u) {
     if (cached_has_bits & 0x00000001u) {
-      GOOGLE_DCHECK(rect_ != nullptr);
-      rect_->Clear();
+      GOOGLE_DCHECK(pos_ != nullptr);
+      pos_->Clear();
     }
     if (cached_has_bits & 0x00000002u) {
       GOOGLE_DCHECK(pen_ != nullptr);
@@ -2786,7 +2972,11 @@ void Ellipse::Clear() {
       brush_->Clear();
     }
   }
-  angle_ = 0;
+  if (cached_has_bits & 0x00000038u) {
+    ::memset(&width_, 0, static_cast<size_t>(
+        reinterpret_cast<char*>(&angle_) -
+        reinterpret_cast<char*>(&width_)) + sizeof(angle_));
+  }
   _has_bits_.Clear();
   _internal_metadata_.Clear();
 }
@@ -2799,30 +2989,46 @@ const char* Ellipse::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::in
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
-      // required .PBShape.Rect rect = 1;
+      // required .PBShape.Pos pos = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
-          ptr = ctx->ParseMessage(_internal_mutable_rect(), ptr);
+          ptr = ctx->ParseMessage(_internal_mutable_pos(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // optional .PBShape.Pen pen = 2;
+      // required int32 width = 2;
       case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
+          _Internal::set_has_width(&has_bits);
+          width_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // required int32 height = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 24)) {
+          _Internal::set_has_height(&has_bits);
+          height_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // optional .PBShape.Pen pen = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 34)) {
           ptr = ctx->ParseMessage(_internal_mutable_pen(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // optional .PBShape.Brush brush = 3;
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
+      // optional .PBShape.Brush brush = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 42)) {
           ptr = ctx->ParseMessage(_internal_mutable_brush(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // optional float angle = 4 [default = 0];
-      case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 37)) {
+      // optional float angle = 6 [default = 0];
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 53)) {
           _Internal::set_has_angle(&has_bits);
           angle_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
@@ -2856,34 +3062,46 @@ failure:
   (void) cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
-  // required .PBShape.Rect rect = 1;
+  // required .PBShape.Pos pos = 1;
   if (cached_has_bits & 0x00000001u) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        1, _Internal::rect(this), target, stream);
+        1, _Internal::pos(this), target, stream);
   }
 
-  // optional .PBShape.Pen pen = 2;
+  // required int32 width = 2;
+  if (cached_has_bits & 0x00000008u) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_width(), target);
+  }
+
+  // required int32 height = 3;
+  if (cached_has_bits & 0x00000010u) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(3, this->_internal_height(), target);
+  }
+
+  // optional .PBShape.Pen pen = 4;
   if (cached_has_bits & 0x00000002u) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        2, _Internal::pen(this), target, stream);
+        4, _Internal::pen(this), target, stream);
   }
 
-  // optional .PBShape.Brush brush = 3;
+  // optional .PBShape.Brush brush = 5;
   if (cached_has_bits & 0x00000004u) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        3, _Internal::brush(this), target, stream);
+        5, _Internal::brush(this), target, stream);
   }
 
-  // optional float angle = 4 [default = 0];
-  if (cached_has_bits & 0x00000008u) {
+  // optional float angle = 6 [default = 0];
+  if (cached_has_bits & 0x00000020u) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(4, this->_internal_angle(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(6, this->_internal_angle(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -2894,42 +3112,82 @@ failure:
   return target;
 }
 
+size_t Ellipse::RequiredFieldsByteSizeFallback() const {
+// @@protoc_insertion_point(required_fields_byte_size_fallback_start:PBShape.Ellipse)
+  size_t total_size = 0;
+
+  if (_internal_has_pos()) {
+    // required .PBShape.Pos pos = 1;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *pos_);
+  }
+
+  if (_internal_has_width()) {
+    // required int32 width = 2;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_width());
+  }
+
+  if (_internal_has_height()) {
+    // required int32 height = 3;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_height());
+  }
+
+  return total_size;
+}
 size_t Ellipse::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:PBShape.Ellipse)
   size_t total_size = 0;
 
-  // required .PBShape.Rect rect = 1;
-  if (_internal_has_rect()) {
+  if (((_has_bits_[0] & 0x00000019) ^ 0x00000019) == 0) {  // All required fields are present.
+    // required .PBShape.Pos pos = 1;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *rect_);
+        *pos_);
+
+    // required int32 width = 2;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_width());
+
+    // required int32 height = 3;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_height());
+
+  } else {
+    total_size += RequiredFieldsByteSizeFallback();
   }
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
-  if (cached_has_bits & 0x0000000eu) {
-    // optional .PBShape.Pen pen = 2;
+  if (cached_has_bits & 0x00000006u) {
+    // optional .PBShape.Pen pen = 4;
     if (cached_has_bits & 0x00000002u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
           *pen_);
     }
 
-    // optional .PBShape.Brush brush = 3;
+    // optional .PBShape.Brush brush = 5;
     if (cached_has_bits & 0x00000004u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
           *brush_);
     }
 
-    // optional float angle = 4 [default = 0];
-    if (cached_has_bits & 0x00000008u) {
-      total_size += 1 + 4;
-    }
-
   }
+  // optional float angle = 6 [default = 0];
+  if (cached_has_bits & 0x00000020u) {
+    total_size += 1 + 4;
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
         _internal_metadata_, total_size, &_cached_size_);
@@ -2962,9 +3220,9 @@ void Ellipse::MergeFrom(const Ellipse& from) {
   (void) cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
-  if (cached_has_bits & 0x0000000fu) {
+  if (cached_has_bits & 0x0000003fu) {
     if (cached_has_bits & 0x00000001u) {
-      _internal_mutable_rect()->::PBShape::Rect::MergeFrom(from._internal_rect());
+      _internal_mutable_pos()->::PBShape::Pos::MergeFrom(from._internal_pos());
     }
     if (cached_has_bits & 0x00000002u) {
       _internal_mutable_pen()->::PBShape::Pen::MergeFrom(from._internal_pen());
@@ -2973,6 +3231,12 @@ void Ellipse::MergeFrom(const Ellipse& from) {
       _internal_mutable_brush()->::PBShape::Brush::MergeFrom(from._internal_brush());
     }
     if (cached_has_bits & 0x00000008u) {
+      width_ = from.width_;
+    }
+    if (cached_has_bits & 0x00000010u) {
+      height_ = from.height_;
+    }
+    if (cached_has_bits & 0x00000020u) {
       angle_ = from.angle_;
     }
     _has_bits_[0] |= cached_has_bits;
@@ -2994,9 +3258,9 @@ void Ellipse::CopyFrom(const Ellipse& from) {
 }
 
 bool Ellipse::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
-  if (_internal_has_rect()) {
-    if (!rect_->IsInitialized()) return false;
+  if ((_has_bits_[0] & 0x00000019) != 0x00000019) return false;
+  if (_internal_has_pos()) {
+    if (!pos_->IsInitialized()) return false;
   }
   return true;
 }
@@ -3005,9 +3269,11 @@ void Ellipse::InternalSwap(Ellipse* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
-  swap(rect_, other->rect_);
+  swap(pos_, other->pos_);
   swap(pen_, other->pen_);
   swap(brush_, other->brush_);
+  swap(width_, other->width_);
+  swap(height_, other->height_);
   swap(angle_, other->angle_);
 }
 
@@ -3019,8 +3285,8 @@ void Ellipse::InternalSwap(Ellipse* other) {
 // ===================================================================
 
 void Triangle::InitAsDefaultInstance() {
-  ::PBShape::_Triangle_default_instance_._instance.get_mutable()->rect_ = const_cast< ::PBShape::Rect*>(
-      ::PBShape::Rect::internal_default_instance());
+  ::PBShape::_Triangle_default_instance_._instance.get_mutable()->pos_ = const_cast< ::PBShape::Pos*>(
+      ::PBShape::Pos::internal_default_instance());
   ::PBShape::_Triangle_default_instance_._instance.get_mutable()->pen_ = const_cast< ::PBShape::Pen*>(
       ::PBShape::Pen::internal_default_instance());
   ::PBShape::_Triangle_default_instance_._instance.get_mutable()->brush_ = const_cast< ::PBShape::Brush*>(
@@ -3029,9 +3295,15 @@ void Triangle::InitAsDefaultInstance() {
 class Triangle::_Internal {
  public:
   using HasBits = decltype(std::declval<Triangle>()._has_bits_);
-  static const ::PBShape::Rect& rect(const Triangle* msg);
-  static void set_has_rect(HasBits* has_bits) {
+  static const ::PBShape::Pos& pos(const Triangle* msg);
+  static void set_has_pos(HasBits* has_bits) {
     (*has_bits)[0] |= 1u;
+  }
+  static void set_has_width(HasBits* has_bits) {
+    (*has_bits)[0] |= 8u;
+  }
+  static void set_has_height(HasBits* has_bits) {
+    (*has_bits)[0] |= 16u;
   }
   static const ::PBShape::Pen& pen(const Triangle* msg);
   static void set_has_pen(HasBits* has_bits) {
@@ -3042,13 +3314,13 @@ class Triangle::_Internal {
     (*has_bits)[0] |= 4u;
   }
   static void set_has_angle(HasBits* has_bits) {
-    (*has_bits)[0] |= 8u;
+    (*has_bits)[0] |= 32u;
   }
 };
 
-const ::PBShape::Rect&
-Triangle::_Internal::rect(const Triangle* msg) {
-  return *msg->rect_;
+const ::PBShape::Pos&
+Triangle::_Internal::pos(const Triangle* msg) {
+  return *msg->pos_;
 }
 const ::PBShape::Pen&
 Triangle::_Internal::pen(const Triangle* msg) {
@@ -3068,10 +3340,10 @@ Triangle::Triangle(const Triangle& from)
       _internal_metadata_(nullptr),
       _has_bits_(from._has_bits_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  if (from._internal_has_rect()) {
-    rect_ = new ::PBShape::Rect(*from.rect_);
+  if (from._internal_has_pos()) {
+    pos_ = new ::PBShape::Pos(*from.pos_);
   } else {
-    rect_ = nullptr;
+    pos_ = nullptr;
   }
   if (from._internal_has_pen()) {
     pen_ = new ::PBShape::Pen(*from.pen_);
@@ -3083,15 +3355,17 @@ Triangle::Triangle(const Triangle& from)
   } else {
     brush_ = nullptr;
   }
-  angle_ = from.angle_;
+  ::memcpy(&width_, &from.width_,
+    static_cast<size_t>(reinterpret_cast<char*>(&angle_) -
+    reinterpret_cast<char*>(&width_)) + sizeof(angle_));
   // @@protoc_insertion_point(copy_constructor:PBShape.Triangle)
 }
 
 void Triangle::SharedCtor() {
   ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_Triangle_pbshape_2eproto.base);
-  ::memset(&rect_, 0, static_cast<size_t>(
+  ::memset(&pos_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&angle_) -
-      reinterpret_cast<char*>(&rect_)) + sizeof(angle_));
+      reinterpret_cast<char*>(&pos_)) + sizeof(angle_));
 }
 
 Triangle::~Triangle() {
@@ -3100,7 +3374,7 @@ Triangle::~Triangle() {
 }
 
 void Triangle::SharedDtor() {
-  if (this != internal_default_instance()) delete rect_;
+  if (this != internal_default_instance()) delete pos_;
   if (this != internal_default_instance()) delete pen_;
   if (this != internal_default_instance()) delete brush_;
 }
@@ -3123,8 +3397,8 @@ void Triangle::Clear() {
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 0x00000007u) {
     if (cached_has_bits & 0x00000001u) {
-      GOOGLE_DCHECK(rect_ != nullptr);
-      rect_->Clear();
+      GOOGLE_DCHECK(pos_ != nullptr);
+      pos_->Clear();
     }
     if (cached_has_bits & 0x00000002u) {
       GOOGLE_DCHECK(pen_ != nullptr);
@@ -3135,7 +3409,11 @@ void Triangle::Clear() {
       brush_->Clear();
     }
   }
-  angle_ = 0;
+  if (cached_has_bits & 0x00000038u) {
+    ::memset(&width_, 0, static_cast<size_t>(
+        reinterpret_cast<char*>(&angle_) -
+        reinterpret_cast<char*>(&width_)) + sizeof(angle_));
+  }
   _has_bits_.Clear();
   _internal_metadata_.Clear();
 }
@@ -3148,30 +3426,46 @@ const char* Triangle::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::i
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
-      // required .PBShape.Rect rect = 1;
+      // required .PBShape.Pos pos = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
-          ptr = ctx->ParseMessage(_internal_mutable_rect(), ptr);
+          ptr = ctx->ParseMessage(_internal_mutable_pos(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // optional .PBShape.Pen pen = 2;
+      // required int32 width = 2;
       case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
+          _Internal::set_has_width(&has_bits);
+          width_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // required int32 height = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 24)) {
+          _Internal::set_has_height(&has_bits);
+          height_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // optional .PBShape.Pen pen = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 34)) {
           ptr = ctx->ParseMessage(_internal_mutable_pen(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // optional .PBShape.Brush brush = 3;
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
+      // optional .PBShape.Brush brush = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 42)) {
           ptr = ctx->ParseMessage(_internal_mutable_brush(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // optional float angle = 4 [default = 0];
-      case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 37)) {
+      // optional float angle = 6 [default = 0];
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 53)) {
           _Internal::set_has_angle(&has_bits);
           angle_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
@@ -3205,34 +3499,46 @@ failure:
   (void) cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
-  // required .PBShape.Rect rect = 1;
+  // required .PBShape.Pos pos = 1;
   if (cached_has_bits & 0x00000001u) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        1, _Internal::rect(this), target, stream);
+        1, _Internal::pos(this), target, stream);
   }
 
-  // optional .PBShape.Pen pen = 2;
+  // required int32 width = 2;
+  if (cached_has_bits & 0x00000008u) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_width(), target);
+  }
+
+  // required int32 height = 3;
+  if (cached_has_bits & 0x00000010u) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(3, this->_internal_height(), target);
+  }
+
+  // optional .PBShape.Pen pen = 4;
   if (cached_has_bits & 0x00000002u) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        2, _Internal::pen(this), target, stream);
+        4, _Internal::pen(this), target, stream);
   }
 
-  // optional .PBShape.Brush brush = 3;
+  // optional .PBShape.Brush brush = 5;
   if (cached_has_bits & 0x00000004u) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        3, _Internal::brush(this), target, stream);
+        5, _Internal::brush(this), target, stream);
   }
 
-  // optional float angle = 4 [default = 0];
-  if (cached_has_bits & 0x00000008u) {
+  // optional float angle = 6 [default = 0];
+  if (cached_has_bits & 0x00000020u) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(4, this->_internal_angle(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(6, this->_internal_angle(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -3243,42 +3549,82 @@ failure:
   return target;
 }
 
+size_t Triangle::RequiredFieldsByteSizeFallback() const {
+// @@protoc_insertion_point(required_fields_byte_size_fallback_start:PBShape.Triangle)
+  size_t total_size = 0;
+
+  if (_internal_has_pos()) {
+    // required .PBShape.Pos pos = 1;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *pos_);
+  }
+
+  if (_internal_has_width()) {
+    // required int32 width = 2;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_width());
+  }
+
+  if (_internal_has_height()) {
+    // required int32 height = 3;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_height());
+  }
+
+  return total_size;
+}
 size_t Triangle::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:PBShape.Triangle)
   size_t total_size = 0;
 
-  // required .PBShape.Rect rect = 1;
-  if (_internal_has_rect()) {
+  if (((_has_bits_[0] & 0x00000019) ^ 0x00000019) == 0) {  // All required fields are present.
+    // required .PBShape.Pos pos = 1;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *rect_);
+        *pos_);
+
+    // required int32 width = 2;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_width());
+
+    // required int32 height = 3;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_height());
+
+  } else {
+    total_size += RequiredFieldsByteSizeFallback();
   }
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
-  if (cached_has_bits & 0x0000000eu) {
-    // optional .PBShape.Pen pen = 2;
+  if (cached_has_bits & 0x00000006u) {
+    // optional .PBShape.Pen pen = 4;
     if (cached_has_bits & 0x00000002u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
           *pen_);
     }
 
-    // optional .PBShape.Brush brush = 3;
+    // optional .PBShape.Brush brush = 5;
     if (cached_has_bits & 0x00000004u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
           *brush_);
     }
 
-    // optional float angle = 4 [default = 0];
-    if (cached_has_bits & 0x00000008u) {
-      total_size += 1 + 4;
-    }
-
   }
+  // optional float angle = 6 [default = 0];
+  if (cached_has_bits & 0x00000020u) {
+    total_size += 1 + 4;
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
         _internal_metadata_, total_size, &_cached_size_);
@@ -3311,9 +3657,9 @@ void Triangle::MergeFrom(const Triangle& from) {
   (void) cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
-  if (cached_has_bits & 0x0000000fu) {
+  if (cached_has_bits & 0x0000003fu) {
     if (cached_has_bits & 0x00000001u) {
-      _internal_mutable_rect()->::PBShape::Rect::MergeFrom(from._internal_rect());
+      _internal_mutable_pos()->::PBShape::Pos::MergeFrom(from._internal_pos());
     }
     if (cached_has_bits & 0x00000002u) {
       _internal_mutable_pen()->::PBShape::Pen::MergeFrom(from._internal_pen());
@@ -3322,6 +3668,12 @@ void Triangle::MergeFrom(const Triangle& from) {
       _internal_mutable_brush()->::PBShape::Brush::MergeFrom(from._internal_brush());
     }
     if (cached_has_bits & 0x00000008u) {
+      width_ = from.width_;
+    }
+    if (cached_has_bits & 0x00000010u) {
+      height_ = from.height_;
+    }
+    if (cached_has_bits & 0x00000020u) {
       angle_ = from.angle_;
     }
     _has_bits_[0] |= cached_has_bits;
@@ -3343,9 +3695,9 @@ void Triangle::CopyFrom(const Triangle& from) {
 }
 
 bool Triangle::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
-  if (_internal_has_rect()) {
-    if (!rect_->IsInitialized()) return false;
+  if ((_has_bits_[0] & 0x00000019) != 0x00000019) return false;
+  if (_internal_has_pos()) {
+    if (!pos_->IsInitialized()) return false;
   }
   return true;
 }
@@ -3354,9 +3706,11 @@ void Triangle::InternalSwap(Triangle* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
-  swap(rect_, other->rect_);
+  swap(pos_, other->pos_);
   swap(pen_, other->pen_);
   swap(brush_, other->brush_);
+  swap(width_, other->width_);
+  swap(height_, other->height_);
   swap(angle_, other->angle_);
 }
 
@@ -3367,9 +3721,293 @@ void Triangle::InternalSwap(Triangle* other) {
 
 // ===================================================================
 
+void Eraser::InitAsDefaultInstance() {
+}
+class Eraser::_Internal {
+ public:
+  using HasBits = decltype(std::declval<Eraser>()._has_bits_);
+  static void set_has_path(HasBits* has_bits) {
+    (*has_bits)[0] |= 1u;
+  }
+  static void set_has_width(HasBits* has_bits) {
+    (*has_bits)[0] |= 2u;
+  }
+};
+
+Eraser::Eraser()
+  : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:PBShape.Eraser)
+}
+Eraser::Eraser(const Eraser& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _internal_metadata_(nullptr),
+      _has_bits_(from._has_bits_) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  path_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (from._internal_has_path()) {
+    path_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.path_);
+  }
+  width_ = from.width_;
+  // @@protoc_insertion_point(copy_constructor:PBShape.Eraser)
+}
+
+void Eraser::SharedCtor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_Eraser_pbshape_2eproto.base);
+  path_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  width_ = 0;
+}
+
+Eraser::~Eraser() {
+  // @@protoc_insertion_point(destructor:PBShape.Eraser)
+  SharedDtor();
+}
+
+void Eraser::SharedDtor() {
+  path_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void Eraser::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const Eraser& Eraser::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_Eraser_pbshape_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void Eraser::Clear() {
+// @@protoc_insertion_point(message_clear_start:PBShape.Eraser)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  if (cached_has_bits & 0x00000001u) {
+    path_.ClearNonDefaultToEmptyNoArena();
+  }
+  width_ = 0;
+  _has_bits_.Clear();
+  _internal_metadata_.Clear();
+}
+
+const char* Eraser::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  _Internal::HasBits has_bits{};
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
+    switch (tag >> 3) {
+      // required bytes path = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          auto str = _internal_mutable_path();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // required int32 width = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
+          _Internal::set_has_width(&has_bits);
+          width_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag, &_internal_metadata_, ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  _has_bits_.Or(has_bits);
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* Eraser::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:PBShape.Eraser)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  // required bytes path = 1;
+  if (cached_has_bits & 0x00000001u) {
+    target = stream->WriteBytesMaybeAliased(
+        1, this->_internal_path(), target);
+  }
+
+  // required int32 width = 2;
+  if (cached_has_bits & 0x00000002u) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_width(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:PBShape.Eraser)
+  return target;
+}
+
+size_t Eraser::RequiredFieldsByteSizeFallback() const {
+// @@protoc_insertion_point(required_fields_byte_size_fallback_start:PBShape.Eraser)
+  size_t total_size = 0;
+
+  if (_internal_has_path()) {
+    // required bytes path = 1;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
+        this->_internal_path());
+  }
+
+  if (_internal_has_width()) {
+    // required int32 width = 2;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_width());
+  }
+
+  return total_size;
+}
+size_t Eraser::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:PBShape.Eraser)
+  size_t total_size = 0;
+
+  if (((_has_bits_[0] & 0x00000003) ^ 0x00000003) == 0) {  // All required fields are present.
+    // required bytes path = 1;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
+        this->_internal_path());
+
+    // required int32 width = 2;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_width());
+
+  } else {
+    total_size += RequiredFieldsByteSizeFallback();
+  }
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void Eraser::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:PBShape.Eraser)
+  GOOGLE_DCHECK_NE(&from, this);
+  const Eraser* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<Eraser>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:PBShape.Eraser)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:PBShape.Eraser)
+    MergeFrom(*source);
+  }
+}
+
+void Eraser::MergeFrom(const Eraser& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:PBShape.Eraser)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = from._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    if (cached_has_bits & 0x00000001u) {
+      _has_bits_[0] |= 0x00000001u;
+      path_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.path_);
+    }
+    if (cached_has_bits & 0x00000002u) {
+      width_ = from.width_;
+    }
+    _has_bits_[0] |= cached_has_bits;
+  }
+}
+
+void Eraser::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:PBShape.Eraser)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void Eraser::CopyFrom(const Eraser& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:PBShape.Eraser)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool Eraser::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
+  return true;
+}
+
+void Eraser::InternalSwap(Eraser* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_has_bits_[0], other->_has_bits_[0]);
+  path_.Swap(&other->path_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  swap(width_, other->width_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata Eraser::GetMetadata() const {
+  return GetMetadataStatic();
+}
+
+
+// ===================================================================
+
+Scribble_MaperaserEntry_DoNotUse::Scribble_MaperaserEntry_DoNotUse() {}
+Scribble_MaperaserEntry_DoNotUse::Scribble_MaperaserEntry_DoNotUse(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+    : SuperType(arena) {}
+void Scribble_MaperaserEntry_DoNotUse::MergeFrom(const Scribble_MaperaserEntry_DoNotUse& other) {
+  MergeFromInternal(other);
+}
+::PROTOBUF_NAMESPACE_ID::Metadata Scribble_MaperaserEntry_DoNotUse::GetMetadata() const {
+  return GetMetadataStatic();
+}
+void Scribble_MaperaserEntry_DoNotUse::MergeFrom(
+    const ::PROTOBUF_NAMESPACE_ID::Message& other) {
+  ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom(other);
+}
+
+
+// ===================================================================
+
 void Scribble::InitAsDefaultInstance() {
   ::PBShape::_Scribble_default_instance_._instance.get_mutable()->rect_ = const_cast< ::PBShape::Rect*>(
       ::PBShape::Rect::internal_default_instance());
+  ::PBShape::_Scribble_default_instance_._instance.get_mutable()->pos_ = const_cast< ::PBShape::Pos*>(
+      ::PBShape::Pos::internal_default_instance());
+  ::PBShape::_Scribble_default_instance_._instance.get_mutable()->pen_ = const_cast< ::PBShape::Pen*>(
+      ::PBShape::Pen::internal_default_instance());
 }
 class Scribble::_Internal {
  public:
@@ -3378,17 +4016,33 @@ class Scribble::_Internal {
   static void set_has_rect(HasBits* has_bits) {
     (*has_bits)[0] |= 2u;
   }
-  static void set_has_pixmap(HasBits* has_bits) {
+  static const ::PBShape::Pos& pos(const Scribble* msg);
+  static void set_has_pos(HasBits* has_bits) {
+    (*has_bits)[0] |= 4u;
+  }
+  static void set_has_path(HasBits* has_bits) {
     (*has_bits)[0] |= 1u;
   }
+  static const ::PBShape::Pen& pen(const Scribble* msg);
+  static void set_has_pen(HasBits* has_bits) {
+    (*has_bits)[0] |= 8u;
+  }
   static void set_has_angle(HasBits* has_bits) {
-    (*has_bits)[0] |= 4u;
+    (*has_bits)[0] |= 16u;
   }
 };
 
 const ::PBShape::Rect&
 Scribble::_Internal::rect(const Scribble* msg) {
   return *msg->rect_;
+}
+const ::PBShape::Pos&
+Scribble::_Internal::pos(const Scribble* msg) {
+  return *msg->pos_;
+}
+const ::PBShape::Pen&
+Scribble::_Internal::pen(const Scribble* msg) {
+  return *msg->pen_;
 }
 Scribble::Scribble()
   : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
@@ -3400,14 +4054,25 @@ Scribble::Scribble(const Scribble& from)
       _internal_metadata_(nullptr),
       _has_bits_(from._has_bits_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  pixmap_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  if (from._internal_has_pixmap()) {
-    pixmap_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.pixmap_);
+  maperaser_.MergeFrom(from.maperaser_);
+  path_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (from._internal_has_path()) {
+    path_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.path_);
   }
   if (from._internal_has_rect()) {
     rect_ = new ::PBShape::Rect(*from.rect_);
   } else {
     rect_ = nullptr;
+  }
+  if (from._internal_has_pos()) {
+    pos_ = new ::PBShape::Pos(*from.pos_);
+  } else {
+    pos_ = nullptr;
+  }
+  if (from._internal_has_pen()) {
+    pen_ = new ::PBShape::Pen(*from.pen_);
+  } else {
+    pen_ = nullptr;
   }
   angle_ = from.angle_;
   // @@protoc_insertion_point(copy_constructor:PBShape.Scribble)
@@ -3415,7 +4080,7 @@ Scribble::Scribble(const Scribble& from)
 
 void Scribble::SharedCtor() {
   ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_Scribble_pbshape_2eproto.base);
-  pixmap_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  path_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   ::memset(&rect_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&angle_) -
       reinterpret_cast<char*>(&rect_)) + sizeof(angle_));
@@ -3427,8 +4092,10 @@ Scribble::~Scribble() {
 }
 
 void Scribble::SharedDtor() {
-  pixmap_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  path_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   if (this != internal_default_instance()) delete rect_;
+  if (this != internal_default_instance()) delete pos_;
+  if (this != internal_default_instance()) delete pen_;
 }
 
 void Scribble::SetCachedSize(int size) const {
@@ -3446,14 +4113,23 @@ void Scribble::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  maperaser_.Clear();
   cached_has_bits = _has_bits_[0];
-  if (cached_has_bits & 0x00000003u) {
+  if (cached_has_bits & 0x0000000fu) {
     if (cached_has_bits & 0x00000001u) {
-      pixmap_.ClearNonDefaultToEmptyNoArena();
+      path_.ClearNonDefaultToEmptyNoArena();
     }
     if (cached_has_bits & 0x00000002u) {
       GOOGLE_DCHECK(rect_ != nullptr);
       rect_->Clear();
+    }
+    if (cached_has_bits & 0x00000004u) {
+      GOOGLE_DCHECK(pos_ != nullptr);
+      pos_->Clear();
+    }
+    if (cached_has_bits & 0x00000008u) {
+      GOOGLE_DCHECK(pen_ != nullptr);
+      pen_->Clear();
     }
   }
   angle_ = 0;
@@ -3476,17 +4152,43 @@ const char* Scribble::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::i
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // required bytes pixmap = 2;
+      // required .PBShape.Pos pos = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
-          auto str = _internal_mutable_pixmap();
+          ptr = ctx->ParseMessage(_internal_mutable_pos(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // required bytes path = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
+          auto str = _internal_mutable_path();
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // optional float angle = 3 [default = 0];
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 29)) {
+      // required .PBShape.Pen pen = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 34)) {
+          ptr = ctx->ParseMessage(_internal_mutable_pen(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // map<int32, .PBShape.Eraser> maperaser = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 42)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(&maperaser_, ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<42>(ptr));
+        } else goto handle_unusual;
+        continue;
+      // optional float angle = 6 [default = 0];
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 53)) {
           _Internal::set_has_angle(&has_bits);
           angle_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
@@ -3528,16 +4230,63 @@ failure:
         1, _Internal::rect(this), target, stream);
   }
 
-  // required bytes pixmap = 2;
-  if (cached_has_bits & 0x00000001u) {
-    target = stream->WriteBytesMaybeAliased(
-        2, this->_internal_pixmap(), target);
-  }
-
-  // optional float angle = 3 [default = 0];
+  // required .PBShape.Pos pos = 2;
   if (cached_has_bits & 0x00000004u) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(3, this->_internal_angle(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        2, _Internal::pos(this), target, stream);
+  }
+
+  // required bytes path = 3;
+  if (cached_has_bits & 0x00000001u) {
+    target = stream->WriteBytesMaybeAliased(
+        3, this->_internal_path(), target);
+  }
+
+  // required .PBShape.Pen pen = 4;
+  if (cached_has_bits & 0x00000008u) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        4, _Internal::pen(this), target, stream);
+  }
+
+  // map<int32, .PBShape.Eraser> maperaser = 5;
+  if (!this->_internal_maperaser().empty()) {
+    typedef ::PROTOBUF_NAMESPACE_ID::Map< ::PROTOBUF_NAMESPACE_ID::int32, ::PBShape::Eraser >::const_pointer
+        ConstPtr;
+    typedef ::PROTOBUF_NAMESPACE_ID::internal::SortItem< ::PROTOBUF_NAMESPACE_ID::int32, ConstPtr > SortItem;
+    typedef ::PROTOBUF_NAMESPACE_ID::internal::CompareByFirstField<SortItem> Less;
+
+    if (stream->IsSerializationDeterministic() &&
+        this->_internal_maperaser().size() > 1) {
+      ::std::unique_ptr<SortItem[]> items(
+          new SortItem[this->_internal_maperaser().size()]);
+      typedef ::PROTOBUF_NAMESPACE_ID::Map< ::PROTOBUF_NAMESPACE_ID::int32, ::PBShape::Eraser >::size_type size_type;
+      size_type n = 0;
+      for (::PROTOBUF_NAMESPACE_ID::Map< ::PROTOBUF_NAMESPACE_ID::int32, ::PBShape::Eraser >::const_iterator
+          it = this->_internal_maperaser().begin();
+          it != this->_internal_maperaser().end(); ++it, ++n) {
+        items[static_cast<ptrdiff_t>(n)] = SortItem(&*it);
+      }
+      ::std::sort(&items[0], &items[static_cast<ptrdiff_t>(n)], Less());
+      for (size_type i = 0; i < n; i++) {
+        target = Scribble_MaperaserEntry_DoNotUse::Funcs::InternalSerialize(5, items[static_cast<ptrdiff_t>(i)].second->first, items[static_cast<ptrdiff_t>(i)].second->second, target, stream);
+      }
+    } else {
+      for (::PROTOBUF_NAMESPACE_ID::Map< ::PROTOBUF_NAMESPACE_ID::int32, ::PBShape::Eraser >::const_iterator
+          it = this->_internal_maperaser().begin();
+          it != this->_internal_maperaser().end(); ++it) {
+        target = Scribble_MaperaserEntry_DoNotUse::Funcs::InternalSerialize(5, it->first, it->second, target, stream);
+      }
+    }
+  }
+
+  // optional float angle = 6 [default = 0];
+  if (cached_has_bits & 0x00000010u) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(6, this->_internal_angle(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -3552,11 +4301,11 @@ size_t Scribble::RequiredFieldsByteSizeFallback() const {
 // @@protoc_insertion_point(required_fields_byte_size_fallback_start:PBShape.Scribble)
   size_t total_size = 0;
 
-  if (_internal_has_pixmap()) {
-    // required bytes pixmap = 2;
+  if (_internal_has_path()) {
+    // required bytes path = 3;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
-        this->_internal_pixmap());
+        this->_internal_path());
   }
 
   if (_internal_has_rect()) {
@@ -3566,22 +4315,46 @@ size_t Scribble::RequiredFieldsByteSizeFallback() const {
         *rect_);
   }
 
+  if (_internal_has_pos()) {
+    // required .PBShape.Pos pos = 2;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *pos_);
+  }
+
+  if (_internal_has_pen()) {
+    // required .PBShape.Pen pen = 4;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *pen_);
+  }
+
   return total_size;
 }
 size_t Scribble::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:PBShape.Scribble)
   size_t total_size = 0;
 
-  if (((_has_bits_[0] & 0x00000003) ^ 0x00000003) == 0) {  // All required fields are present.
-    // required bytes pixmap = 2;
+  if (((_has_bits_[0] & 0x0000000f) ^ 0x0000000f) == 0) {  // All required fields are present.
+    // required bytes path = 3;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
-        this->_internal_pixmap());
+        this->_internal_path());
 
     // required .PBShape.Rect rect = 1;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *rect_);
+
+    // required .PBShape.Pos pos = 2;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *pos_);
+
+    // required .PBShape.Pen pen = 4;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *pen_);
 
   } else {
     total_size += RequiredFieldsByteSizeFallback();
@@ -3590,9 +4363,18 @@ size_t Scribble::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // optional float angle = 3 [default = 0];
+  // map<int32, .PBShape.Eraser> maperaser = 5;
+  total_size += 1 *
+      ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(this->_internal_maperaser_size());
+  for (::PROTOBUF_NAMESPACE_ID::Map< ::PROTOBUF_NAMESPACE_ID::int32, ::PBShape::Eraser >::const_iterator
+      it = this->_internal_maperaser().begin();
+      it != this->_internal_maperaser().end(); ++it) {
+    total_size += Scribble_MaperaserEntry_DoNotUse::Funcs::ByteSizeLong(it->first, it->second);
+  }
+
+  // optional float angle = 6 [default = 0];
   cached_has_bits = _has_bits_[0];
-  if (cached_has_bits & 0x00000004u) {
+  if (cached_has_bits & 0x00000010u) {
     total_size += 1 + 4;
   }
 
@@ -3627,16 +4409,23 @@ void Scribble::MergeFrom(const Scribble& from) {
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
+  maperaser_.MergeFrom(from.maperaser_);
   cached_has_bits = from._has_bits_[0];
-  if (cached_has_bits & 0x00000007u) {
+  if (cached_has_bits & 0x0000001fu) {
     if (cached_has_bits & 0x00000001u) {
       _has_bits_[0] |= 0x00000001u;
-      pixmap_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.pixmap_);
+      path_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.path_);
     }
     if (cached_has_bits & 0x00000002u) {
       _internal_mutable_rect()->::PBShape::Rect::MergeFrom(from._internal_rect());
     }
     if (cached_has_bits & 0x00000004u) {
+      _internal_mutable_pos()->::PBShape::Pos::MergeFrom(from._internal_pos());
+    }
+    if (cached_has_bits & 0x00000008u) {
+      _internal_mutable_pen()->::PBShape::Pen::MergeFrom(from._internal_pen());
+    }
+    if (cached_has_bits & 0x00000010u) {
       angle_ = from.angle_;
     }
     _has_bits_[0] |= cached_has_bits;
@@ -3658,9 +4447,13 @@ void Scribble::CopyFrom(const Scribble& from) {
 }
 
 bool Scribble::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
+  if ((_has_bits_[0] & 0x0000000f) != 0x0000000f) return false;
+  if (!::PROTOBUF_NAMESPACE_ID::internal::AllAreInitialized(maperaser_)) return false;
   if (_internal_has_rect()) {
     if (!rect_->IsInitialized()) return false;
+  }
+  if (_internal_has_pos()) {
+    if (!pos_->IsInitialized()) return false;
   }
   return true;
 }
@@ -3669,9 +4462,12 @@ void Scribble::InternalSwap(Scribble* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
-  pixmap_.Swap(&other->pixmap_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+  maperaser_.Swap(&other->maperaser_);
+  path_.Swap(&other->path_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
     GetArenaNoVirtual());
   swap(rect_, other->rect_);
+  swap(pos_, other->pos_);
+  swap(pen_, other->pen_);
   swap(angle_, other->angle_);
 }
 
@@ -4240,6 +5036,12 @@ template<> PROTOBUF_NOINLINE ::PBShape::Ellipse* Arena::CreateMaybeMessage< ::PB
 }
 template<> PROTOBUF_NOINLINE ::PBShape::Triangle* Arena::CreateMaybeMessage< ::PBShape::Triangle >(Arena* arena) {
   return Arena::CreateInternal< ::PBShape::Triangle >(arena);
+}
+template<> PROTOBUF_NOINLINE ::PBShape::Eraser* Arena::CreateMaybeMessage< ::PBShape::Eraser >(Arena* arena) {
+  return Arena::CreateInternal< ::PBShape::Eraser >(arena);
+}
+template<> PROTOBUF_NOINLINE ::PBShape::Scribble_MaperaserEntry_DoNotUse* Arena::CreateMaybeMessage< ::PBShape::Scribble_MaperaserEntry_DoNotUse >(Arena* arena) {
+  return Arena::CreateInternal< ::PBShape::Scribble_MaperaserEntry_DoNotUse >(arena);
 }
 template<> PROTOBUF_NOINLINE ::PBShape::Scribble* Arena::CreateMaybeMessage< ::PBShape::Scribble >(Arena* arena) {
   return Arena::CreateInternal< ::PBShape::Scribble >(arena);

@@ -41,30 +41,44 @@ message Line{
 }
 
 message Rectangle{
-    required Rect           rect    = 1;
-    optional Pen            pen     = 2;
-    optional Brush          brush   = 3;
-    optional float          angle   = 4[default=0.0];
+    required Pos            pos     = 1;
+    required int32          width   = 2;
+    required int32          height  = 3;
+    optional Pen            pen     = 4;
+    optional Brush          brush   = 5;
+    optional float          angle   = 6[default=0.0];
 }
 
 message Ellipse{
-    required Rect           rect    = 1;
-    optional Pen            pen     = 2;
-    optional Brush          brush   = 3;
-    optional float          angle   = 4[default=0.0];
+    required Pos            pos     = 1;
+    required int32          width   = 2;
+    required int32          height  = 3;
+    optional Pen            pen     = 4;
+    optional Brush          brush   = 5;
+    optional float          angle   = 6[default=0.0];
 }
 
 message Triangle{
-    required Rect           rect    = 1;
-    optional Pen            pen     = 2;
-    optional Brush          brush   = 3;
-    optional float          angle   = 4[default=0.0];
+    required Pos            pos     = 1;
+    required int32          width   = 2;
+    required int32          height  = 3;
+    optional Pen            pen     = 4;
+    optional Brush          brush   = 5;
+    optional float          angle   = 6[default=0.0];
+}
+
+message Eraser{
+    required bytes          path    = 1;
+    required int32          width   = 2;
 }
 
 message Scribble{
-    required Rect           rect    = 1;
-    required bytes          pixmap  = 2;
-    optional float          angle   = 3[default=0.0];
+    required Rect           rect            = 1;
+    required Pos            pos             = 2;
+    required bytes          path            = 3;
+    required Pen            pen             = 4;
+    map<int32, Eraser>      maperaser       = 5;
+    optional float          angle           = 6[default=0.0];
 }
 
 message Scene{

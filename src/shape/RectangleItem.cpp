@@ -9,6 +9,13 @@ RectangleItem::RectangleItem(int x, int y, int width, int height)
     m_pen.setColor(PropObj::GetInstance()->PenColor());
 }
 
+QRectF RectangleItem::GetRect() const{
+    QRectF rc = QRectF(-m_width/2, -m_height/2,  m_width, m_height);
+    QPointF topLeft = mapToScene(rc.topLeft());
+    QPointF bottomRight = mapToScene(rc.bottomRight());
+    return QRectF(topLeft, bottomRight);
+}
+
 void RectangleItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     painter->setRenderHint(QPainter::Antialiasing, true);

@@ -21,8 +21,6 @@ typedef struct _ERASER_PATH{
 typedef QVector<ERASER_PATH *> VectorPath;
 typedef QMap<int, VectorPath *> MapEraserPath;
 
-typedef std::function<void(int)> CBPencilRemove;
-
 class PencilItem : public QGraphicsPathItem, public ItemCtrl
 {
 public:
@@ -39,9 +37,6 @@ public:
         m_hideClose = hide;
     }
 
-    void setShouldRemoveCallback(const CBPencilRemove &callback){
-        m_cbRemove = callback;
-    }
     void setEraser(int key, QPainterPath *path, int width);
     void onEraserRelease();
 
@@ -90,7 +85,6 @@ private:
     QPainterPath mPath;
     bool m_isCreating;
     bool m_hideClose;
-    CBPencilRemove m_cbRemove;
 
     QPixmap m_pixmap;
 

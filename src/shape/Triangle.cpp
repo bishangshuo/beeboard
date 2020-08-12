@@ -27,6 +27,10 @@ int Triangle::Create(const QPointF &leftTop, const QPointF &rightBottom, Graphic
     m_pItem->SetRemoveCallback([=](int _key){
         emit sigRemove(_key);
     });
+
+    connect(m_pItem, &ItemBase::sigItemChanged, [=](){
+        emit sigGeoChanged(reinterpret_cast<int>(m_pItem));
+    });
     return key;
 }
 
@@ -101,6 +105,18 @@ QPointF Triangle::GetP2(){
 
 QPointF Triangle::GetPos(){
     return m_pItem->scenePos();
+}
+
+qreal Triangle::GetAngle() const{
+    return  m_pItem->rotation();
+}
+
+int Triangle::GetItemWidth() const{
+    return m_pItem->Width();
+}
+
+int Triangle::GetItemHeight() const{
+    return m_pItem->Height();
 }
 
 void Triangle::ChangePos(qreal dx, qreal dy){

@@ -14,7 +14,7 @@ public:
      * @param height 矩形搞
      */
     RectangleItem(int x, int y, int width, int height);
-
+    QRectF GetRect() const;
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
     ItemBase *createNew(int x, int y, int width, int height) override;

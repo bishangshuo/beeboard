@@ -17,7 +17,8 @@ typedef struct _TOOL_TYPE{
         ZOOMIN,
         ZOOMOUT,
         RESET,
-        CLEAR
+        CLEAR,
+        OPENFILE
     };
 }TOOL_TYPE;
 

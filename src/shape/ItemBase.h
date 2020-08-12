@@ -1,7 +1,7 @@
 #ifndef ITEMBASE_H
 #define ITEMBASE_H
 
-#include <QGraphicsItem>
+#include <QGraphicsObject>
 #include <QTime>
 #include <QVector2D>
 #include <cmath>
@@ -14,8 +14,9 @@ const qreal AnglePerPI = 180.0 / PI;
 
 class QGraphicsScene;
 
-class ItemBase : public QGraphicsItem, public ItemCtrl
+class ItemBase : public QGraphicsObject, public ItemCtrl
 {
+    Q_OBJECT
 public:
     enum { Type = UserType + 1 };
 
@@ -26,6 +27,14 @@ public:
         m_width = width;
         m_height = height;
         update();
+    }
+
+    int Width() const{
+        return m_width;
+    }
+
+    int Height() const{
+        return m_height;
     }
 
     bool IsCreating() const{
@@ -63,6 +72,11 @@ public:
     QBrush GetBrush() const {
         return m_brush;
     }
+
+    void Rotate(qreal angle);
+
+signals:
+    void sigItemChanged();
 
 protected:
     virtual ItemBase *createNew(int x, int y, int width, int height) = 0;

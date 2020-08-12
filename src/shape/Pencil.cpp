@@ -6,6 +6,7 @@
 #include "src/property/PropObj.h"
 #include <QStyleOptionGraphicsItem>
 #include <QtConcurrent>
+#include <QDataStream>
 
 static QPixmap QPixmapFromItem(QGraphicsItem *item){
     QPixmap pixmap(item->boundingRect().size().toSize());
@@ -46,10 +47,6 @@ int Pencil::LoadFromPixmap(const QPixmap &pixmap, const QRect &rect, GraphicsSce
         emit sigRemove(_key);
     });
 
-    m_pItem->setShouldRemoveCallback([=](int _key){
-        emit sigRemove(_key);
-    });
-
     return key;
 }
 
@@ -60,11 +57,11 @@ int Pencil::Create(const QPointF &leftTop, const QPointF &rightBottom, GraphicsS
     m_pItem->setData(ITEM_DATA_KEY, key);
 
     m_pItem->SetRemoveCallback([=](int _key){
-        emit sigRemove(_key);
+        emit sigGeoChanged(reinterpret_cast<int>(m_pItem));
     });
 
-    m_pItem->setShouldRemoveCallback([=](int _key){
-        emit sigRemove(_key);
+    m_pItem->SetItemChangedCallback([=](int _key){
+        emit sigGeoChanged(reinterpret_cast<int>(m_pItem));
     });
 
     m_path.moveTo(leftTop);
@@ -84,6 +81,28 @@ void Pencil::UpdateRect(const QPointF &leftTop, const QPointF &rightBottom, Grap
     m_point = rightBottom;
 
     m_pItem->setPath(m_path);
+}
+
+void Pencil::SetPath(const QPainterPath &path){
+    m_path = path;
+    m_pItem->setPath(m_path);
+}
+
+void Pencil::AddEraserPath(const QPainterPath &path, int width){
+    MapEraserPath::iterator it = m_pItem->m_mapEraserPathUndo.find(0);
+    if(it != m_pItem->m_mapEraserPathUndo.end()){
+        ERASER_PATH *path_data = new ERASER_PATH(new QPainterPath(path), width);
+        it.value()->append(path_data);
+    }else{
+        ERASER_PATH *path_data = new ERASER_PATH(new QPainterPath(path), width);
+        VectorPath *vectorPath = new VectorPath();
+        vectorPath->append(path_data);
+        m_pItem->m_mapEraserPathUndo[0] = vectorPath;
+    }
+}
+
+void Pencil::SetPos(const QPointF &pos){
+    m_pItem->setPos(pos);
 }
 
 void Pencil::CreateEnd(const QPointF &pos, GraphicsScene *pScene) {
@@ -134,7 +153,7 @@ QPointF Pencil::GetP2() {
     return QPointF();
 }
 QPointF Pencil::GetPos() {
-    return QPointF();
+    return m_pItem->scenePos();
 }
 void Pencil::ChangePos(qreal dx, qreal dy) {
 
@@ -342,4 +361,36 @@ QBrush Pencil::GetBrush() const{
 
 QPixmap Pencil::GetPixmap() const{
     return m_pItem->GetPixmap();
+}
+
+int Pencil::GetPathData(QByteArray *ba) const{
+    QDataStream out(ba, QIODevice::ReadWrite);
+    out << m_pItem->path();
+    return ba->length();
+}
+
+QList<ERASER_DATA> *Pencil::GetEraserData() const{
+    QList<ERASER_DATA> *listEraser = new QList<ERASER_DATA>();
+    for(MapEraserPath::iterator it = m_pItem->m_mapEraserPathUndo.begin(); it != m_pItem->m_mapEraserPathUndo.end(); it ++){
+        VectorPath *vectorPath = it.value();
+        for(VectorPath::Iterator itV = vectorPath->begin(); itV != vectorPath->end(); itV++){
+            ERASER_PATH *path_data = *itV;
+            QPainterPath *path = path_data->path;
+            int width = path_data->width;
+            QByteArray *ba = new QByteArray();
+            QDataStream out(ba, QIODevice::ReadWrite);
+            out << *path;
+            listEraser->push_back(ERASER_DATA(ba, width));
+        }
+    }
+    return listEraser;
+}
+
+void Pencil::SafeDelete(QList<ERASER_DATA> *listEraser){
+    for(QList<ERASER_DATA>::iterator it = listEraser->begin(); it != listEraser->end(); ){
+        ERASER_DATA edata = *it;
+        delete edata.ba;
+        it = listEraser->erase(it);
+    }
+    delete listEraser;
 }

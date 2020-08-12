@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>903</width>
+    <height>637</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -50,6 +50,8 @@
    <addaction name="actionReset"/>
    <addaction name="separator"/>
    <addaction name="actionClear"/>
+   <addaction name="separator"/>
+   <addaction name="actionOpenFile"/>
   </widget>
   <action name="actionSelect">
    <property name="checkable">
@@ -227,6 +229,18 @@
    </property>
    <property name="text">
     <string>Triangle</string>
+   </property>
+  </action>
+  <action name="actionOpenFile">
+   <property name="icon">
+    <iconset resource="../../Resources.qrc">
+     <normaloff>:/resources/images/icon_open_file.png</normaloff>:/resources/images/icon_open_file.png</iconset>
+   </property>
+   <property name="text">
+    <string>Open</string>
+   </property>
+   <property name="toolTip">
+    <string>Open</string>
    </property>
   </action>
  </widget>

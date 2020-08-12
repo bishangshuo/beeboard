@@ -33,12 +33,12 @@ PBShape::Line *PBShapeHelper::CreateLine(const QPoint &p0, const QPoint &p1, con
 
 PBShape::Rectangle *PBShapeHelper::CreateRectangle(int x, int y, int width, int height, const QPen &p, const QBrush &b){
     PBShape::Rectangle *rectangle = new PBShape::Rectangle;
-    PBShape::Rect *rect = new PBShape::Rect;
-    rect->set_x(x);
-    rect->set_y(y);
-    rect->set_w(width);
-    rect->set_h(height);
-    rectangle->set_allocated_rect(rect);
+    PBShape::Pos *pos = new PBShape::Pos();
+    pos->set_x(x);
+    pos->set_y(y);
+    rectangle->set_allocated_pos(pos);
+    rectangle->set_width(width);
+    rectangle->set_height(height);
     PBShape::Pen *pen = new PBShape::Pen();
     QColor penColor = p.color();
     int penWidth = p.width();
@@ -63,12 +63,12 @@ PBShape::Rectangle *PBShapeHelper::CreateRectangle(int x, int y, int width, int 
 
 PBShape::Ellipse *PBShapeHelper::CreateEllipse(int x, int y, int width, int height, const QPen &p, const QBrush &b){
     PBShape::Ellipse *ellipse = new PBShape::Ellipse;
-    PBShape::Rect *rect = new PBShape::Rect;
-    rect->set_x(x);
-    rect->set_y(y);
-    rect->set_w(width);
-    rect->set_h(height);
-    ellipse->set_allocated_rect(rect);
+    PBShape::Pos *pos = new PBShape::Pos();
+    pos->set_x(x);
+    pos->set_y(y);
+    ellipse->set_allocated_pos(pos);
+    ellipse->set_width(width);
+    ellipse->set_height(height);
     PBShape::Pen *pen = new PBShape::Pen();
     QColor penColor = p.color();
     int penWidth = p.width();
@@ -93,12 +93,12 @@ PBShape::Ellipse *PBShapeHelper::CreateEllipse(int x, int y, int width, int heig
 
 PBShape::Triangle *PBShapeHelper::CreateTriangle(int x, int y, int width, int height, const QPen &p, const QBrush &b){
     PBShape::Triangle *triangle = new PBShape::Triangle;
-    PBShape::Rect *rect = new PBShape::Rect;
-    rect->set_x(x);
-    rect->set_y(y);
-    rect->set_w(width);
-    rect->set_h(height);
-    triangle->set_allocated_rect(rect);
+    PBShape::Pos *pos = new PBShape::Pos();
+    pos->set_x(x);
+    pos->set_y(y);
+    triangle->set_allocated_pos(pos);
+    triangle->set_width(width);
+    triangle->set_height(height);
     PBShape::Pen *pen = new PBShape::Pen();
     QColor penColor = p.color();
     int penWidth = p.width();
@@ -121,7 +121,8 @@ PBShape::Triangle *PBShapeHelper::CreateTriangle(int x, int y, int width, int he
     return triangle;
 }
 
-PBShape::Scribble *PBShapeHelper::CreateScribble(int x, int y, int width, int height, const QByteArray &ba){
+PBShape::Scribble *PBShapeHelper::CreateScribble(int x, int y, int width, int height, const QPointF &pos, const QPen &p,
+                                                 const QByteArray &path_ba, const QList<ERASER_DATA> &eraser_data){
     PBShape::Scribble *scribble = new PBShape::Scribble;
     PBShape::Rect *rect = new PBShape::Rect;
     rect->set_x(x);
@@ -129,7 +130,32 @@ PBShape::Scribble *PBShapeHelper::CreateScribble(int x, int y, int width, int he
     rect->set_w(width);
     rect->set_h(height);
     scribble->set_allocated_rect(rect);
-    std::string *pixmap_data = new std::string(ba.toStdString());
-    scribble->set_allocated_pixmap(pixmap_data);
+    PBShape::Pen *pen = new PBShape::Pen();
+    QColor penColor = p.color();
+    int penWidth = p.width();
+    pen->set_width(penWidth);
+    pen->set_r(penColor.red());
+    pen->set_g(penColor.green());
+    pen->set_b(penColor.blue());
+    pen->set_a(penColor.alpha());
+    pen->set_style(Qt::SolidPattern);
+    pen->set_capstyle(Qt::RoundCap);
+    pen->set_joinstyle(Qt::RoundJoin);
+    scribble->set_allocated_pen(pen);
+    PBShape::Pos *pos_p = new PBShape::Pos();
+    pos_p->set_x(pos.x());
+    pos_p->set_y(pos.y());
+    scribble->set_allocated_pos(pos_p);
+    std::string *path_data = new std::string(path_ba.toStdString());
+    scribble->set_allocated_path(path_data);
+    int i = 1;
+    for(QList<ERASER_DATA>::const_iterator it = eraser_data.constBegin(); it != eraser_data.constEnd(); it++){
+        ERASER_DATA edata = *it;
+        PBShape::Eraser *eraser = new PBShape::Eraser();
+        eraser->set_width(edata.width);
+        QByteArray *eba = edata.ba;
+        eraser->set_allocated_path(new std::string(eba->toStdString()));
+        (*scribble->mutable_maperaser())[i++] = *eraser;
+    }
     return scribble;
 }

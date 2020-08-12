@@ -27,6 +27,9 @@ protected:
     QPointF GetP1() override;
     QPointF GetP2() override;
     QPointF GetPos() override;
+    qreal GetAngle() const override;
+    int GetItemWidth() const override;
+    int GetItemHeight() const override;
     void ChangePos(qreal dx, qreal dy) override;
     QGraphicsItem *GetGraphicsItem() override;
     void ChangeSize(qreal dx, qreal dy) override;

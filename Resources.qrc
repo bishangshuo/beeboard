@@ -59,5 +59,6 @@
         <file>resources/images/rotate-left-cur.png</file>
         <file>resources/images/triangle.png</file>
         <file>resources/images/triangle-selected.png</file>
+        <file>resources/images/icon_open_file.png</file>
     </qresource>
 </RCC>

@@ -19,7 +19,6 @@ PencilItem::PencilItem(QGraphicsItem *parent)
     : QGraphicsPathItem(parent)
     , m_isCreating(true)
     , m_hideClose(false)
-    , m_cbRemove(NULL)
 
 {
     setFlag(QGraphicsItem::ItemIsMovable, true);
@@ -228,6 +227,9 @@ void PencilItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 void PencilItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsItem::mouseReleaseEvent(event);
+    if(m_pCBItemChanged){
+        m_pCBItemChanged(reinterpret_cast<int>(this));
+    }
 }
 
 bool PencilItem::isInCloseArea(const QPointF &pos) const
@@ -276,8 +278,8 @@ void PencilItem::onEraserRelease(){
     qDebug() << "end scan:"<<et<<", erasetime="<<et-bt;
 
     if(!b){
-        if(m_cbRemove != NULL){
-            m_cbRemove(key);
+        if(m_pCBRemove){
+            m_pCBRemove(reinterpret_cast<int>(this));
         }
     }
 }

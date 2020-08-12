@@ -5,6 +5,7 @@
 #include <QPen>
 
 #include "pbshape.pb.h"
+#include "Pencil.h"
 
 class PBShapeHelper : public QObject
 {
@@ -18,7 +19,8 @@ public:
     static PBShape::Rectangle   *CreateRectangle(int x, int y, int width, int height, const QPen &p, const QBrush &b);
     static PBShape::Ellipse     *CreateEllipse(int x, int y, int width, int height, const QPen &p, const QBrush &b);
     static PBShape::Triangle    *CreateTriangle(int x, int y, int width, int height, const QPen &p, const QBrush &b);
-    static PBShape::Scribble    *CreateScribble(int x, int y, int width, int height, const QByteArray &ba);
+    static PBShape::Scribble    *CreateScribble(int x, int y, int width, int height, const QPointF &pos, const QPen &p,
+                                                const QByteArray &path_ba, const QList<ERASER_DATA> &eraser_data);
 };
 
 #endif // PBSHAPEHELPER_H
