@@ -45,7 +45,7 @@ void Triangle::UpdateRect(const QPointF &leftTop, const QPointF &rightBottom, Gr
     m_pItem->UpdateSize(width, height);
 }
 
-void Triangle::CreateEnd(const QPointF &pos, GraphicsScene *pScene){
+void Triangle::CreateEnd(GraphicsScene *pScene){
     m_pItem->Created();
 }
 
@@ -77,11 +77,7 @@ void Triangle::RotateBegin(){
 }
 
 void Triangle::Rotate(qreal x, qreal y, qreal angle){
-    QPointF pos = m_pItem->pos();
-    qreal ang = trimAngle(angle);
-    m_pItem->setTransformOriginPoint(m_pItem->sceneBoundingRect().center());
-    m_pItem->setRotation(ang + m_rAngle);
-    m_pItem->setPos(pos);
+    m_pItem->Rotate(angle);
 }
 
 void Triangle::RotateEnd(){

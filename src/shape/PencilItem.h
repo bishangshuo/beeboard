@@ -63,6 +63,10 @@ public:
         return m_pixmap;
     }
 
+    void PencilLoaded() {
+        RenderPathToPixmap();
+    }
+
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 

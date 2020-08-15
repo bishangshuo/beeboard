@@ -271,6 +271,10 @@ void LineItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
     m_pressed = false;
     m_isResizing = false;
 
+    if(m_pCBItemChanged){
+        m_pCBItemChanged(reinterpret_cast<int>(this));
+    }
+
     setFlag(QGraphicsItem::ItemIsMovable, true);
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 }

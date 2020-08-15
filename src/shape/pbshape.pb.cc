@@ -426,6 +426,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_pbshape_2eproto::offsets[] PRO
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::PBShape::Line, pos_),
   PROTOBUF_FIELD_OFFSET(::PBShape::Line, p0_),
   PROTOBUF_FIELD_OFFSET(::PBShape::Line, p1_),
   PROTOBUF_FIELD_OFFSET(::PBShape::Line, pen_),
@@ -434,6 +435,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_pbshape_2eproto::offsets[] PRO
   1,
   2,
   3,
+  4,
   PROTOBUF_FIELD_OFFSET(::PBShape::Rectangle, _has_bits_),
   PROTOBUF_FIELD_OFFSET(::PBShape::Rectangle, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -586,19 +588,19 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 13, 26, sizeof(::PBShape::Pen)},
   { 34, 44, sizeof(::PBShape::Brush)},
   { 49, 56, sizeof(::PBShape::Pos)},
-  { 58, 67, sizeof(::PBShape::Line)},
-  { 71, 82, sizeof(::PBShape::Rectangle)},
-  { 88, 99, sizeof(::PBShape::Ellipse)},
-  { 105, 116, sizeof(::PBShape::Triangle)},
-  { 122, 129, sizeof(::PBShape::Eraser)},
-  { 131, 138, sizeof(::PBShape::Scribble_MaperaserEntry_DoNotUse)},
-  { 140, 151, sizeof(::PBShape::Scribble)},
-  { 157, 164, sizeof(::PBShape::Scene_MapLineEntry_DoNotUse)},
-  { 166, 173, sizeof(::PBShape::Scene_MapRectangleEntry_DoNotUse)},
-  { 175, 182, sizeof(::PBShape::Scene_MapEllipseEntry_DoNotUse)},
-  { 184, 191, sizeof(::PBShape::Scene_MapTriangleEntry_DoNotUse)},
-  { 193, 200, sizeof(::PBShape::Scene_MapScribbleEntry_DoNotUse)},
-  { 202, 212, sizeof(::PBShape::Scene)},
+  { 58, 68, sizeof(::PBShape::Line)},
+  { 73, 84, sizeof(::PBShape::Rectangle)},
+  { 90, 101, sizeof(::PBShape::Ellipse)},
+  { 107, 118, sizeof(::PBShape::Triangle)},
+  { 124, 131, sizeof(::PBShape::Eraser)},
+  { 133, 140, sizeof(::PBShape::Scribble_MaperaserEntry_DoNotUse)},
+  { 142, 153, sizeof(::PBShape::Scribble)},
+  { 159, 166, sizeof(::PBShape::Scene_MapLineEntry_DoNotUse)},
+  { 168, 175, sizeof(::PBShape::Scene_MapRectangleEntry_DoNotUse)},
+  { 177, 184, sizeof(::PBShape::Scene_MapEllipseEntry_DoNotUse)},
+  { 186, 193, sizeof(::PBShape::Scene_MapTriangleEntry_DoNotUse)},
+  { 195, 202, sizeof(::PBShape::Scene_MapScribbleEntry_DoNotUse)},
+  { 204, 214, sizeof(::PBShape::Scene)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -630,43 +632,44 @@ const char descriptor_table_protodef_pbshape_2eproto[] PROTOBUF_SECTION_VARIABLE
   "\n\tjoinstyle\030\010 \001(\005:\003128\"S\n\005Brush\022\014\n\001r\030\001 \001"
   "(\005:\0010\022\014\n\001g\030\002 \001(\005:\0010\022\014\n\001b\030\003 \001(\005:\0010\022\016\n\001a\030\004"
   " \001(\005:\003255\022\020\n\005style\030\005 \001(\005:\0011\"\033\n\003Pos\022\t\n\001x\030"
-  "\001 \002(\005\022\t\n\001y\030\002 \002(\005\"g\n\004Line\022\030\n\002p0\030\001 \002(\0132\014.P"
-  "BShape.Pos\022\030\n\002p1\030\002 \002(\0132\014.PBShape.Pos\022\031\n\003"
-  "pen\030\003 \002(\0132\014.PBShape.Pen\022\020\n\005angle\030\004 \001(\002:\001"
-  "0\"\221\001\n\tRectangle\022\031\n\003pos\030\001 \002(\0132\014.PBShape.P"
-  "os\022\r\n\005width\030\002 \002(\005\022\016\n\006height\030\003 \002(\005\022\031\n\003pen"
-  "\030\004 \001(\0132\014.PBShape.Pen\022\035\n\005brush\030\005 \001(\0132\016.PB"
-  "Shape.Brush\022\020\n\005angle\030\006 \001(\002:\0010\"\217\001\n\007Ellips"
-  "e\022\031\n\003pos\030\001 \002(\0132\014.PBShape.Pos\022\r\n\005width\030\002 "
-  "\002(\005\022\016\n\006height\030\003 \002(\005\022\031\n\003pen\030\004 \001(\0132\014.PBSha"
-  "pe.Pen\022\035\n\005brush\030\005 \001(\0132\016.PBShape.Brush\022\020\n"
-  "\005angle\030\006 \001(\002:\0010\"\220\001\n\010Triangle\022\031\n\003pos\030\001 \002("
-  "\0132\014.PBShape.Pos\022\r\n\005width\030\002 \002(\005\022\016\n\006height"
-  "\030\003 \002(\005\022\031\n\003pen\030\004 \001(\0132\014.PBShape.Pen\022\035\n\005bru"
-  "sh\030\005 \001(\0132\016.PBShape.Brush\022\020\n\005angle\030\006 \001(\002:"
-  "\0010\"%\n\006Eraser\022\014\n\004path\030\001 \002(\014\022\r\n\005width\030\002 \002("
-  "\005\"\365\001\n\010Scribble\022\033\n\004rect\030\001 \002(\0132\r.PBShape.R"
-  "ect\022\031\n\003pos\030\002 \002(\0132\014.PBShape.Pos\022\014\n\004path\030\003"
-  " \002(\014\022\031\n\003pen\030\004 \002(\0132\014.PBShape.Pen\0223\n\tmaper"
-  "aser\030\005 \003(\0132 .PBShape.Scribble.MaperaserE"
-  "ntry\022\020\n\005angle\030\006 \001(\002:\0010\032A\n\016MaperaserEntry"
-  "\022\013\n\003key\030\001 \001(\005\022\036\n\005value\030\002 \001(\0132\017.PBShape.E"
-  "raser:\0028\001\"\350\004\n\005Scene\022,\n\007mapLine\030\001 \003(\0132\033.P"
-  "BShape.Scene.MapLineEntry\0226\n\014mapRectangl"
-  "e\030\002 \003(\0132 .PBShape.Scene.MapRectangleEntr"
-  "y\0222\n\nmapEllipse\030\003 \003(\0132\036.PBShape.Scene.Ma"
-  "pEllipseEntry\0224\n\013mapTriangle\030\004 \003(\0132\037.PBS"
-  "hape.Scene.MapTriangleEntry\0224\n\013mapScribb"
-  "le\030\005 \003(\0132\037.PBShape.Scene.MapScribbleEntr"
-  "y\032=\n\014MapLineEntry\022\013\n\003key\030\001 \001(\005\022\034\n\005value\030"
-  "\002 \001(\0132\r.PBShape.Line:\0028\001\032G\n\021MapRectangle"
-  "Entry\022\013\n\003key\030\001 \001(\005\022!\n\005value\030\002 \001(\0132\022.PBSh"
-  "ape.Rectangle:\0028\001\032C\n\017MapEllipseEntry\022\013\n\003"
-  "key\030\001 \001(\005\022\037\n\005value\030\002 \001(\0132\020.PBShape.Ellip"
-  "se:\0028\001\032E\n\020MapTriangleEntry\022\013\n\003key\030\001 \001(\005\022"
-  " \n\005value\030\002 \001(\0132\021.PBShape.Triangle:\0028\001\032E\n"
-  "\020MapScribbleEntry\022\013\n\003key\030\001 \001(\005\022 \n\005value\030"
-  "\002 \001(\0132\021.PBShape.Scribble:\0028\001"
+  "\001 \002(\005\022\t\n\001y\030\002 \002(\005\"\202\001\n\004Line\022\031\n\003pos\030\001 \002(\0132\014"
+  ".PBShape.Pos\022\030\n\002p0\030\002 \002(\0132\014.PBShape.Pos\022\030"
+  "\n\002p1\030\003 \002(\0132\014.PBShape.Pos\022\031\n\003pen\030\004 \002(\0132\014."
+  "PBShape.Pen\022\020\n\005angle\030\005 \001(\002:\0010\"\221\001\n\tRectan"
+  "gle\022\031\n\003pos\030\001 \002(\0132\014.PBShape.Pos\022\r\n\005width\030"
+  "\002 \002(\005\022\016\n\006height\030\003 \002(\005\022\031\n\003pen\030\004 \001(\0132\014.PBS"
+  "hape.Pen\022\035\n\005brush\030\005 \001(\0132\016.PBShape.Brush\022"
+  "\020\n\005angle\030\006 \001(\002:\0010\"\217\001\n\007Ellipse\022\031\n\003pos\030\001 \002"
+  "(\0132\014.PBShape.Pos\022\r\n\005width\030\002 \002(\005\022\016\n\006heigh"
+  "t\030\003 \002(\005\022\031\n\003pen\030\004 \001(\0132\014.PBShape.Pen\022\035\n\005br"
+  "ush\030\005 \001(\0132\016.PBShape.Brush\022\020\n\005angle\030\006 \001(\002"
+  ":\0010\"\220\001\n\010Triangle\022\031\n\003pos\030\001 \002(\0132\014.PBShape."
+  "Pos\022\r\n\005width\030\002 \002(\005\022\016\n\006height\030\003 \002(\005\022\031\n\003pe"
+  "n\030\004 \001(\0132\014.PBShape.Pen\022\035\n\005brush\030\005 \001(\0132\016.P"
+  "BShape.Brush\022\020\n\005angle\030\006 \001(\002:\0010\"%\n\006Eraser"
+  "\022\014\n\004path\030\001 \002(\014\022\r\n\005width\030\002 \002(\005\"\365\001\n\010Scribb"
+  "le\022\033\n\004rect\030\001 \002(\0132\r.PBShape.Rect\022\031\n\003pos\030\002"
+  " \002(\0132\014.PBShape.Pos\022\014\n\004path\030\003 \002(\014\022\031\n\003pen\030"
+  "\004 \002(\0132\014.PBShape.Pen\0223\n\tmaperaser\030\005 \003(\0132 "
+  ".PBShape.Scribble.MaperaserEntry\022\020\n\005angl"
+  "e\030\006 \001(\002:\0010\032A\n\016MaperaserEntry\022\013\n\003key\030\001 \001("
+  "\005\022\036\n\005value\030\002 \001(\0132\017.PBShape.Eraser:\0028\001\"\350\004"
+  "\n\005Scene\022,\n\007mapLine\030\001 \003(\0132\033.PBShape.Scene"
+  ".MapLineEntry\0226\n\014mapRectangle\030\002 \003(\0132 .PB"
+  "Shape.Scene.MapRectangleEntry\0222\n\nmapElli"
+  "pse\030\003 \003(\0132\036.PBShape.Scene.MapEllipseEntr"
+  "y\0224\n\013mapTriangle\030\004 \003(\0132\037.PBShape.Scene.M"
+  "apTriangleEntry\0224\n\013mapScribble\030\005 \003(\0132\037.P"
+  "BShape.Scene.MapScribbleEntry\032=\n\014MapLine"
+  "Entry\022\013\n\003key\030\001 \001(\005\022\034\n\005value\030\002 \001(\0132\r.PBSh"
+  "ape.Line:\0028\001\032G\n\021MapRectangleEntry\022\013\n\003key"
+  "\030\001 \001(\005\022!\n\005value\030\002 \001(\0132\022.PBShape.Rectangl"
+  "e:\0028\001\032C\n\017MapEllipseEntry\022\013\n\003key\030\001 \001(\005\022\037\n"
+  "\005value\030\002 \001(\0132\020.PBShape.Ellipse:\0028\001\032E\n\020Ma"
+  "pTriangleEntry\022\013\n\003key\030\001 \001(\005\022 \n\005value\030\002 \001"
+  "(\0132\021.PBShape.Triangle:\0028\001\032E\n\020MapScribble"
+  "Entry\022\013\n\003key\030\001 \001(\005\022 \n\005value\030\002 \001(\0132\021.PBSh"
+  "ape.Scribble:\0028\001"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_pbshape_2eproto_deps[1] = {
 };
@@ -692,7 +695,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_pbs
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_pbshape_2eproto_once;
 static bool descriptor_table_pbshape_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_pbshape_2eproto = {
-  &descriptor_table_pbshape_2eproto_initialized, descriptor_table_protodef_pbshape_2eproto, "pbshape.proto", 1788,
+  &descriptor_table_pbshape_2eproto_initialized, descriptor_table_protodef_pbshape_2eproto, "pbshape.proto", 1816,
   &descriptor_table_pbshape_2eproto_once, descriptor_table_pbshape_2eproto_sccs, descriptor_table_pbshape_2eproto_deps, 17, 0,
   schemas, file_default_instances, TableStruct_pbshape_2eproto::offsets,
   file_level_metadata_pbshape_2eproto, 17, file_level_enum_descriptors_pbshape_2eproto, file_level_service_descriptors_pbshape_2eproto,
@@ -2035,6 +2038,8 @@ void Pos::InternalSwap(Pos* other) {
 // ===================================================================
 
 void Line::InitAsDefaultInstance() {
+  ::PBShape::_Line_default_instance_._instance.get_mutable()->pos_ = const_cast< ::PBShape::Pos*>(
+      ::PBShape::Pos::internal_default_instance());
   ::PBShape::_Line_default_instance_._instance.get_mutable()->p0_ = const_cast< ::PBShape::Pos*>(
       ::PBShape::Pos::internal_default_instance());
   ::PBShape::_Line_default_instance_._instance.get_mutable()->p1_ = const_cast< ::PBShape::Pos*>(
@@ -2045,23 +2050,31 @@ void Line::InitAsDefaultInstance() {
 class Line::_Internal {
  public:
   using HasBits = decltype(std::declval<Line>()._has_bits_);
+  static const ::PBShape::Pos& pos(const Line* msg);
+  static void set_has_pos(HasBits* has_bits) {
+    (*has_bits)[0] |= 1u;
+  }
   static const ::PBShape::Pos& p0(const Line* msg);
   static void set_has_p0(HasBits* has_bits) {
-    (*has_bits)[0] |= 1u;
+    (*has_bits)[0] |= 2u;
   }
   static const ::PBShape::Pos& p1(const Line* msg);
   static void set_has_p1(HasBits* has_bits) {
-    (*has_bits)[0] |= 2u;
+    (*has_bits)[0] |= 4u;
   }
   static const ::PBShape::Pen& pen(const Line* msg);
   static void set_has_pen(HasBits* has_bits) {
-    (*has_bits)[0] |= 4u;
+    (*has_bits)[0] |= 8u;
   }
   static void set_has_angle(HasBits* has_bits) {
-    (*has_bits)[0] |= 8u;
+    (*has_bits)[0] |= 16u;
   }
 };
 
+const ::PBShape::Pos&
+Line::_Internal::pos(const Line* msg) {
+  return *msg->pos_;
+}
 const ::PBShape::Pos&
 Line::_Internal::p0(const Line* msg) {
   return *msg->p0_;
@@ -2084,6 +2097,11 @@ Line::Line(const Line& from)
       _internal_metadata_(nullptr),
       _has_bits_(from._has_bits_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
+  if (from._internal_has_pos()) {
+    pos_ = new ::PBShape::Pos(*from.pos_);
+  } else {
+    pos_ = nullptr;
+  }
   if (from._internal_has_p0()) {
     p0_ = new ::PBShape::Pos(*from.p0_);
   } else {
@@ -2105,9 +2123,9 @@ Line::Line(const Line& from)
 
 void Line::SharedCtor() {
   ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_Line_pbshape_2eproto.base);
-  ::memset(&p0_, 0, static_cast<size_t>(
+  ::memset(&pos_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&angle_) -
-      reinterpret_cast<char*>(&p0_)) + sizeof(angle_));
+      reinterpret_cast<char*>(&pos_)) + sizeof(angle_));
 }
 
 Line::~Line() {
@@ -2116,6 +2134,7 @@ Line::~Line() {
 }
 
 void Line::SharedDtor() {
+  if (this != internal_default_instance()) delete pos_;
   if (this != internal_default_instance()) delete p0_;
   if (this != internal_default_instance()) delete p1_;
   if (this != internal_default_instance()) delete pen_;
@@ -2137,16 +2156,20 @@ void Line::Clear() {
   (void) cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
-  if (cached_has_bits & 0x00000007u) {
+  if (cached_has_bits & 0x0000000fu) {
     if (cached_has_bits & 0x00000001u) {
+      GOOGLE_DCHECK(pos_ != nullptr);
+      pos_->Clear();
+    }
+    if (cached_has_bits & 0x00000002u) {
       GOOGLE_DCHECK(p0_ != nullptr);
       p0_->Clear();
     }
-    if (cached_has_bits & 0x00000002u) {
+    if (cached_has_bits & 0x00000004u) {
       GOOGLE_DCHECK(p1_ != nullptr);
       p1_->Clear();
     }
-    if (cached_has_bits & 0x00000004u) {
+    if (cached_has_bits & 0x00000008u) {
       GOOGLE_DCHECK(pen_ != nullptr);
       pen_->Clear();
     }
@@ -2164,30 +2187,37 @@ const char* Line::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::inter
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
-      // required .PBShape.Pos p0 = 1;
+      // required .PBShape.Pos pos = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          ptr = ctx->ParseMessage(_internal_mutable_pos(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // required .PBShape.Pos p0 = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
           ptr = ctx->ParseMessage(_internal_mutable_p0(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // required .PBShape.Pos p1 = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+      // required .PBShape.Pos p1 = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
           ptr = ctx->ParseMessage(_internal_mutable_p1(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // required .PBShape.Pen pen = 3;
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
+      // required .PBShape.Pen pen = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 34)) {
           ptr = ctx->ParseMessage(_internal_mutable_pen(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // optional float angle = 4 [default = 0];
-      case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 37)) {
+      // optional float angle = 5 [default = 0];
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 45)) {
           _Internal::set_has_angle(&has_bits);
           angle_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
@@ -2221,34 +2251,42 @@ failure:
   (void) cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
-  // required .PBShape.Pos p0 = 1;
+  // required .PBShape.Pos pos = 1;
   if (cached_has_bits & 0x00000001u) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        1, _Internal::p0(this), target, stream);
+        1, _Internal::pos(this), target, stream);
   }
 
-  // required .PBShape.Pos p1 = 2;
+  // required .PBShape.Pos p0 = 2;
   if (cached_has_bits & 0x00000002u) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        2, _Internal::p1(this), target, stream);
+        2, _Internal::p0(this), target, stream);
   }
 
-  // required .PBShape.Pen pen = 3;
+  // required .PBShape.Pos p1 = 3;
   if (cached_has_bits & 0x00000004u) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        3, _Internal::pen(this), target, stream);
+        3, _Internal::p1(this), target, stream);
   }
 
-  // optional float angle = 4 [default = 0];
+  // required .PBShape.Pen pen = 4;
   if (cached_has_bits & 0x00000008u) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(4, this->_internal_angle(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        4, _Internal::pen(this), target, stream);
+  }
+
+  // optional float angle = 5 [default = 0];
+  if (cached_has_bits & 0x00000010u) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(5, this->_internal_angle(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -2263,22 +2301,29 @@ size_t Line::RequiredFieldsByteSizeFallback() const {
 // @@protoc_insertion_point(required_fields_byte_size_fallback_start:PBShape.Line)
   size_t total_size = 0;
 
+  if (_internal_has_pos()) {
+    // required .PBShape.Pos pos = 1;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *pos_);
+  }
+
   if (_internal_has_p0()) {
-    // required .PBShape.Pos p0 = 1;
+    // required .PBShape.Pos p0 = 2;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *p0_);
   }
 
   if (_internal_has_p1()) {
-    // required .PBShape.Pos p1 = 2;
+    // required .PBShape.Pos p1 = 3;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *p1_);
   }
 
   if (_internal_has_pen()) {
-    // required .PBShape.Pen pen = 3;
+    // required .PBShape.Pen pen = 4;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *pen_);
@@ -2290,18 +2335,23 @@ size_t Line::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:PBShape.Line)
   size_t total_size = 0;
 
-  if (((_has_bits_[0] & 0x00000007) ^ 0x00000007) == 0) {  // All required fields are present.
-    // required .PBShape.Pos p0 = 1;
+  if (((_has_bits_[0] & 0x0000000f) ^ 0x0000000f) == 0) {  // All required fields are present.
+    // required .PBShape.Pos pos = 1;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *pos_);
+
+    // required .PBShape.Pos p0 = 2;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *p0_);
 
-    // required .PBShape.Pos p1 = 2;
+    // required .PBShape.Pos p1 = 3;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *p1_);
 
-    // required .PBShape.Pen pen = 3;
+    // required .PBShape.Pen pen = 4;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *pen_);
@@ -2313,9 +2363,9 @@ size_t Line::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // optional float angle = 4 [default = 0];
+  // optional float angle = 5 [default = 0];
   cached_has_bits = _has_bits_[0];
-  if (cached_has_bits & 0x00000008u) {
+  if (cached_has_bits & 0x00000010u) {
     total_size += 1 + 4;
   }
 
@@ -2351,17 +2401,20 @@ void Line::MergeFrom(const Line& from) {
   (void) cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
-  if (cached_has_bits & 0x0000000fu) {
+  if (cached_has_bits & 0x0000001fu) {
     if (cached_has_bits & 0x00000001u) {
-      _internal_mutable_p0()->::PBShape::Pos::MergeFrom(from._internal_p0());
+      _internal_mutable_pos()->::PBShape::Pos::MergeFrom(from._internal_pos());
     }
     if (cached_has_bits & 0x00000002u) {
-      _internal_mutable_p1()->::PBShape::Pos::MergeFrom(from._internal_p1());
+      _internal_mutable_p0()->::PBShape::Pos::MergeFrom(from._internal_p0());
     }
     if (cached_has_bits & 0x00000004u) {
-      _internal_mutable_pen()->::PBShape::Pen::MergeFrom(from._internal_pen());
+      _internal_mutable_p1()->::PBShape::Pos::MergeFrom(from._internal_p1());
     }
     if (cached_has_bits & 0x00000008u) {
+      _internal_mutable_pen()->::PBShape::Pen::MergeFrom(from._internal_pen());
+    }
+    if (cached_has_bits & 0x00000010u) {
       angle_ = from.angle_;
     }
     _has_bits_[0] |= cached_has_bits;
@@ -2383,7 +2436,10 @@ void Line::CopyFrom(const Line& from) {
 }
 
 bool Line::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000007) != 0x00000007) return false;
+  if ((_has_bits_[0] & 0x0000000f) != 0x0000000f) return false;
+  if (_internal_has_pos()) {
+    if (!pos_->IsInitialized()) return false;
+  }
   if (_internal_has_p0()) {
     if (!p0_->IsInitialized()) return false;
   }
@@ -2397,6 +2453,7 @@ void Line::InternalSwap(Line* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
+  swap(pos_, other->pos_);
   swap(p0_, other->p0_);
   swap(p1_, other->p1_);
   swap(pen_, other->pen_);

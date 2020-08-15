@@ -17,7 +17,7 @@ int Eraser::Create(const QPointF &leftTop, const QPointF &rightBottom, GraphicsS
 void Eraser::UpdateRect(const QPointF &leftTop, const QPointF &rightBottom, GraphicsScene *pScene){
 }
 
-void Eraser::CreateEnd(const QPointF &pos, GraphicsScene *pScene){
+void Eraser::CreateEnd(GraphicsScene *pScene){
 }
 
 void Eraser::SetSelected(bool selected){

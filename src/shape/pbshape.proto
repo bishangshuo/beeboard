@@ -34,10 +34,11 @@ message Pos{
 }
 
 message Line{
-    required Pos            p0      = 1;
-    required Pos            p1      = 2;
-    required Pen            pen     = 3;
-    optional float          angle   = 4[default=0.0];
+    required Pos            pos     = 1;
+    required Pos            p0      = 2;
+    required Pos            p1      = 3;
+    required Pen            pen     = 4;
+    optional float          angle   = 5[default=0.0];
 }
 
 message Rectangle{

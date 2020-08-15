@@ -6,16 +6,20 @@ PBShapeHelper::PBShapeHelper(QObject *parent) : QObject(parent)
 
 }
 
-PBShape::Line *PBShapeHelper::CreateLine(const QPoint &p0, const QPoint &p1, const QPen &p){
+PBShape::Line *PBShapeHelper::CreateLine(int x, int y, const QPoint &p0, const QPoint &p1, const QPen &p){
     PBShape::Line *line = new PBShape::Line;
+    PBShape::Pos *_pos = new PBShape::Pos();
+    _pos->set_x(x);
+    _pos->set_y(y);
     PBShape::Pos *_p0 = new PBShape::Pos();
     _p0->set_x(p0.x());
     _p0->set_y(p0.y());
     PBShape::Pos *_p1 = new PBShape::Pos();
     _p1->set_x(p1.x());
     _p1->set_y(p1.y());
+    line->set_allocated_pos(_pos);
     line->set_allocated_p0(_p0);
-    line->set_allocated_p1(_p0);
+    line->set_allocated_p1(_p1);
     PBShape::Pen *pen = new PBShape::Pen();
     QColor penColor = p.color();
     int penWidth = p.width();

@@ -9,10 +9,12 @@ class Line : public ShapeBase
 public:
     Line(QObject *parent = nullptr);
     ~Line();
+
+    void SetPos(const QPointF &pos);
 protected:
     int Create(const QPointF &leftTop, const QPointF &rightBottom, GraphicsScene *pScene) override;
     void UpdateRect(const QPointF &leftTop, const QPointF &rightBottom, GraphicsScene *pScene) override;
-    void CreateEnd(const QPointF &pos, GraphicsScene *pScene) override;
+    void CreateEnd(GraphicsScene *pScene) override;
     void SetSelected(bool selected) override;
     void SetEditable(bool editable) override;
     void Remove(GraphicsScene *pScene) override;

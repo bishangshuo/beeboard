@@ -1037,12 +1037,28 @@ class Line :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kP0FieldNumber = 1,
-    kP1FieldNumber = 2,
-    kPenFieldNumber = 3,
-    kAngleFieldNumber = 4,
+    kPosFieldNumber = 1,
+    kP0FieldNumber = 2,
+    kP1FieldNumber = 3,
+    kPenFieldNumber = 4,
+    kAngleFieldNumber = 5,
   };
-  // required .PBShape.Pos p0 = 1;
+  // required .PBShape.Pos pos = 1;
+  bool has_pos() const;
+  private:
+  bool _internal_has_pos() const;
+  public:
+  void clear_pos();
+  const ::PBShape::Pos& pos() const;
+  ::PBShape::Pos* release_pos();
+  ::PBShape::Pos* mutable_pos();
+  void set_allocated_pos(::PBShape::Pos* pos);
+  private:
+  const ::PBShape::Pos& _internal_pos() const;
+  ::PBShape::Pos* _internal_mutable_pos();
+  public:
+
+  // required .PBShape.Pos p0 = 2;
   bool has_p0() const;
   private:
   bool _internal_has_p0() const;
@@ -1057,7 +1073,7 @@ class Line :
   ::PBShape::Pos* _internal_mutable_p0();
   public:
 
-  // required .PBShape.Pos p1 = 2;
+  // required .PBShape.Pos p1 = 3;
   bool has_p1() const;
   private:
   bool _internal_has_p1() const;
@@ -1072,7 +1088,7 @@ class Line :
   ::PBShape::Pos* _internal_mutable_p1();
   public:
 
-  // required .PBShape.Pen pen = 3;
+  // required .PBShape.Pen pen = 4;
   bool has_pen() const;
   private:
   bool _internal_has_pen() const;
@@ -1087,7 +1103,7 @@ class Line :
   ::PBShape::Pen* _internal_mutable_pen();
   public:
 
-  // optional float angle = 4 [default = 0];
+  // optional float angle = 5 [default = 0];
   bool has_angle() const;
   private:
   bool _internal_has_angle() const;
@@ -1110,6 +1126,7 @@ class Line :
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
   ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  ::PBShape::Pos* pos_;
   ::PBShape::Pos* p0_;
   ::PBShape::Pos* p1_;
   ::PBShape::Pen* pen_;
@@ -3179,9 +3196,69 @@ inline void Pos::set_y(::PROTOBUF_NAMESPACE_ID::int32 value) {
 
 // Line
 
-// required .PBShape.Pos p0 = 1;
-inline bool Line::_internal_has_p0() const {
+// required .PBShape.Pos pos = 1;
+inline bool Line::_internal_has_pos() const {
   bool value = (_has_bits_[0] & 0x00000001u) != 0;
+  PROTOBUF_ASSUME(!value || pos_ != nullptr);
+  return value;
+}
+inline bool Line::has_pos() const {
+  return _internal_has_pos();
+}
+inline void Line::clear_pos() {
+  if (pos_ != nullptr) pos_->Clear();
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline const ::PBShape::Pos& Line::_internal_pos() const {
+  const ::PBShape::Pos* p = pos_;
+  return p != nullptr ? *p : *reinterpret_cast<const ::PBShape::Pos*>(
+      &::PBShape::_Pos_default_instance_);
+}
+inline const ::PBShape::Pos& Line::pos() const {
+  // @@protoc_insertion_point(field_get:PBShape.Line.pos)
+  return _internal_pos();
+}
+inline ::PBShape::Pos* Line::release_pos() {
+  // @@protoc_insertion_point(field_release:PBShape.Line.pos)
+  _has_bits_[0] &= ~0x00000001u;
+  ::PBShape::Pos* temp = pos_;
+  pos_ = nullptr;
+  return temp;
+}
+inline ::PBShape::Pos* Line::_internal_mutable_pos() {
+  _has_bits_[0] |= 0x00000001u;
+  if (pos_ == nullptr) {
+    auto* p = CreateMaybeMessage<::PBShape::Pos>(GetArenaNoVirtual());
+    pos_ = p;
+  }
+  return pos_;
+}
+inline ::PBShape::Pos* Line::mutable_pos() {
+  // @@protoc_insertion_point(field_mutable:PBShape.Line.pos)
+  return _internal_mutable_pos();
+}
+inline void Line::set_allocated_pos(::PBShape::Pos* pos) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == nullptr) {
+    delete pos_;
+  }
+  if (pos) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
+    if (message_arena != submessage_arena) {
+      pos = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, pos, submessage_arena);
+    }
+    _has_bits_[0] |= 0x00000001u;
+  } else {
+    _has_bits_[0] &= ~0x00000001u;
+  }
+  pos_ = pos;
+  // @@protoc_insertion_point(field_set_allocated:PBShape.Line.pos)
+}
+
+// required .PBShape.Pos p0 = 2;
+inline bool Line::_internal_has_p0() const {
+  bool value = (_has_bits_[0] & 0x00000002u) != 0;
   PROTOBUF_ASSUME(!value || p0_ != nullptr);
   return value;
 }
@@ -3190,7 +3267,7 @@ inline bool Line::has_p0() const {
 }
 inline void Line::clear_p0() {
   if (p0_ != nullptr) p0_->Clear();
-  _has_bits_[0] &= ~0x00000001u;
+  _has_bits_[0] &= ~0x00000002u;
 }
 inline const ::PBShape::Pos& Line::_internal_p0() const {
   const ::PBShape::Pos* p = p0_;
@@ -3203,13 +3280,13 @@ inline const ::PBShape::Pos& Line::p0() const {
 }
 inline ::PBShape::Pos* Line::release_p0() {
   // @@protoc_insertion_point(field_release:PBShape.Line.p0)
-  _has_bits_[0] &= ~0x00000001u;
+  _has_bits_[0] &= ~0x00000002u;
   ::PBShape::Pos* temp = p0_;
   p0_ = nullptr;
   return temp;
 }
 inline ::PBShape::Pos* Line::_internal_mutable_p0() {
-  _has_bits_[0] |= 0x00000001u;
+  _has_bits_[0] |= 0x00000002u;
   if (p0_ == nullptr) {
     auto* p = CreateMaybeMessage<::PBShape::Pos>(GetArenaNoVirtual());
     p0_ = p;
@@ -3231,17 +3308,17 @@ inline void Line::set_allocated_p0(::PBShape::Pos* p0) {
       p0 = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, p0, submessage_arena);
     }
-    _has_bits_[0] |= 0x00000001u;
+    _has_bits_[0] |= 0x00000002u;
   } else {
-    _has_bits_[0] &= ~0x00000001u;
+    _has_bits_[0] &= ~0x00000002u;
   }
   p0_ = p0;
   // @@protoc_insertion_point(field_set_allocated:PBShape.Line.p0)
 }
 
-// required .PBShape.Pos p1 = 2;
+// required .PBShape.Pos p1 = 3;
 inline bool Line::_internal_has_p1() const {
-  bool value = (_has_bits_[0] & 0x00000002u) != 0;
+  bool value = (_has_bits_[0] & 0x00000004u) != 0;
   PROTOBUF_ASSUME(!value || p1_ != nullptr);
   return value;
 }
@@ -3250,7 +3327,7 @@ inline bool Line::has_p1() const {
 }
 inline void Line::clear_p1() {
   if (p1_ != nullptr) p1_->Clear();
-  _has_bits_[0] &= ~0x00000002u;
+  _has_bits_[0] &= ~0x00000004u;
 }
 inline const ::PBShape::Pos& Line::_internal_p1() const {
   const ::PBShape::Pos* p = p1_;
@@ -3263,13 +3340,13 @@ inline const ::PBShape::Pos& Line::p1() const {
 }
 inline ::PBShape::Pos* Line::release_p1() {
   // @@protoc_insertion_point(field_release:PBShape.Line.p1)
-  _has_bits_[0] &= ~0x00000002u;
+  _has_bits_[0] &= ~0x00000004u;
   ::PBShape::Pos* temp = p1_;
   p1_ = nullptr;
   return temp;
 }
 inline ::PBShape::Pos* Line::_internal_mutable_p1() {
-  _has_bits_[0] |= 0x00000002u;
+  _has_bits_[0] |= 0x00000004u;
   if (p1_ == nullptr) {
     auto* p = CreateMaybeMessage<::PBShape::Pos>(GetArenaNoVirtual());
     p1_ = p;
@@ -3291,17 +3368,17 @@ inline void Line::set_allocated_p1(::PBShape::Pos* p1) {
       p1 = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, p1, submessage_arena);
     }
-    _has_bits_[0] |= 0x00000002u;
+    _has_bits_[0] |= 0x00000004u;
   } else {
-    _has_bits_[0] &= ~0x00000002u;
+    _has_bits_[0] &= ~0x00000004u;
   }
   p1_ = p1;
   // @@protoc_insertion_point(field_set_allocated:PBShape.Line.p1)
 }
 
-// required .PBShape.Pen pen = 3;
+// required .PBShape.Pen pen = 4;
 inline bool Line::_internal_has_pen() const {
-  bool value = (_has_bits_[0] & 0x00000004u) != 0;
+  bool value = (_has_bits_[0] & 0x00000008u) != 0;
   PROTOBUF_ASSUME(!value || pen_ != nullptr);
   return value;
 }
@@ -3310,7 +3387,7 @@ inline bool Line::has_pen() const {
 }
 inline void Line::clear_pen() {
   if (pen_ != nullptr) pen_->Clear();
-  _has_bits_[0] &= ~0x00000004u;
+  _has_bits_[0] &= ~0x00000008u;
 }
 inline const ::PBShape::Pen& Line::_internal_pen() const {
   const ::PBShape::Pen* p = pen_;
@@ -3323,13 +3400,13 @@ inline const ::PBShape::Pen& Line::pen() const {
 }
 inline ::PBShape::Pen* Line::release_pen() {
   // @@protoc_insertion_point(field_release:PBShape.Line.pen)
-  _has_bits_[0] &= ~0x00000004u;
+  _has_bits_[0] &= ~0x00000008u;
   ::PBShape::Pen* temp = pen_;
   pen_ = nullptr;
   return temp;
 }
 inline ::PBShape::Pen* Line::_internal_mutable_pen() {
-  _has_bits_[0] |= 0x00000004u;
+  _has_bits_[0] |= 0x00000008u;
   if (pen_ == nullptr) {
     auto* p = CreateMaybeMessage<::PBShape::Pen>(GetArenaNoVirtual());
     pen_ = p;
@@ -3351,17 +3428,17 @@ inline void Line::set_allocated_pen(::PBShape::Pen* pen) {
       pen = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, pen, submessage_arena);
     }
-    _has_bits_[0] |= 0x00000004u;
+    _has_bits_[0] |= 0x00000008u;
   } else {
-    _has_bits_[0] &= ~0x00000004u;
+    _has_bits_[0] &= ~0x00000008u;
   }
   pen_ = pen;
   // @@protoc_insertion_point(field_set_allocated:PBShape.Line.pen)
 }
 
-// optional float angle = 4 [default = 0];
+// optional float angle = 5 [default = 0];
 inline bool Line::_internal_has_angle() const {
-  bool value = (_has_bits_[0] & 0x00000008u) != 0;
+  bool value = (_has_bits_[0] & 0x00000010u) != 0;
   return value;
 }
 inline bool Line::has_angle() const {
@@ -3369,7 +3446,7 @@ inline bool Line::has_angle() const {
 }
 inline void Line::clear_angle() {
   angle_ = 0;
-  _has_bits_[0] &= ~0x00000008u;
+  _has_bits_[0] &= ~0x00000010u;
 }
 inline float Line::_internal_angle() const {
   return angle_;
@@ -3379,7 +3456,7 @@ inline float Line::angle() const {
   return _internal_angle();
 }
 inline void Line::_internal_set_angle(float value) {
-  _has_bits_[0] |= 0x00000008u;
+  _has_bits_[0] |= 0x00000010u;
   angle_ = value;
 }
 inline void Line::set_angle(float value) {

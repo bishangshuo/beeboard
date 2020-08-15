@@ -37,6 +37,10 @@ public:
     void SetPath(const QPainterPath &path);
     void AddEraserPath(const QPainterPath &path, int width);
     void SetPos(const QPointF &pos);
+
+    void Repaint() {
+        m_pItem->update();
+    }
 signals:
     void sigShouldRemovePencil(int key);
 public slots:
@@ -46,7 +50,7 @@ public slots:
 protected:
     int Create(const QPointF &leftTop, const QPointF &rightBottom, GraphicsScene *pScene) override;
     void UpdateRect(const QPointF &leftTop, const QPointF &rightBottom, GraphicsScene *pScene) override;
-    void CreateEnd(const QPointF &pos, GraphicsScene *pScene) override;
+    void CreateEnd(GraphicsScene *pScene) override;
     void SetSelected(bool selected) override;
     void SetEditable(bool editable) override;
     void Remove(GraphicsScene *pScene) override;
@@ -85,6 +89,7 @@ private:
     PencilItem *m_pItem;
     QPainterPath m_path;
     QPointF m_point;
+    bool m_bInfectedByEraser;
 };
 
 #endif // PENCIL_H

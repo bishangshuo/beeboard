@@ -131,7 +131,7 @@ private:
     void createMultiSelector(const QRectF &rc);
     void destroyMultiSelector();
     void resetMultiSelector();
-
+    void onSelectedItemsChanged();
     void OnSceneChanged();
 
 private:

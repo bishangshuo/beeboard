@@ -29,6 +29,9 @@ int Line::Create(const QPointF &leftTop, const QPointF &rightBottom, GraphicsSce
     m_pItem->SetRemoveCallback([=](int _key){
         emit sigRemove(_key);
     });
+    m_pItem->SetItemChangedCallback([=](int _key){
+        emit sigGeoChanged(reinterpret_cast<int>(m_pItem));
+    });
     return key;
 }
 
@@ -36,12 +39,14 @@ void Line::UpdateRect(const QPointF &leftTop, const QPointF &rightBottom, Graphi
     if(m_pItem == nullptr){
         return;
     }
-
     m_pItem->setLine(QLineF(leftTop, rightBottom));
 }
 
-void Line::CreateEnd(const QPointF &pos, GraphicsScene *pScene){
+void Line::SetPos(const QPointF &pos){
+    m_pItem->setPos(pos);
+}
 
+void Line::CreateEnd(GraphicsScene *pScene){
     m_pItem->update();
 }
 
@@ -92,11 +97,11 @@ QRect Line::GetRect(){
 }
 
 QPointF Line::GetP1(){
-    return QPointF();//m_pItem->line().p1();
+    return m_pItem->line().p1();
 }
 
 QPointF Line::GetP2(){
-    return QPointF();//m_pItem->line().p2();
+    return m_pItem->line().p2();
 }
 
 QPointF Line::GetPos(){

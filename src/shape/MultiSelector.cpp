@@ -47,7 +47,7 @@ void MultiSelector::UpdateRect(const QPointF &leftTop, const QPointF &rightBotto
     m_pItem->UpdateSize(width*2, height*2);
 }
 
-void MultiSelector::CreateEnd(const QPointF &pos, GraphicsScene *pScene){
+void MultiSelector::CreateEnd(GraphicsScene *pScene){
     m_pItem->Created();
 }
 

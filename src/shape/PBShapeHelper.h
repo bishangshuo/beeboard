@@ -15,7 +15,7 @@ public:
 
 signals:
 public:
-    static PBShape::Line        *CreateLine(const QPoint &p0, const QPoint &p1, const QPen &p);
+    static PBShape::Line        *CreateLine(int x, int y, const QPoint &p0, const QPoint &p1, const QPen &p);
     static PBShape::Rectangle   *CreateRectangle(int x, int y, int width, int height, const QPen &p, const QBrush &b);
     static PBShape::Ellipse     *CreateEllipse(int x, int y, int width, int height, const QPen &p, const QBrush &b);
     static PBShape::Triangle    *CreateTriangle(int x, int y, int width, int height, const QPen &p, const QBrush &b);

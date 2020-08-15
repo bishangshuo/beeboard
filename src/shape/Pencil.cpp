@@ -21,6 +21,7 @@ static QPixmap QPixmapFromItem(QGraphicsItem *item){
 Pencil::Pencil(QObject *parent)
     : ShapeBase(parent)
     , m_pItem(NULL)
+    , m_bInfectedByEraser(false)
 {
         m_type = TOOL_TYPE::PENCIL;
 }
@@ -57,7 +58,7 @@ int Pencil::Create(const QPointF &leftTop, const QPointF &rightBottom, GraphicsS
     m_pItem->setData(ITEM_DATA_KEY, key);
 
     m_pItem->SetRemoveCallback([=](int _key){
-        emit sigGeoChanged(reinterpret_cast<int>(m_pItem));
+        emit sigRemove(reinterpret_cast<int>(m_pItem));
     });
 
     m_pItem->SetItemChangedCallback([=](int _key){
@@ -105,10 +106,13 @@ void Pencil::SetPos(const QPointF &pos){
     m_pItem->setPos(pos);
 }
 
-void Pencil::CreateEnd(const QPointF &pos, GraphicsScene *pScene) {
+void Pencil::CreateEnd(GraphicsScene *pScene) {
     if(m_pItem == nullptr){
         return;
     }
+    //调用此句，已装载画笔轨迹到bitmap
+    m_pItem->PencilLoaded();
+    //结束绘制
     m_pItem->Created();
 }
 
@@ -293,7 +297,6 @@ void Pencil::slotEraserMove(const QPointF &_prevPos, const QPointF &_pos, Eraser
     //5 如果prevPos，pos横跨item区域，则取两个交点之间的直线作为path(新创建path)
     //这种情况下，有一个或多个交点,如果 只有一个交点，则不需要处理；当鼠标轨迹和边框重合时，path为多个点。
     else if(pos != prevPos && !rcLayer.contains(prevPos.toPoint()) && !rcLayer.contains(pos.toPoint())){
-        bingo = true;
         //取直线(prevPos,pos)与item的交点
         QLineF line(prevPos, pos);
         QList<QPointF> iPosList;//交点列表
@@ -305,6 +308,7 @@ void Pencil::slotEraserMove(const QPointF &_prevPos, const QPointF &_pos, Eraser
             }
         }
         if(iPosList.size() > 1){
+            bingo = true;
             QPainterPath *path  = new QPainterPath();
             path->moveTo(MapFromScene(pos));
             ERASER_PATH *path_data = new ERASER_PATH(path, eraser->Width());
@@ -330,17 +334,23 @@ void Pencil::slotEraserMove(const QPointF &_prevPos, const QPointF &_pos, Eraser
     }
 
     if(bingo){
+        m_bInfectedByEraser = true;
         m_pItem->update();
     }
 }
 
 void Pencil::slotEraserPressed(){
+    m_bInfectedByEraser = false;
     m_pItem->HideClose(true);
     m_pItem->setSelected(false);
 }
 
 void Pencil::slotEraserRelease(){
-    m_pItem->onEraserRelease();
+    if(m_bInfectedByEraser){
+        m_pItem->onEraserRelease();
+        emit sigGeoChanged(reinterpret_cast<int>(m_pItem));
+    }
+    m_bInfectedByEraser = false;
 }
 
 void Pencil::SetPen(QPen pen) {
