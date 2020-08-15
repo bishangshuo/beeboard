@@ -39,9 +39,10 @@ void Triangle::UpdateRect(const QPointF &leftTop, const QPointF &rightBottom, Gr
         return;
     }
 
+    m_pItem->setPos((leftTop+rightBottom)/2);
     int width = abs(rightBottom.x()-leftTop.x());
     int height = abs(rightBottom.y()-leftTop.y());
-    m_pItem->UpdateSize(width*2, height*2);
+    m_pItem->UpdateSize(width, height);
 }
 
 void Triangle::CreateEnd(const QPointF &pos, GraphicsScene *pScene){
