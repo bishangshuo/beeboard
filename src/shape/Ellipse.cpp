@@ -115,16 +115,8 @@ int Ellipse::GetItemHeight() const{
     return m_pItem->Height();
 }
 
-void Ellipse::ChangePos(qreal dx, qreal dy){
-    m_pItem->moveBy(dx, dy);
-}
-
 QGraphicsItem *Ellipse::GetGraphicsItem(){
     return m_pItem;
-}
-
-void Ellipse::ChangeSize(qreal dx, qreal dy){
-
 }
 
 void Ellipse::HideControls(bool hide){
@@ -147,4 +139,16 @@ QPen Ellipse::GetPen() const{
 
 QBrush Ellipse::GetBrush() const{
     return m_pItem->GetBrush();
+}
+
+void Ellipse::Undo(){
+    m_pItem->Undo();
+}
+
+void Ellipse::Redo(){
+    m_pItem->Redo();
+}
+
+void Ellipse::ClearRedo(){
+    m_pItem->ClearRedo();
 }

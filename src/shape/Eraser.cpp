@@ -58,15 +58,8 @@ QPointF Eraser::GetPos(){
     return QPointF();
 }
 
-void Eraser::ChangePos(qreal dx, qreal dy){
-}
-
 QGraphicsItem *Eraser::GetGraphicsItem(){
     return NULL;
-}
-
-void Eraser::ChangeSize(qreal dx, qreal dy){
-
 }
 
 void Eraser::HideControls(bool hide){
@@ -78,4 +71,16 @@ QPen Eraser::GetPen() const{
 
 QBrush Eraser::GetBrush() const{
     return QBrush();
+}
+
+void Eraser::Undo(){
+
+}
+
+void Eraser::Redo(){
+
+}
+
+void Eraser::ClearRedo(){
+
 }

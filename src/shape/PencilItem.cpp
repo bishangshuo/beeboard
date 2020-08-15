@@ -50,8 +50,12 @@ PencilItem::~PencilItem(){
 }
 
 void PencilItem::Created(){
-    m_isCreating = false;
-    mPath = path();
+    if(m_isCreating){
+        m_isCreating = false;
+        mPath = path();
+        QPointF pos = scenePos();
+        m_stUndo.push(new BASEITEM_GEO(pos.x(), pos.y(), 0, 0, 0));
+    }
 }
 
 QPainterPath PencilItem::shape() const{
@@ -212,6 +216,7 @@ void PencilItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void PencilItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    m_ptClicked = event->scenePos();
     static qreal z = 0.0;
     setZValue(z += 1.0);
     if (event->button() == Qt::LeftButton && isInCloseArea(event->pos())  && !m_hideClose)
@@ -227,8 +232,18 @@ void PencilItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 void PencilItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsItem::mouseReleaseEvent(event);
-    if(m_pCBItemChanged){
-        m_pCBItemChanged(reinterpret_cast<int>(this));
+
+    QPointF pos = scenePos();
+    BASEITEM_GEO *geo = new BASEITEM_GEO(pos.x(), pos.y(), 0, 0, 0);
+    BASEITEM_GEO *topGeo = m_stUndo.top();
+    if(!topGeo->compare(*geo)){
+        m_stUndo.push(new BASEITEM_GEO(pos.x(), pos.y(), 0, 0, 0));
+    }
+
+    if(m_ptClicked != event->scenePos()){
+        if(m_pCBItemChanged){
+            m_pCBItemChanged(reinterpret_cast<int>(this));
+        }
     }
 }
 
@@ -282,4 +297,29 @@ void PencilItem::onEraserRelease(){
             m_pCBRemove(reinterpret_cast<int>(this));
         }
     }
+}
+
+void PencilItem::Undo(){
+    if(m_stUndo.size() < 2){
+        return;
+    }
+    BASEITEM_GEO *geo_r = m_stUndo.pop();
+
+    BASEITEM_GEO *geo = m_stUndo.top();
+    QPointF pos = QPointF(geo->px, geo->py);
+    setPos(pos);
+    update();
+
+    m_stRedo.push(geo_r);
+}
+
+void PencilItem::Redo(){
+    if(m_stRedo.size() == 0){
+        return;
+    }
+    BASEITEM_GEO *geo = m_stRedo.pop();
+    QPointF pos = QPointF(geo->px, geo->py);
+    setPos(pos);
+    update();
+    m_stUndo.push(geo);
 }

@@ -37,7 +37,6 @@ ItemBase::ItemBase(int x, int y, int width, int height)
 
 ItemBase::~ItemBase()
 {
-
 }
 
 QRectF ItemBase::boundingRect() const
@@ -93,114 +92,6 @@ void ItemBase::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     painter->setRenderHint(QPainter::Antialiasing, false);
 }
 
-void ItemBase::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
-{
-    if (!isSelected() && scene())
-    {
-        scene()->clearSelection();
-        setSelected(true);
-    }
-
-    QMenu menu;
-    QAction *delAction = menu.addAction("Delete");
-    QAction *newAction = menu.addAction("New");
-    QAction *growAction = menu.addAction("Grow");
-    QAction *shrinkAction = menu.addAction("Shrink");
-
-    QAction *selectedAction = menu.exec(event->screenPos());
-
-    if (selectedAction == delAction)
-        deleteSelectedItems(scene());
-    else if (selectedAction == newAction)
-        duplicateSelectedItems(scene());
-    else if (selectedAction == growAction)
-        growSelectedItems(scene());
-    else if (selectedAction == shrinkAction)
-        shrinkSelectedItems(scene());
-}
-
-void ItemBase::duplicateSelectedItems(QGraphicsScene *scene)
-{
-    if (!scene)
-        return;
-
-    QList<QGraphicsItem *> selected;
-    selected = scene->selectedItems();
-
-    foreach (QGraphicsItem *item, selected)
-    {
-        ItemBase *itemBase = qgraphicsitem_cast<ItemBase *>(item);
-        if (itemBase)
-            scene->addItem(itemBase->createNew(static_cast<int>(itemBase->pos().x()) + itemBase->m_width,
-                                               static_cast<int>(itemBase->pos().y()),
-                                                itemBase->m_width, itemBase->m_height));
-    }
-}
-
-void ItemBase::deleteSelectedItems(QGraphicsScene *scene)
-{
-    if (!scene)
-        return;
-
-    QList<QGraphicsItem *> selected;
-    selected = scene->selectedItems();
-
-    foreach (QGraphicsItem *item, selected)
-    {
-        ItemBase *itemBase = qgraphicsitem_cast<ItemBase *>(item);
-        if (itemBase)
-            delete itemBase;
-    }
-}
-
-void ItemBase::growSelectedItems(QGraphicsScene *scene)
-{
-    if (!scene)
-        return;
-
-    QList<QGraphicsItem *> selected;
-    selected = scene->selectedItems();
-
-    foreach (QGraphicsItem *item, selected)
-    {
-        ItemBase *itemBase = qgraphicsitem_cast<ItemBase *>(item);
-        if (itemBase)
-        {
-            itemBase->prepareGeometryChange();
-            qreal r = itemBase->m_width / itemBase->m_height;
-            itemBase->m_width *= 2;
-            if (itemBase->m_width > MAX_ITEM_SIZE){
-                itemBase->m_width = MAX_ITEM_SIZE;
-                itemBase->m_height = itemBase->m_width / r;
-            }
-        }
-    }
-}
-
-void ItemBase::shrinkSelectedItems(QGraphicsScene *scene)
-{
-    if (!scene)
-        return;
-
-    QList<QGraphicsItem *> selected;
-    selected = scene->selectedItems();
-
-    foreach (QGraphicsItem *item, selected)
-    {
-        ItemBase *itemBase = qgraphicsitem_cast<ItemBase *>(item);
-        if (itemBase)
-        {
-            itemBase->prepareGeometryChange();
-            qreal r = itemBase->m_width / itemBase->m_height;
-            itemBase->m_width /= 2;
-            if (itemBase->m_width < MIN_ITEM_SIZE){
-                itemBase->m_width = MIN_ITEM_SIZE;
-            }
-            itemBase->m_height = itemBase->m_width / r;
-        }
-    }
-}
-
 void ItemBase::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 {
     if ((isInResizeArea(event->pos()) && isSelected()) && !m_hideResize){
@@ -215,6 +106,30 @@ void ItemBase::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
     QGraphicsItem::hoverMoveEvent(event);
 }
 
+void ItemBase::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    m_ptClicked = event->scenePos();
+    static qreal z = 0.0;
+    setZValue(z += 1.0);
+    if (event->button() == Qt::LeftButton && isInResizeArea(event->pos())  && !m_hideResize)
+    {
+        qDebug()<<"before resize, scenePos="<<scenePos();
+        m_isResizing = true;
+    }
+    else if (event->button() == Qt::LeftButton && isInRotateArea(event->pos())  && !m_hideRotate)
+    {
+        m_isRotating = true;
+    }
+    else if (event->button() == Qt::LeftButton && isInCloseArea(event->pos())  && !m_hideClose)
+    {
+        if(m_pCBRemove){
+            m_pCBRemove(reinterpret_cast<int>(this));
+        }
+    }else{
+        QGraphicsItem::mousePressEvent(event);
+    }
+}
+
 void ItemBase::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     if (m_isResizing && !m_hideResize)
@@ -227,16 +142,12 @@ void ItemBase::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         m_height = dy;
         if (m_width < MIN_ITEM_SIZE){
             m_width = MIN_ITEM_SIZE;
-        }else if (m_width > MAX_ITEM_SIZE){
-            m_width = MAX_ITEM_SIZE;
-        }
-        if (m_height < MIN_ITEM_SIZE){
-            m_height = MIN_ITEM_SIZE;
-        }else if (m_height > MAX_ITEM_SIZE){
-            m_height = MAX_ITEM_SIZE;
         }
 
-        qDebug()<<"resize, scenePos="<<scenePos();
+        if (m_height < MIN_ITEM_SIZE){
+            m_height = MIN_ITEM_SIZE;
+        }
+
     }
     else if (m_isRotating && !m_hideRotate)
     {
@@ -261,29 +172,6 @@ void ItemBase::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     }
 }
 
-void ItemBase::mousePressEvent(QGraphicsSceneMouseEvent *event)
-{
-    static qreal z = 0.0;
-    setZValue(z += 1.0);
-    if (event->button() == Qt::LeftButton && isInResizeArea(event->pos())  && !m_hideResize)
-    {
-        qDebug()<<"before resize, scenePos="<<scenePos();
-        m_isResizing = true;
-    }
-    else if (event->button() == Qt::LeftButton && isInRotateArea(event->pos())  && !m_hideRotate)
-    {
-        m_isRotating = true;
-    }
-    else if (event->button() == Qt::LeftButton && isInCloseArea(event->pos())  && !m_hideClose)
-    {
-        if(m_pCBRemove){
-            m_pCBRemove(reinterpret_cast<int>(this));
-        }
-    }else{
-        QGraphicsItem::mousePressEvent(event);
-    }
-}
-
 void ItemBase::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton && m_isResizing)
@@ -298,41 +186,16 @@ void ItemBase::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     {
         QGraphicsItem::mouseReleaseEvent(event);
     }
-    emit sigItemChanged();
-}
 
-void ItemBase::keyPressEvent(QKeyEvent *event)
-{
-    switch (event->key())
-    {
-    case Qt::Key_Delete:
-        deleteSelectedItems(scene());
-        break;
-    case Qt::Key_Insert:
-        duplicateSelectedItems(scene());
-        break;
-    case Qt::Key_Plus:
-        growSelectedItems(scene());
-        break;
-    case Qt::Key_Minus:
-        shrinkSelectedItems(scene());
-        break;
-    default:
-        QGraphicsItem::keyPressEvent(event);
-        break;
+    QPointF pos = scenePos();
+    BASEITEM_GEO *geo = new BASEITEM_GEO(pos.x(), pos.y(), m_width, m_height, rotation());
+    BASEITEM_GEO *topGeo = m_stUndo.top();
+    if(!topGeo->compare(*geo)){
+        m_stUndo.push(new BASEITEM_GEO(pos.x(), pos.y(), m_width, m_height, rotation()));
     }
-}
 
-void ItemBase::wheelEvent(QGraphicsSceneWheelEvent *event)
-{
-    prepareGeometryChange();
-//    qreal r = m_width / m_height;
-//    m_width = int(m_width * qExp(-event->delta() / 600.0));
-//    if (m_width > MAX_ITEM_SIZE)
-//        m_width = MAX_ITEM_SIZE;
-//    else if (m_width < MIN_ITEM_SIZE)
-//        m_width = MIN_ITEM_SIZE;
-//    m_height = m_width/r;
+    if(m_ptClicked != event->scenePos())
+        emit sigItemChanged();
 }
 
 int ItemBase::type() const
@@ -375,4 +238,50 @@ void ItemBase::Rotate(qreal angle){
         }
     }
     setRotation(angle);
+}
+
+void ItemBase::Created(){
+    if(m_isCreating){
+        QPointF pos = scenePos();
+        m_stUndo.push(new BASEITEM_GEO(pos.x(), pos.y(), m_width, m_height, rotation()));
+        m_isCreating = false;
+    }
+
+}
+
+void ItemBase::Undo(){
+    if(m_stUndo.size() < 2){
+        return;
+    }
+    BASEITEM_GEO *geo_r = m_stUndo.pop();
+
+    BASEITEM_GEO *geo = m_stUndo.top();
+    QPointF pos = QPointF(geo->px, geo->py);
+    qreal angle = geo->angle;
+    m_width = geo->width;
+    m_height = geo->height;
+    setPos(pos);
+    Rotate(angle);
+    update();
+
+    m_stRedo.push(geo_r);
+}
+
+void ItemBase::Redo(){
+    if(m_stRedo.size() == 0){
+        return;
+    }
+    BASEITEM_GEO *geo = m_stRedo.pop();
+    QPointF pos = QPointF(geo->px, geo->py);
+    qreal angle = geo->angle;
+    m_width = geo->width;
+    m_height = geo->height;
+    setPos(pos);
+    Rotate(angle);
+    update();
+    m_stUndo.push(geo);
+}
+
+void ItemBase::ClearRedo(){
+    m_stRedo.clear();
 }

@@ -47,6 +47,7 @@ void Line::SetPos(const QPointF &pos){
 }
 
 void Line::CreateEnd(GraphicsScene *pScene){
+    m_pItem->Created();
     m_pItem->update();
 }
 
@@ -108,19 +109,8 @@ QPointF Line::GetPos(){
     return m_pItem->scenePos();
 }
 
-void Line::ChangePos(qreal dx, qreal dy){
-    m_pItem->moveBy(dx, dy);
-}
-
 QGraphicsItem *Line::GetGraphicsItem(){
     return m_pItem;
-}
-
-void Line::ChangeSize(qreal dx, qreal dy){
-//    QPointF p1 = m_pItem->line().p1();
-//    QPointF p2 = m_pItem->line().p2();
-//    QPointF p3 = QPointF(p2.x()+dx, p2.y()+dy);
-//    m_pItem->setLine(p1.x(), p1.y(), p3.x(), p3.y());
 }
 
 void Line::HideControls(bool hide){
@@ -142,4 +132,16 @@ QPen Line::GetPen() const{
 
 QBrush Line::GetBrush() const{
     return m_pItem->GetBrush();
+}
+
+void Line::Undo(){
+    m_pItem->Undo();
+}
+
+void Line::Redo(){
+    m_pItem->Redo();
+}
+
+void Line::ClearRedo(){
+
 }

@@ -111,25 +111,8 @@ QPointF Select::GetPos(){
     return m_pItem->scenePos();
 }
 
-void Select::ChangePos(qreal dx, qreal dy){
-    m_pItem->moveBy(dx, dy);
-}
-
 QGraphicsItem *Select::GetGraphicsItem(){
     return m_pItem;
-}
-
-void Select::ChangeSize(qreal dx, qreal dy){
-//    QRectF oldRect = m_pItem->rect();
-//    QRectF newRect = QRectF(oldRect.x(), oldRect.y(), oldRect.width()+dx, oldRect.height()+dy);
-//    //qDebug()<<"Select::ChangeSize oldRect="<<oldRect<<", newRect="<<newRect;
-//    if(newRect.width() < 10){
-//        newRect.setWidth(10);
-//    }
-//    if(newRect.height() < 10){
-//        newRect.setHeight(10);
-//    }
-//    m_pItem->setRect(newRect);
 }
 
 void Select::HideControls(bool hide){
@@ -142,4 +125,16 @@ QPen Select::GetPen() const{
 
 QBrush Select::GetBrush() const{
     return m_pItem->GetBrush();
+}
+
+void Select::Undo(){
+
+}
+
+void Select::Redo(){
+
+}
+
+void Select::ClearRedo(){
+
 }

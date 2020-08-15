@@ -159,14 +159,9 @@ QPointF Pencil::GetP2() {
 QPointF Pencil::GetPos() {
     return m_pItem->scenePos();
 }
-void Pencil::ChangePos(qreal dx, qreal dy) {
 
-}
 QGraphicsItem *Pencil::GetGraphicsItem() {
     return m_pItem;
-}
-void Pencil::ChangeSize(qreal dx, qreal dy) {
-
 }
 
 void Pencil::HideControls(bool hide) {
@@ -403,4 +398,16 @@ void Pencil::SafeDelete(QList<ERASER_DATA> *listEraser){
         it = listEraser->erase(it);
     }
     delete listEraser;
+}
+
+void Pencil::Undo(){
+    m_pItem->Undo();
+}
+
+void Pencil::Redo(){
+    m_pItem->Redo();
+}
+
+void Pencil::ClearRedo(){
+
 }

@@ -67,6 +67,9 @@ public:
         RenderPathToPixmap();
     }
 
+    void Undo();
+    void Redo();
+
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 

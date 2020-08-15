@@ -73,9 +73,7 @@ protected:
     int GetItemHeight() const override{
         return 0;
     }
-    void ChangePos(qreal dx, qreal dy) override;
     QGraphicsItem *GetGraphicsItem() override;
-    void ChangeSize(qreal dx, qreal dy) override;
 
     void SetPen(QPen pen) override;
     void SetBrush(QBrush brush) override;
@@ -85,6 +83,10 @@ protected:
     QPixmap GetPixmap() const override;
 
     void HideControls(bool hide) override;
+
+    void Undo() override;
+    void Redo() override;
+    void ClearRedo() override;
 private:
     PencilItem *m_pItem;
     QPainterPath m_path;

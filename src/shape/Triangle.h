@@ -30,9 +30,7 @@ protected:
     qreal GetAngle() const override;
     int GetItemWidth() const override;
     int GetItemHeight() const override;
-    void ChangePos(qreal dx, qreal dy) override;
     QGraphicsItem *GetGraphicsItem() override;
-    void ChangeSize(qreal dx, qreal dy) override;
 
     void SetPen(QPen pen) override;
     void SetBrush(QBrush brush) override;
@@ -44,6 +42,10 @@ protected:
     }
 
     void HideControls(bool hide) override;
+
+    void Undo() override;
+    void Redo() override;
+    void ClearRedo() override;
 private:
     TriangleItem *m_pItem;
 };

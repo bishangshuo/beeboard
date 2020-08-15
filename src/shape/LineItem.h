@@ -12,6 +12,8 @@ public:
     LineItem(QGraphicsItem *parent = nullptr);
     ~LineItem();
 
+    void Created();
+
     void HideClose(bool hide){
         m_hideClose = hide;
     }
@@ -35,6 +37,9 @@ public:
     QBrush GetBrush() const {
         return m_brush;
     }
+
+    void Undo();
+    void Redo();
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
     QPainterPath shape() const override;
@@ -53,6 +58,7 @@ private:
 
     bool m_hideClose;
     bool m_hideResize;
+    bool m_isCreating;
 
     QPainterPath m_pathShape;
 

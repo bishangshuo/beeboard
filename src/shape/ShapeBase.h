@@ -36,41 +36,20 @@ public:
     virtual qreal GetAngle() const = 0;
     virtual int GetItemWidth() const = 0;
     virtual int GetItemHeight() const = 0;
-    virtual void ChangePos(qreal dx, qreal dy) = 0;
     virtual QGraphicsItem *GetGraphicsItem() = 0;
-    virtual void ChangeSize(qreal dx, qreal dy) = 0;
 
     virtual void SetPen(QPen pen) = 0;
     virtual void SetBrush(QBrush brush) = 0;
     virtual QPen GetPen() const = 0;
     virtual QBrush GetBrush() const = 0;
-
     virtual QPixmap GetPixmap() const = 0;
-
     virtual void HideControls(bool hide) = 0;
 
+    virtual void Undo() = 0;
+    virtual void Redo() = 0;
+    virtual void ClearRedo() = 0;
+
 public:
-    inline void swapPointIf(QPointF &p1, QPointF &p2){
-        QPointF leftTop, rightBottom;
-        if(p2.x() < p1.x()){
-            leftTop.setX(p2.x());
-            rightBottom.setX(p1.x());
-        }else{
-            leftTop.setX(p1.x());
-            rightBottom.setX(p2.x());
-        }
-
-        if(p2.y() < p1.y()){
-            leftTop.setY(p2.y());
-            rightBottom.setY(p1.y());
-        }else{
-            leftTop.setY(p1.y());
-            rightBottom.setY(p2.y());
-        }
-        p1 = leftTop;
-        p2 = rightBottom;
-    }
-
     inline qreal trimAngle(qreal angle){
         qreal ang = angle;
         if (ang > 360.0)

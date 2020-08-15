@@ -29,29 +29,21 @@ typedef QList<int> ListShapeKey;
 enum action_type{
     act_type_null = 1,
     act_type_create_item,
-    act_type_change_rect,
-    act_type_remove_item,
-    act_type_rotate_item,
-    act_type_erase
+    act_type_change_geo,
+    act_type_remove_item
 };
 
 typedef struct _ACTION_NODE{
     _ACTION_NODE(){}
     _ACTION_NODE(const _ACTION_NODE &node)
         : action(node.action)
-        , shape(node.shape)
-        , rect(node.rect)
-        , angle(node.angle){}
+        , shape(node.shape){}
 
     _ACTION_NODE(action_type _act, ShapeBase *_shape)
         : action(_act)
-        , shape(_shape)
-        , rect(_shape->GetRect())
-        , angle(_shape->GetAngle()){}
+        , shape(_shape){}
     action_type action;
     ShapeBase *shape;
-    QRectF rect;
-    qreal angle;
 }ACTION_NODE;
 
 class GraphicsScene : public QGraphicsScene
@@ -63,19 +55,11 @@ public:
     void setToolType(const TOOL_TYPE::Type &toolType);
     void setView(GraphicsView *view);
     void clearScene();
-    void onItemPosChanged(int key, qreal dx, qreal dy);
-    void onItemRemove(int key);
+    void destroyRedoShapes();
+    void onItemRemove(int key, bool destroy = false);
     void onItemGeoChanged(int key);
     void onItemsRemoveByRubberBand();
     void onMultiSelectedItemsRotate(qreal anchor_x, qreal anchor_y, qreal angle);
-
-    void onItemResizeBegin(int key);
-    void onItemResize(int key, qreal dx, qreal dy);
-    void onItemResizeEnd(int key);
-
-    void onItemRotateBegin(int key);
-    void onItemRotate(int key, qreal angle);
-    void onItemRotateEnd(int key);
 
     TOOL_TYPE::Type GetPoints(int key, QPoint &p1, QPoint &p2);
     QPoint GetDeltaPos(int key);
@@ -102,9 +86,6 @@ public:
 
 signals:
     void sigSceneClicked();
-    void sigItemSelected(int key, TOOL_TYPE::Type toolType, const QRect &rc, const QPointF &p1, const QPointF &p2);
-    void sigItemResizeCompleted(int key, TOOL_TYPE::Type toolType, const QRect &rc, const QPointF &p1, const QPointF &p2);
-    void sigItemPointsChanged(int key, TOOL_TYPE::Type toolType, const QRect &rc, const QPointF &p1, const QPointF &p2);
 
     void sigEraserPressed();
     void sigEraserMove(const QPointF &prePos, const QPointF &pos, Eraser *eraser);
@@ -125,7 +106,6 @@ private:
     void MakeFileName();
     void SetAllEditable(bool editable);
     bool onMouseSelectItem(const QPointF &pos);
-    void signalItemSelected(int key);
     void SelectItemsByRubberBand(const QRectF &rubberBandRect);
     void deleteSelectItem();
     void createMultiSelector(const QRectF &rc);
@@ -133,6 +113,7 @@ private:
     void resetMultiSelector();
     void onSelectedItemsChanged();
     void OnSceneChanged();
+    void doClearScene();
 
 private:
     TOOL_TYPE::Type m_eToolType;

@@ -8,6 +8,7 @@
 #include <QPen>
 #include <QBrush>
 #include "src/shape/ItemCtrl.h"
+#include <QStack>
 
 const qreal PI = 3.141592653;
 const qreal AnglePerPI = 180.0 / PI;
@@ -41,9 +42,7 @@ public:
         return m_isCreating;
     }
 
-    void Created(){
-        m_isCreating = false;
-    }
+    void Created();
 
     void HideRotate(bool hide){
         m_hideRotate = hide;
@@ -75,27 +74,23 @@ public:
 
     void Rotate(qreal angle);
 
+    void Undo();
+    void Redo();
+    void ClearRedo();
+
 signals:
     void sigItemChanged();
 
 protected:
     virtual ItemBase *createNew(int x, int y, int width, int height) = 0;
-    void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     void hoverMoveEvent(QGraphicsSceneHoverEvent *event) override;
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
-    void keyPressEvent(QKeyEvent *event) override;
-    void wheelEvent(QGraphicsSceneWheelEvent *event) override;
     int type() const override;
     bool isInResizeArea(const QPointF &pos) const;
     bool isInRotateArea(const QPointF &pos) const;
     bool isInCloseArea(const QPointF &pos) const;
-
-    static void duplicateSelectedItems(QGraphicsScene *scene);
-    static void deleteSelectedItems(QGraphicsScene *scene);
-    static void growSelectedItems(QGraphicsScene *scene);
-    static void shrinkSelectedItems(QGraphicsScene *scene);
 
     inline qreal GetDegreeAngle(QVector2D vector2d) const
     {

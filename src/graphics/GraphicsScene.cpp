@@ -19,9 +19,6 @@
 #include <QMessageBox>
 #include <QDataStream>
 
-const qreal PI = 3.1415926;
-const qreal ARC = PI/180;
-
 inline QPixmap GetCursorPixmap(const QString &fileName){
     QPixmap pixmap(fileName);
     return pixmap;
@@ -70,12 +67,12 @@ GraphicsScene::~GraphicsScene(){
     m_thSceneObj.quit();
     m_thSceneObj.wait();
 
-    m_stRedo.clear();
-    m_stUndo.clear();
-
-    clearScene();
+    doClearScene();
     deleteSelectItem();
     destroyMultiSelector();
+
+    m_stRedo.clear();
+    m_stUndo.clear();
 }
 
 void GraphicsScene::MakeFileName(){
@@ -191,14 +188,12 @@ void GraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
         m_mapShape[m_nCurKey] = new SHAPE_DATA(m_nCurKey, m_eToolType, shape, m_mapShape.size()+1);
         //shape->SetSelected(true);
         connect(shape, &ShapeBase::sigRemove, [=](int _key){
-            onItemRemove(_key);
+            onItemRemove(_key, true);
         });
         connect(shape, &ShapeBase::sigGeoChanged, [=](int _key){
             onItemGeoChanged(_key);
         });
-        //创建新元素，清空所有redo
-        m_stRedo.clear();
-        m_stUndo.push(ACTION_NODE(act_type_create_item, shape));
+
         OnSceneChanged();
     }
 }
@@ -288,6 +283,10 @@ void GraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         case TOOL_TYPE::LINE:{
             SaveItemToProtobuf(shape);
             SaveProtobufToFile();
+            //创建新元素，清空所有redo和undo
+            destroyRedoShapes();
+            m_stUndo.push(ACTION_NODE(act_type_create_item, shape));
+            OnSceneChanged();
             break;
         }
         case TOOL_TYPE::ERASER:{
@@ -323,10 +322,13 @@ void GraphicsScene::onSelectedItemsChanged(){
         if(itShape != m_mapShape.end()){
             b = true;
             ModifyItemInProtobuf(itShape.value()->shape);
+            m_stUndo.push(ACTION_NODE(act_type_change_geo, itShape.value()->shape));
+
         }
     }
     if(b){
         SaveProtobufToFile();
+        OnSceneChanged();
     }
 }
 
@@ -411,7 +413,7 @@ void GraphicsScene::resetMultiSelector(){
     m_listSelectedItems.clear();
 }
 
-void GraphicsScene::clearScene(){
+void GraphicsScene::doClearScene(){
     for(auto it = m_pScenePb->mutable_mapline()->begin(); it != m_pScenePb->mutable_mapline()->end(); ){
         it->second.Clear();
         it = m_pScenePb->mutable_mapline()->erase(it);
@@ -442,6 +444,7 @@ void GraphicsScene::clearScene(){
     }
     m_pScenePb->mutable_mapscribble()->clear();
 
+    destroyRedoShapes();
     MapShape::iterator it = m_mapShape.begin();
     while(it != m_mapShape.end()){
         SHAPE_DATA *data = it.value();
@@ -451,29 +454,45 @@ void GraphicsScene::clearScene(){
         delete data;
         it = m_mapShape.erase(it);
     }
+    m_stUndo.clear();
+    m_stRedo.clear();
     m_pView->update();
 }
 
-void GraphicsScene::onItemPosChanged(int key, qreal dx, qreal dy){
-    MapShape::iterator it = m_mapShape.find(key);
-    if(it != m_mapShape.end()){
-        SHAPE_DATA *data = it.value();
-        ShapeBase *shape = data->shape;
-        shape->ChangePos(dx, dy);
-    }
+void GraphicsScene::clearScene(){
+    doClearScene();
+    SaveProtobufToFile();
+    OnSceneChanged();
 }
 
-void GraphicsScene::onItemRemove(int key){
+void GraphicsScene::destroyRedoShapes(){
+    for(auto it = m_stRedo.begin(); it != m_stRedo.end(); ){
+        ShapeBase *shape = (*it).shape;
+        MapShape::iterator itShape = m_mapShape.find(shape->GetItemKey());
+        if(itShape != m_mapShape.end()){
+            SHAPE_DATA *data = itShape.value();
+            ShapeBase *shapeTemp = itShape.value()->shape;
+            shapeTemp->deleteLater();
+            delete data;
+            itShape = m_mapShape.erase(itShape);
+        }
+        it = m_stRedo.erase(it);
+    }
+
+    m_stRedo.clear();
+}
+
+void GraphicsScene::onItemRemove(int key, bool destroy){
     MapShape::iterator it = m_mapShape.find(key);
     if(it != m_mapShape.end()){
         SHAPE_DATA *data = it.value();
         ShapeBase *shape = data->shape;
-        removeItem(shape->GetGraphicsItem());
         RemoveItemFromProtobuf(shape);
         SaveProtobufToFile();
-        shape->deleteLater();
-        delete data;
-        it = m_mapShape.erase(it);
+        removeItem(shape->GetGraphicsItem());
+        if(destroy){
+            m_stUndo.push(ACTION_NODE(act_type_remove_item, shape));
+        }
     }
 }
 
@@ -484,13 +503,15 @@ void GraphicsScene::onItemGeoChanged(int key){
         SHAPE_DATA *data = it.value();
         ShapeBase *shape = data->shape;
         ModifyItemInProtobuf(shape);
+        m_stUndo.push(ACTION_NODE(act_type_change_geo, shape));
         SaveProtobufToFile();
+        OnSceneChanged();
     }
 }
 
 void GraphicsScene::onItemsRemoveByRubberBand(){
     for(ListShapeKey::iterator it = m_listSelectedItems.begin(); it != m_listSelectedItems.end(); ){
-        onItemRemove(*it);
+        onItemRemove(*it, true);
         it = m_listSelectedItems.erase(it);
     }
     m_listSelectedItems.clear();
@@ -517,108 +538,6 @@ void GraphicsScene::deleteSelectItem(){
         m_pSelect->Remove(this);
         m_pSelect->deleteLater();
         m_pSelect = NULL;
-    }
-}
-
-void GraphicsScene::onItemResizeBegin(int key){
-
-}
-
-void GraphicsScene::onItemResize(int key, qreal dx, qreal dy){
-    MapShape::iterator it = m_mapShape.find(key);
-    if(it == m_mapShape.end())
-        return;
-    SHAPE_DATA *data = it.value();
-    ShapeBase *shape = data->shape;
-    shape->ChangeSize(dx, dy);
-
-    QRectF rcSceneShape = shape->GetRect();
-    QPoint topLeftView = m_pView->mapFromScene(rcSceneShape.topLeft());
-    QPoint bottomRightView = m_pView->mapFromScene(rcSceneShape.bottomRight());
-    QRect rcViewShape = QRect(topLeftView, bottomRightView);
-    QPointF p1 = m_pView->mapFromScene(it.value()->shape->GetP1());
-    QPointF p2 = m_pView->mapFromScene(it.value()->shape->GetP2());
-    emit sigItemPointsChanged(key, data->toolType, rcViewShape, p1, p2);
-
-}
-
-void GraphicsScene::onItemResizeEnd(int key){
-    MapShape::iterator it = m_mapShape.find(key);
-    if(it == m_mapShape.end())
-        return;
-
-    SHAPE_DATA *data = it.value();
-    ShapeBase *shape = data->shape;
-    QRectF rcSceneShape = shape->GetRect();
-    QPoint topLeftView = m_pView->mapFromScene(rcSceneShape.topLeft());
-    QPoint bottomRightView = m_pView->mapFromScene(rcSceneShape.bottomRight());
-    QRect rcViewShape = QRect(topLeftView, bottomRightView);
-    QPointF p1 = m_pView->mapFromScene(it.value()->shape->GetP1());
-    QPointF p2 = m_pView->mapFromScene(it.value()->shape->GetP2());
-
-    emit sigItemResizeCompleted(key, data->toolType, rcViewShape, p1, p2);
-
-    signalItemSelected(key);
-
-    m_pView->update();
-}
-
-void GraphicsScene::onItemRotateBegin(int key){
-    MapShape::iterator it = m_mapShape.find(key);
-    if(it == m_mapShape.end())
-        return;
-
-    SHAPE_DATA *data = it.value();
-    ShapeBase *shape = data->shape;
-    shape->RotateBegin();
-}
-
-void GraphicsScene::onItemRotate(int key, qreal angle){
-    MapShape::iterator it = m_mapShape.find(key);
-    if(it == m_mapShape.end())
-        return;
-
-    SHAPE_DATA *data = it.value();
-    ShapeBase *shape = data->shape;
-    shape->Rotate(0, 0, angle);
-}
-
-void GraphicsScene::onItemRotateEnd(int key){
-    MapShape::iterator it = m_mapShape.find(key);
-    if(it == m_mapShape.end())
-        return;
-
-    SHAPE_DATA *data = it.value();
-    ShapeBase *shape = data->shape;
-    shape->RotateEnd();
-
-    signalItemSelected(key);
-
-    m_pView->update();
-}
-
-void GraphicsScene::signalItemSelected(int key){
-    MapShape::iterator it = m_mapShape.find(key);
-    if(it != m_mapShape.end()){
-        it.value()->shape->SetSelected(true);
-        QRect rcSceneShape = it.value()->shape->GetRect();
-        QPoint topLeftView = m_pView->mapFromScene(rcSceneShape.topLeft());
-        QPoint bottomRightView = m_pView->mapFromScene(rcSceneShape.bottomRight());
-        QRect rcViewShape = QRect(topLeftView, bottomRightView);
-        QPointF lineP1 = it.value()->shape->GetP1();
-        QPointF lineP2 = it.value()->shape->GetP2();
-        QPointF p1 = m_pView->mapFromScene(lineP1);
-        QPointF p2 = m_pView->mapFromScene(lineP2);
-
-        qDebug()<<"GraphicsScene::signalItemSelected lineP1="<<lineP1<<", lineP2="<<lineP2<<"; p1="<<p1<<", p2"<<p2;
-//        QPointF p0 = (p1+p2)/2;
-//        qreal angle = it.value()->shape->GetAngle();
-//        QPointF p1_a = QPointF((p1.x()-p0.x())*cos(angle*ARC)-(p1.y()-p0.y())*sin(angle*ARC) + p0.x(),
-//                               (p1.x()-p0.x())*sin(angle*ARC)+(p1.y()-p0.y())*cos(angle*ARC) + p0.y());
-//        QPointF p2_a = QPointF((p2.x()-p0.x())*cos(angle*ARC)-(p2.y()-p0.y())*sin(angle*ARC) + p0.x(),
-//                               (p2.x()-p0.x())*sin(angle*ARC)+(p2.y()-p0.y())*cos(angle*ARC) + p0.y());
-
-        emit sigItemSelected(key, it.value()->toolType, rcViewShape, p1, p2);
     }
 }
 
@@ -700,7 +619,15 @@ void GraphicsScene::OnSceneChanged(){
 void GraphicsScene::Undo(){
     ACTION_NODE node = m_stUndo.pop();
     if(node.action == act_type_create_item){
-        onItemRemove(node.shape->GetItemKey());
+        onItemRemove(node.shape->GetItemKey(), false);
+    }else if(node.action == act_type_change_geo){
+        node.shape->Undo();
+        ModifyItemInProtobuf(node.shape);
+        SaveProtobufToFile();
+    }else if(node.action == act_type_remove_item){
+        addItem(node.shape->GetGraphicsItem());
+        ModifyItemInProtobuf(node.shape);
+        SaveProtobufToFile();
     }
     m_stRedo.push(node);
     OnSceneChanged();
@@ -709,7 +636,15 @@ void GraphicsScene::Undo(){
 void GraphicsScene::Redo(){
     ACTION_NODE node = m_stRedo.pop();
     if(node.action == act_type_create_item){
-
+        addItem(node.shape->GetGraphicsItem());
+        ModifyItemInProtobuf(node.shape);
+        SaveProtobufToFile();
+    }else if(node.action == act_type_change_geo){
+        node.shape->Redo();
+        ModifyItemInProtobuf(node.shape);
+        SaveProtobufToFile();
+    }else if(node.action == act_type_remove_item){
+        onItemRemove(node.shape->GetItemKey(), false);
     }
     m_stUndo.push(node);
     OnSceneChanged();
@@ -981,7 +916,7 @@ void GraphicsScene::LoadLineObject(const PBShape::Line &line){
 
     m_mapShape[m_nCurKey] = new SHAPE_DATA(m_nCurKey, m_eToolType, shape, m_mapShape.size()+1);
     connect(shape, &ShapeBase::sigRemove, [=](int _key){
-        onItemRemove(_key);
+        onItemRemove(_key, true);
     });
     connect(shape, &ShapeBase::sigGeoChanged, [=](int _key){
         onItemGeoChanged(_key);
@@ -1019,7 +954,7 @@ void GraphicsScene::LoadRectangleObject(const PBShape::Rectangle &rectangle){
 
     m_mapShape[m_nCurKey] = new SHAPE_DATA(m_nCurKey, m_eToolType, shape, m_mapShape.size()+1);
     connect(shape, &ShapeBase::sigRemove, [=](int _key){
-        onItemRemove(_key);
+        onItemRemove(_key, true);
     });
     connect(shape, &ShapeBase::sigGeoChanged, [=](int _key){
         onItemGeoChanged(_key);
@@ -1063,7 +998,7 @@ void GraphicsScene::LoadEllipseObject(const PBShape::Ellipse &ellipse){
 
     m_mapShape[m_nCurKey] = new SHAPE_DATA(m_nCurKey, m_eToolType, shape, m_mapShape.size()+1);
     connect(shape, &ShapeBase::sigRemove, [=](int _key){
-        onItemRemove(_key);
+        onItemRemove(_key, true);
     });
     connect(shape, &ShapeBase::sigGeoChanged, [=](int _key){
         onItemGeoChanged(_key);
@@ -1109,7 +1044,7 @@ void GraphicsScene::LoadTriangleObject(const PBShape::Triangle &triangle){
 
     m_mapShape[m_nCurKey] = new SHAPE_DATA(m_nCurKey, m_eToolType, shape, m_mapShape.size()+1);
     connect(shape, &ShapeBase::sigRemove, [=](int _key){
-        onItemRemove(_key);
+        onItemRemove(_key, true);
     });
     connect(shape, &ShapeBase::sigGeoChanged, [=](int _key){
         onItemGeoChanged(_key);
@@ -1166,7 +1101,7 @@ void GraphicsScene::LoadScribbleObject(const PBShape::Scribble &scribble){
 
     m_mapShape[m_nCurKey] = new SHAPE_DATA(m_nCurKey, m_eToolType, shape, m_mapShape.size()+1);
     connect(shape, &ShapeBase::sigRemove, [=](int _key){
-        onItemRemove(_key);
+        onItemRemove(_key, true);
     });
 
     connect(shape, &ShapeBase::sigGeoChanged, [=](int _key){

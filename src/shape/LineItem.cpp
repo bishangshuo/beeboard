@@ -54,6 +54,7 @@ LineItem::LineItem(QGraphicsItem *parent)
     , m_isResizing(false)
     , m_hideClose(false)
     , m_hideResize(false)
+    , m_isCreating(true)
 {
     setFlag(QGraphicsItem::ItemIsMovable, true);
     setFlag(QGraphicsItem::ItemIsSelectable, true);
@@ -120,6 +121,16 @@ void LineItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
            QPointF ptMove = rzPos(p1, p2);
            painter->drawPixmap(ptMove.x()-RZICON_LEN/2, ptMove.y()-RZICON_LEN/2, QPixmap(px_r));
        }
+    }
+}
+
+void LineItem::Created(){
+    if(m_isCreating){
+        m_isCreating = false;
+        QPointF pos = scenePos();
+        BASEITEM_GEO *geo = new BASEITEM_GEO(pos.x(), pos.y(), 0, 0, 0);
+        geo->line = line();
+        m_stUndo.push(geo);
     }
 }
 
@@ -231,7 +242,7 @@ QPainterPath LineItem::shape() const{
 }
 
 void LineItem::mousePressEvent(QGraphicsSceneMouseEvent *event){
-
+    m_ptClicked = event->scenePos();
     m_pressed = true;
     static qreal z = 0.0;
     setZValue(z += 1.0);
@@ -255,11 +266,11 @@ void LineItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
         QPointF deltaPt = event->pos()-m_beginSizePoint;
         QPointF p1 = line().p1();
         QPointF p2 = line().p2();
-        qDebug() << "LineItem::mouseMoveEvent before p1=" <<p1<<", p2="<<p2;
-        qDebug() << "LineItem::mouseMoveEvent deltaPt=" <<deltaPt;
+        //qDebug() << "LineItem::mouseMoveEvent before p1=" <<p1<<", p2="<<p2;
+        //qDebug() << "LineItem::mouseMoveEvent deltaPt=" <<deltaPt;
         p2 = p2+deltaPt;
         setLine(QLineF(p1, p2));
-        qDebug() << "LineItem::mouseMoveEvent after p1=" <<p1<<", p2="<<p2;
+        //qDebug() << "LineItem::mouseMoveEvent after p1=" <<p1<<", p2="<<p2;
         m_beginSizePoint = event->pos();
     }else{
         QGraphicsItem::mouseMoveEvent(event);
@@ -271,8 +282,20 @@ void LineItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
     m_pressed = false;
     m_isResizing = false;
 
-    if(m_pCBItemChanged){
-        m_pCBItemChanged(reinterpret_cast<int>(this));
+    QLineF ln = line();
+    QPointF pos = scenePos();
+    BASEITEM_GEO *geo = new BASEITEM_GEO(pos.x(), pos.y(), 0, 0, 0);
+    BASEITEM_GEO *topGeo = m_stUndo.top();
+    if(!topGeo->compare(*geo) || ln != topGeo->line){
+        BASEITEM_GEO *geo = new BASEITEM_GEO(pos.x(), pos.y(), 0, 0, 0);
+        geo->line = line();
+        m_stUndo.push(geo);
+    }
+
+    if(m_ptClicked != event->scenePos()){
+        if(m_pCBItemChanged){
+            m_pCBItemChanged(reinterpret_cast<int>(this));
+        }
     }
 
     setFlag(QGraphicsItem::ItemIsMovable, true);
@@ -313,4 +336,33 @@ bool LineItem::isInCloseArea(const QPointF &pos) const
         //qDebug() << "isInCloseArea";
     }
     return b;
+}
+
+void LineItem::Undo(){
+    if(m_stUndo.size() < 2){
+        return;
+    }
+    BASEITEM_GEO *geo_r = m_stUndo.pop();
+
+    BASEITEM_GEO *geo = m_stUndo.top();
+    QPointF pos = QPointF(geo->px, geo->py);
+    setPos(pos);
+    QLineF ln = geo->line;
+    setLine(ln);
+    update();
+
+    m_stRedo.push(geo_r);
+}
+
+void LineItem::Redo(){
+    if(m_stRedo.size() == 0){
+        return;
+    }
+    BASEITEM_GEO *geo = m_stRedo.pop();
+    QPointF pos = QPointF(geo->px, geo->py);
+    setPos(pos);
+    QLineF ln = geo->line;
+    setLine(ln);
+    update();
+    m_stUndo.push(geo);
 }

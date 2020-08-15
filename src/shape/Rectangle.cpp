@@ -117,25 +117,8 @@ int Rectangle::GetItemHeight() const{
     return m_pItem->Height();
 }
 
-void Rectangle::ChangePos(qreal dx, qreal dy){
-    m_pItem->moveBy(dx, dy);
-}
-
 QGraphicsItem *Rectangle::GetGraphicsItem(){
     return m_pItem;
-}
-
-void Rectangle::ChangeSize(qreal dx, qreal dy){
-//    QRectF oldRect = m_pItem->rect();
-//    QRectF newRect = QRectF(oldRect.x(), oldRect.y(), oldRect.width()+dx, oldRect.height()+dy);
-//    //qDebug()<<"Rectangle::ChangeSize oldRect="<<oldRect<<", newRect="<<newRect;
-//    if(newRect.width() < 10){
-//        newRect.setWidth(10);
-//    }
-//    if(newRect.height() < 10){
-//        newRect.setHeight(10);
-//    }
-//    m_pItem->setRect(newRect);
 }
 
 void Rectangle::HideControls(bool hide){
@@ -158,4 +141,16 @@ QPen Rectangle::GetPen() const{
 
 QBrush Rectangle::GetBrush() const{
     return m_pItem->GetBrush();
+}
+
+void Rectangle::Undo(){
+    m_pItem->Undo();
+}
+
+void Rectangle::Redo(){
+    m_pItem->Redo();
+}
+
+void Rectangle::ClearRedo(){
+    m_pItem->ClearRedo();
 }

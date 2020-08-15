@@ -116,15 +116,8 @@ int Triangle::GetItemHeight() const{
     return m_pItem->Height();
 }
 
-void Triangle::ChangePos(qreal dx, qreal dy){
-    m_pItem->moveBy(dx, dy);
-}
-
 QGraphicsItem *Triangle::GetGraphicsItem(){
     return m_pItem;
-}
-
-void Triangle::ChangeSize(qreal dx, qreal dy){
 }
 
 void Triangle::HideControls(bool hide){
@@ -147,4 +140,16 @@ QPen Triangle::GetPen() const{
 
 QBrush Triangle::GetBrush() const{
     return m_pItem->GetBrush();
+}
+
+void Triangle::Undo(){
+    m_pItem->Undo();
+}
+
+void Triangle::Redo(){
+    m_pItem->Redo();
+}
+
+void Triangle::ClearRedo(){
+    m_pItem->ClearRedo();
 }

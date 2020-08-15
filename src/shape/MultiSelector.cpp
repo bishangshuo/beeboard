@@ -110,25 +110,8 @@ QPointF MultiSelector::GetPos(){
     return m_pItem->scenePos();
 }
 
-void MultiSelector::ChangePos(qreal dx, qreal dy){
-    m_pItem->moveBy(dx, dy);
-}
-
 QGraphicsItem *MultiSelector::GetGraphicsItem(){
     return m_pItem;
-}
-
-void MultiSelector::ChangeSize(qreal dx, qreal dy){
-//    QRectF oldRect = m_pItem->rect();
-//    QRectF newRect = QRectF(oldRect.x(), oldRect.y(), oldRect.width()+dx, oldRect.height()+dy);
-//    //qDebug()<<"MultiSelector::ChangeSize oldRect="<<oldRect<<", newRect="<<newRect;
-//    if(newRect.width() < 10){
-//        newRect.setWidth(10);
-//    }
-//    if(newRect.height() < 10){
-//        newRect.setHeight(10);
-//    }
-//    m_pItem->setRect(newRect);
 }
 
 void MultiSelector::HideControls(bool hide){
@@ -143,4 +126,16 @@ QPen MultiSelector::GetPen() const{
 
 QBrush MultiSelector::GetBrush() const{
     return m_pItem->GetBrush();
+}
+
+void MultiSelector::Undo(){
+
+}
+
+void MultiSelector::Redo(){
+
+}
+
+void MultiSelector::ClearRedo(){
+
 }
