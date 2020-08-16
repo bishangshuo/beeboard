@@ -251,9 +251,9 @@ void PencilItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsItem::mouseReleaseEvent(event);
 
-    if(1/*is eraser released*/){
+//    if(1/*is eraser released*/){
 
-    }else{
+//    }else{
         QPointF pos = scenePos();
         BASEITEM_GEO *geo = new BASEITEM_GEO(pos.x(), pos.y(), 0, 0, 0);
         BASEITEM_GEO *topGeo = m_stUndo.top();
@@ -266,7 +266,7 @@ void PencilItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
                 m_pCBItemChanged(reinterpret_cast<int>(this));
             }
         }
-    }
+//    }
 }
 
 bool PencilItem::isInCloseArea(const QPointF &pos) const
