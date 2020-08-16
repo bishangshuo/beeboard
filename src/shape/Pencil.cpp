@@ -65,6 +65,10 @@ int Pencil::Create(const QPointF &leftTop, const QPointF &rightBottom, GraphicsS
         emit sigGeoChanged(reinterpret_cast<int>(m_pItem));
     });
 
+    m_pItem->SetItemEraserChanged([=](int _key){
+        emit sigEraserAttach(reinterpret_cast<int>(m_pItem));
+    });
+
     m_path.moveTo(leftTop);
     m_path.lineTo(leftTop+QPointF(1,1));
     m_point = leftTop;
@@ -344,7 +348,7 @@ void Pencil::slotEraserRelease(){
     if(m_bInfectedByEraser){
         m_pItem->onEraserRelease();
         //emit sigGeoChanged(reinterpret_cast<int>(m_pItem));
-        emit sigEraseAttach(reinterpret_cast<int>(m_pItem));
+        emit sigEraserAttach(reinterpret_cast<int>(m_pItem));
     }
     m_bInfectedByEraser = false;
 }

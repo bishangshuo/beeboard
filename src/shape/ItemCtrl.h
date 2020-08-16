@@ -27,6 +27,7 @@ typedef QStack<BASEITEM_GEO *> StGeo;
 typedef std::function<void(int)> CBRemove;
 typedef std::function<void(qreal, qreal, qreal)> CBRotate;
 typedef std::function<void(int)> CBItemChanged;
+typedef std::function<void(int)> CBEraserChanged;
 class ItemCtrl
 {
 public:
@@ -45,9 +46,15 @@ public:
         m_pCBItemChanged = callback;
     }
 
+    void SetItemEraserChanged(const CBEraserChanged &callback){
+        m_pCBEraserChanged = callback;
+    }
+
+
     CBRemove m_pCBRemove;
     CBRotate m_pCBRotate;
     CBItemChanged m_pCBItemChanged;
+    CBEraserChanged m_pCBEraserChanged;
 
     StGeo m_stUndo;
     StGeo m_stRedo;

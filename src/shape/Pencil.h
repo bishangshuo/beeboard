@@ -43,7 +43,7 @@ public:
     }
 signals:
     void sigShouldRemovePencil(int key);
-    void sigEraseAttach(int key);
+    void sigEraserAttach(int key);
 public slots:
     void slotEraserPressed();
     void slotEraserMove(const QPointF &prevPos, const QPointF &pos, Eraser *eraser);

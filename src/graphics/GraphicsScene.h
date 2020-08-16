@@ -16,11 +16,12 @@ class GraphicsView;
 
 typedef struct _SHAPE_DATA{
     _SHAPE_DATA(int _key, TOOL_TYPE::Type _toolType, ShapeBase *_shape, int _index)
-        : key(_key), toolType(_toolType), shape(_shape), index(_index){}
+        : key(_key), toolType(_toolType), shape(_shape), index(_index), isActivated(true){}
     int key;
     TOOL_TYPE::Type toolType;
     ShapeBase *shape;
     int index;
+    bool isActivated;
 }SHAPE_DATA;
 
 typedef QMap<int, SHAPE_DATA *> MapShape;

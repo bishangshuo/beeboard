@@ -342,7 +342,7 @@ void GraphicsScene::SelectItemsByRubberBand(const QRectF &rubberBandRect){
 
     for(MapShape::iterator it = m_mapShape.begin(); it != m_mapShape.end(); it++){
         QRectF rcShape = it.value()->shape->GetRect();
-        if(rcShape.intersects(rubberBandRect)){
+        if(rcShape.intersects(rubberBandRect) && it.value()->isActivated){
             it.value()->shape->SetSelected(true);
             it.value()->shape->HideControls(true);
             m_listSelectedItems.push_back(it.value()->key);
@@ -492,7 +492,8 @@ void GraphicsScene::onItemRemove(int key, bool destroy){
         ShapeBase *shape = data->shape;
         RemoveItemFromProtobuf(shape);
         SaveProtobufToFile();
-        removeItem(shape->GetGraphicsItem());
+        //removeItem(shape->GetGraphicsItem());
+        shape->Remove(this);
         if(destroy){
             m_stUndo.push(ACTION_NODE(act_type_remove_item, shape));
         }
@@ -640,6 +641,10 @@ void GraphicsScene::Undo(){
     }else if(node.action == act_type_erase){
         UndoEraser(dynamic_cast<Eraser *>(node.shape));
     }
+    MapShape::iterator it = m_mapShape.find(node.shape->GetItemKey());
+    if(it != m_mapShape.end()){
+        it.value()->isActivated = false;
+    }
     m_stRedo.push(node);
     OnSceneChanged();
 }
@@ -658,6 +663,10 @@ void GraphicsScene::Redo(){
         onItemRemove(node.shape->GetItemKey(), false);
     }else if(node.action == act_type_erase){
         RedoEraser(dynamic_cast<Eraser *>(node.shape));
+    }
+    MapShape::iterator it = m_mapShape.find(node.shape->GetItemKey());
+    if(it != m_mapShape.end()){
+        it.value()->isActivated = true;
     }
     m_stUndo.push(node);
     OnSceneChanged();
@@ -946,6 +955,7 @@ void GraphicsScene::LoadLineObject(const PBShape::Line &line){
     connect(shape, &ShapeBase::sigGeoChanged, [=](int _key){
         onItemGeoChanged(_key);
     });
+
     (*m_pScenePb->mutable_mapline())[m_nCurKey] = line;
 
     shape->UpdateRect(beginPoint, endPoint, this);
@@ -1139,6 +1149,9 @@ void GraphicsScene::LoadScribbleObject(const PBShape::Scribble &scribble){
             pencil, SLOT(slotEraserPressed()));
     connect(this, SIGNAL(sigEraserRelease()),
             pencil, SLOT(slotEraserRelease()));
+    connect(pencil, SIGNAL(sigEraserAttach(int)),
+            this, SLOT(slotEraserAttachToPencil(int)));
+
     (*m_pScenePb->mutable_mapscribble())[m_nCurKey] = scribble;
 
     shape->CreateEnd(this);

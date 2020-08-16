@@ -251,22 +251,18 @@ void PencilItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsItem::mouseReleaseEvent(event);
 
-//    if(1/*is eraser released*/){
+    QPointF pos = scenePos();
+    BASEITEM_GEO *geo = new BASEITEM_GEO(pos.x(), pos.y(), 0, 0, 0);
+    BASEITEM_GEO *topGeo = m_stUndo.top();
+    if(!topGeo->compare(*geo)){
+        m_stUndo.push(new BASEITEM_GEO(pos.x(), pos.y(), 0, 0, 0));
+    }
 
-//    }else{
-        QPointF pos = scenePos();
-        BASEITEM_GEO *geo = new BASEITEM_GEO(pos.x(), pos.y(), 0, 0, 0);
-        BASEITEM_GEO *topGeo = m_stUndo.top();
-        if(!topGeo->compare(*geo)){
-            m_stUndo.push(new BASEITEM_GEO(pos.x(), pos.y(), 0, 0, 0));
+    if(m_ptClicked != event->scenePos()){
+        if(m_pCBItemChanged){
+            m_pCBItemChanged(reinterpret_cast<int>(this));
         }
-
-        if(m_ptClicked != event->scenePos()){
-            if(m_pCBItemChanged){
-                m_pCBItemChanged(reinterpret_cast<int>(this));
-            }
-        }
-//    }
+    }
 }
 
 bool PencilItem::isInCloseArea(const QPointF &pos) const
@@ -318,6 +314,10 @@ void PencilItem::onEraserRelease(){
         if(m_pCBRemove){
             m_pCBRemove(reinterpret_cast<int>(this));
         }
+    }
+
+    if(m_pCBEraserChanged){
+        m_pCBEraserChanged(reinterpret_cast<int>(this));
     }
 }
 
