@@ -142,6 +142,11 @@ void Line::Redo(){
     m_pItem->Redo();
 }
 
-void Line::ClearRedo(){
+void Line::UndoEraser(int eraser) {
 
 }
+
+void Line::RedoEraser(int eraser) {
+
+}
+

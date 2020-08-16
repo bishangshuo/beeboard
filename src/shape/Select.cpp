@@ -135,6 +135,10 @@ void Select::Redo(){
 
 }
 
-void Select::ClearRedo(){
+void Select::UndoEraser(int eraser) {
+
+}
+
+void Select::RedoEraser(int eraser) {
 
 }

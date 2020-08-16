@@ -51,7 +51,8 @@ protected:
 
     void Undo() override;
     void Redo() override;
-    void ClearRedo() override;
+    void UndoEraser(int eraser) override;
+    void RedoEraser(int eraser) override;
 private:
     MultiSelectorItem *m_pItem;
 };

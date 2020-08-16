@@ -150,6 +150,10 @@ void Triangle::Redo(){
     m_pItem->Redo();
 }
 
-void Triangle::ClearRedo(){
-    m_pItem->ClearRedo();
+void Triangle::UndoEraser(int eraser) {
+
+}
+
+void Triangle::RedoEraser(int eraser) {
+
 }

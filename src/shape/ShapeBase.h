@@ -47,7 +47,9 @@ public:
 
     virtual void Undo() = 0;
     virtual void Redo() = 0;
-    virtual void ClearRedo() = 0;
+
+    virtual void UndoEraser(int eraser) = 0;
+    virtual void RedoEraser(int eraser) = 0;
 
 public:
     inline qreal trimAngle(qreal angle){

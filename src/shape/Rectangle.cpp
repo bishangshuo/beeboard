@@ -151,6 +151,10 @@ void Rectangle::Redo(){
     m_pItem->Redo();
 }
 
-void Rectangle::ClearRedo(){
-    m_pItem->ClearRedo();
+void Rectangle::UndoEraser(int eraser) {
+
+}
+
+void Rectangle::RedoEraser(int eraser) {
+
 }

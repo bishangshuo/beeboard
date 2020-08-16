@@ -70,6 +70,9 @@ public:
     void Undo();
     void Redo();
 
+    void UndoEraser(int eraser);
+    void RedoEraser(int eraser);
+
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
@@ -94,6 +97,7 @@ private:
     bool m_hideClose;
 
     QPixmap m_pixmap;
+    QPixmap m_pmPath;
 
     QPen m_pen;
     QBrush m_brush;

@@ -343,7 +343,8 @@ void Pencil::slotEraserPressed(){
 void Pencil::slotEraserRelease(){
     if(m_bInfectedByEraser){
         m_pItem->onEraserRelease();
-        emit sigGeoChanged(reinterpret_cast<int>(m_pItem));
+        //emit sigGeoChanged(reinterpret_cast<int>(m_pItem));
+        emit sigEraseAttach(reinterpret_cast<int>(m_pItem));
     }
     m_bInfectedByEraser = false;
 }
@@ -408,6 +409,10 @@ void Pencil::Redo(){
     m_pItem->Redo();
 }
 
-void Pencil::ClearRedo(){
+void Pencil::UndoEraser(int eraser) {
+    m_pItem->UndoEraser(eraser);
+}
 
+void Pencil::RedoEraser(int eraser) {
+    m_pItem->RedoEraser(eraser);
 }

@@ -30,7 +30,8 @@ enum action_type{
     act_type_null = 1,
     act_type_create_item,
     act_type_change_geo,
-    act_type_remove_item
+    act_type_remove_item,
+    act_type_erase
 };
 
 typedef struct _ACTION_NODE{
@@ -70,6 +71,9 @@ public:
     void Undo();
     void Redo();
 
+    void UndoEraser(Eraser *eraser);
+    void RedoEraser(Eraser *eraser);
+
     //protobuf操作
     void SaveItemToProtobuf(ShapeBase *shape);
     void ModifyItemInProtobuf(ShapeBase *shape);
@@ -97,6 +101,7 @@ signals:
     void sigWriteSceneObject(const char *data, int size, const QString &fileName);
 public slots:
     void slotWriteSceneObjectCompleted(bool res, const char *data, const QString &fileName);
+    void slotEraserAttachToPencil(int key);
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;

@@ -136,6 +136,10 @@ void MultiSelector::Redo(){
 
 }
 
-void MultiSelector::ClearRedo(){
+void MultiSelector::UndoEraser(int eraser) {
+
+}
+
+void MultiSelector::RedoEraser(int eraser) {
 
 }

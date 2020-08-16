@@ -39,12 +39,28 @@ PencilItem::~PencilItem(){
             VectorPath *vectorPath = it.value();
             for(VectorPath::Iterator itV = vectorPath->begin(); itV != vectorPath->end(); ){
                 ERASER_PATH *data = *itV;
+                data->path->clear();
                 delete data;
                 itV = vectorPath->erase(itV);
             }
             vectorPath->clear();
             delete vectorPath;
             it = m_mapEraserPathUndo.erase(it);
+        }
+    }
+
+    if(m_mapEraserPathRedo.size() > 0){
+        for(MapEraserPath::iterator it = m_mapEraserPathRedo.begin(); it != m_mapEraserPathRedo.end(); ){
+            VectorPath *vectorPath = it.value();
+            for(VectorPath::Iterator itV = vectorPath->begin(); itV != vectorPath->end(); ){
+                ERASER_PATH *data = *itV;
+                data->path->clear();
+                delete data;
+                itV = vectorPath->erase(itV);
+            }
+            vectorPath->clear();
+            delete vectorPath;
+            it = m_mapEraserPathRedo.erase(it);
         }
     }
 }
@@ -144,6 +160,8 @@ void PencilItem::RenderEraserToPixmap(){
                     painter.setCompositionMode(QPainter::CompositionMode_DestinationOut);
                     painter.drawPath(*path);
                     painter.setCompositionMode(oldMode);
+
+                    //(*itV)->drawn = true;
                 }
             }
         }
@@ -233,16 +251,20 @@ void PencilItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsItem::mouseReleaseEvent(event);
 
-    QPointF pos = scenePos();
-    BASEITEM_GEO *geo = new BASEITEM_GEO(pos.x(), pos.y(), 0, 0, 0);
-    BASEITEM_GEO *topGeo = m_stUndo.top();
-    if(!topGeo->compare(*geo)){
-        m_stUndo.push(new BASEITEM_GEO(pos.x(), pos.y(), 0, 0, 0));
-    }
+    if(1/*is eraser released*/){
 
-    if(m_ptClicked != event->scenePos()){
-        if(m_pCBItemChanged){
-            m_pCBItemChanged(reinterpret_cast<int>(this));
+    }else{
+        QPointF pos = scenePos();
+        BASEITEM_GEO *geo = new BASEITEM_GEO(pos.x(), pos.y(), 0, 0, 0);
+        BASEITEM_GEO *topGeo = m_stUndo.top();
+        if(!topGeo->compare(*geo)){
+            m_stUndo.push(new BASEITEM_GEO(pos.x(), pos.y(), 0, 0, 0));
+        }
+
+        if(m_ptClicked != event->scenePos()){
+            if(m_pCBItemChanged){
+                m_pCBItemChanged(reinterpret_cast<int>(this));
+            }
         }
     }
 }
@@ -322,4 +344,38 @@ void PencilItem::Redo(){
     setPos(pos);
     update();
     m_stUndo.push(geo);
+}
+
+void PencilItem::UndoEraser(int eraser){
+    MapEraserPath::iterator it = m_mapEraserPathUndo.find(eraser);
+    if(it != m_mapEraserPathUndo.end()){
+        VectorPath *vPath = it.value();
+        m_mapEraserPathRedo[eraser] = vPath;
+        it = m_mapEraserPathUndo.erase(it);
+    }
+
+    RenderPathToPixmap();
+    for(MapEraserPath::iterator it = m_mapEraserPathUndo.begin(); it != m_mapEraserPathUndo.end(); it ++){
+        VectorPath *vectorPath = it.value();
+        for(VectorPath::Iterator itV = vectorPath->begin(); itV != vectorPath->end(); itV++){
+            ERASER_PATH *path_data = *itV;
+            path_data->drawn = false;
+        }
+    }
+    update();
+}
+
+void PencilItem::RedoEraser(int eraser){
+    RenderPathToPixmap();
+    MapEraserPath::iterator it = m_mapEraserPathRedo.find(eraser);
+    if(it != m_mapEraserPathRedo.end()){
+        VectorPath *vectorPath = it.value();
+        for(VectorPath::Iterator itV = vectorPath->begin(); itV != vectorPath->end(); itV++){
+            ERASER_PATH *path_data = *itV;
+            path_data->drawn = false;
+        }
+        m_mapEraserPathUndo[eraser] = vectorPath;
+        it = m_mapEraserPathRedo.erase(it);
+    }
+    update();
 }

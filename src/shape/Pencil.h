@@ -43,6 +43,7 @@ public:
     }
 signals:
     void sigShouldRemovePencil(int key);
+    void sigEraseAttach(int key);
 public slots:
     void slotEraserPressed();
     void slotEraserMove(const QPointF &prevPos, const QPointF &pos, Eraser *eraser);
@@ -86,7 +87,8 @@ protected:
 
     void Undo() override;
     void Redo() override;
-    void ClearRedo() override;
+    void UndoEraser(int eraser) override;
+    void RedoEraser(int eraser) override;
 private:
     PencilItem *m_pItem;
     QPainterPath m_path;

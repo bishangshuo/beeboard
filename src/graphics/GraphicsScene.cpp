@@ -125,6 +125,8 @@ void GraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
                     pencil, SLOT(slotEraserPressed()));
             connect(this, SIGNAL(sigEraserRelease()),
                     pencil, SLOT(slotEraserRelease()));
+            connect(pencil, SIGNAL(sigEraserAttach(int)),
+                    this, SLOT(slotEraserAttachToPencil(int)));
             break;
         }
         case TOOL_TYPE::RECTANGLE:{
@@ -290,6 +292,7 @@ void GraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             break;
         }
         case TOOL_TYPE::ERASER:{
+            m_stUndo.push(ACTION_NODE(act_type_erase, shape));
             emit sigEraserRelease();
             break;
         }
@@ -502,10 +505,16 @@ void GraphicsScene::onItemGeoChanged(int key){
     if(it != m_mapShape.end()){
         SHAPE_DATA *data = it.value();
         ShapeBase *shape = data->shape;
-        ModifyItemInProtobuf(shape);
-        m_stUndo.push(ACTION_NODE(act_type_change_geo, shape));
-        SaveProtobufToFile();
-        OnSceneChanged();
+        if(shape->GetType() == TOOL_TYPE::PENCIL ||
+                shape->GetType() == TOOL_TYPE::LINE ||
+                shape->GetType() == TOOL_TYPE::RECTANGLE ||
+                shape->GetType() == TOOL_TYPE::ELLIPSE ||
+                shape->GetType() == TOOL_TYPE::TRIANGLE){
+            ModifyItemInProtobuf(shape);
+            m_stUndo.push(ACTION_NODE(act_type_change_geo, shape));
+            SaveProtobufToFile();
+            OnSceneChanged();
+        }
     }
 }
 
@@ -628,6 +637,8 @@ void GraphicsScene::Undo(){
         addItem(node.shape->GetGraphicsItem());
         ModifyItemInProtobuf(node.shape);
         SaveProtobufToFile();
+    }else if(node.action == act_type_erase){
+        UndoEraser(dynamic_cast<Eraser *>(node.shape));
     }
     m_stRedo.push(node);
     OnSceneChanged();
@@ -645,9 +656,23 @@ void GraphicsScene::Redo(){
         SaveProtobufToFile();
     }else if(node.action == act_type_remove_item){
         onItemRemove(node.shape->GetItemKey(), false);
+    }else if(node.action == act_type_erase){
+        RedoEraser(dynamic_cast<Eraser *>(node.shape));
     }
     m_stUndo.push(node);
     OnSceneChanged();
+}
+
+void GraphicsScene::UndoEraser(Eraser *eraser){
+    for(MapShape::Iterator it = m_mapShape.begin(); it != m_mapShape.end(); it++){
+        it.value()->shape->UndoEraser(reinterpret_cast<int>(eraser));
+    }
+}
+
+void GraphicsScene::RedoEraser(Eraser *eraser){
+    for(MapShape::Iterator it = m_mapShape.begin(); it != m_mapShape.end(); it++){
+        it.value()->shape->RedoEraser(reinterpret_cast<int>(eraser));
+    }
 }
 
 void GraphicsScene::SaveItemToProtobuf(ShapeBase *shape){
@@ -1117,4 +1142,18 @@ void GraphicsScene::LoadScribbleObject(const PBShape::Scribble &scribble){
     (*m_pScenePb->mutable_mapscribble())[m_nCurKey] = scribble;
 
     shape->CreateEnd(this);
+}
+
+void GraphicsScene::slotEraserAttachToPencil(int key){
+    qDebug()<<"GraphicsScene::onItemGeoChanged key="<<key;
+    MapShape::iterator it = m_mapShape.find(key);
+    if(it != m_mapShape.end()){
+        SHAPE_DATA *data = it.value();
+        ShapeBase *shape = data->shape;
+        if(shape->GetType() == TOOL_TYPE::PENCIL){
+            ModifyItemInProtobuf(shape);
+            SaveProtobufToFile();
+            OnSceneChanged();
+        }
+    }
 }

@@ -281,7 +281,3 @@ void ItemBase::Redo(){
     update();
     m_stUndo.push(geo);
 }
-
-void ItemBase::ClearRedo(){
-    m_stRedo.clear();
-}

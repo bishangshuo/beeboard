@@ -76,7 +76,6 @@ public:
 
     void Undo();
     void Redo();
-    void ClearRedo();
 
 signals:
     void sigItemChanged();

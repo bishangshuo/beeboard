@@ -149,6 +149,10 @@ void Ellipse::Redo(){
     m_pItem->Redo();
 }
 
-void Ellipse::ClearRedo(){
-    m_pItem->ClearRedo();
+void Ellipse::UndoEraser(int eraser) {
+
+}
+
+void Ellipse::RedoEraser(int eraser) {
+
 }

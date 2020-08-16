@@ -81,6 +81,10 @@ void Eraser::Redo(){
 
 }
 
-void Eraser::ClearRedo(){
+void Eraser::UndoEraser(int eraser) {
+
+}
+
+void Eraser::RedoEraser(int eraser) {
 
 }
