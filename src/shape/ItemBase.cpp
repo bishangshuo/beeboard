@@ -115,6 +115,11 @@ void ItemBase::mousePressEvent(QGraphicsSceneMouseEvent *event)
     {
         qDebug()<<"before resize, scenePos="<<scenePos();
         m_isResizing = true;
+        QPointF pos = scenePos();
+        m_p1 = QPointF(pos.x() - m_width/2, pos.y() - m_height/2);
+        QPointF p2 = QPointF(pos.x() + m_width/2, pos.y() + m_height/2);
+        m_dx = p2.x() - m_ptClicked.x();
+        m_dy = p2.y() - m_ptClicked.y();
     }
     else if (event->button() == Qt::LeftButton && isInRotateArea(event->pos())  && !m_hideRotate)
     {
@@ -134,12 +139,23 @@ void ItemBase::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     if (m_isResizing && !m_hideResize)
     {
-        int dx = int(2.0 * event->pos().x());
-        int dy = int(2.0 * event->pos().y());
-        prepareGeometryChange();
+//        int dx = int(2.0 * event->pos().x());
+//        int dy = int(2.0 * event->pos().y());
+//        prepareGeometryChange();
 
-        m_width = dx;
-        m_height = dy;
+//        m_width = dx;
+//        m_height = dy;
+//        if (m_width < MIN_ITEM_SIZE){
+//            m_width = MIN_ITEM_SIZE;
+//        }
+
+//        if (m_height < MIN_ITEM_SIZE){
+//            m_height = MIN_ITEM_SIZE;
+//        }
+        QPointF curPos = event->scenePos();
+        QPointF p2 = curPos + QPointF(m_dx, m_dy);
+        m_width = abs(p2.x()-m_p1.x());
+        m_height = abs(p2.y()-m_p1.y());
         if (m_width < MIN_ITEM_SIZE){
             m_width = MIN_ITEM_SIZE;
         }
@@ -147,7 +163,8 @@ void ItemBase::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         if (m_height < MIN_ITEM_SIZE){
             m_height = MIN_ITEM_SIZE;
         }
-
+        QPointF pos = (m_p1+p2)/2;
+        setPos(pos);
     }
     else if (m_isRotating && !m_hideRotate)
     {

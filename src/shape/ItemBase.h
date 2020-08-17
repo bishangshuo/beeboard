@@ -113,6 +113,10 @@ public:
 
     QPen m_pen;
     QBrush m_brush;
+
+    QPointF m_p1;
+    qreal m_dx;
+    qreal m_dy;
 };
 
 
