@@ -17,6 +17,27 @@ const int MIN_ITEM_SIZE    = 80;
 //                                  ItemBase                                  //
 //============================================================================//
 
+inline qreal checkAngle(qreal _angle){
+    qreal angle = _angle;
+    if (angle > 360.0)
+    {
+        while(1)
+        {
+            angle -= 360.0;
+            if (angle < 360.0) break;
+        }
+    }
+    else if (angle < 0.0)
+    {
+        while(1)
+        {
+            angle += 360.0;
+            if (angle > 0.0) break;
+        }
+    }
+    return angle;
+}
+
 ItemBase::ItemBase(int x, int y, int width, int height)
     : m_width(width)
     , m_height(height)
@@ -115,11 +136,9 @@ void ItemBase::mousePressEvent(QGraphicsSceneMouseEvent *event)
     {
         qDebug()<<"before resize, scenePos="<<scenePos();
         m_isResizing = true;
-        QPointF pos = scenePos();
-        m_p1 = QPointF(pos.x() - m_width/2, pos.y() - m_height/2);
-        QPointF p2 = QPointF(pos.x() + m_width/2, pos.y() + m_height/2);
-        m_dx = p2.x() - m_ptClicked.x();
-        m_dy = p2.y() - m_ptClicked.y();
+        QPointF p2 = QPointF(m_width/2, m_height/2);
+        m_dx = event->pos().x()-p2.x();
+        m_dy = event->pos().y()-p2.y();
     }
     else if (event->button() == Qt::LeftButton && isInRotateArea(event->pos())  && !m_hideRotate)
     {
@@ -139,23 +158,11 @@ void ItemBase::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     if (m_isResizing && !m_hideResize)
     {
-//        int dx = int(2.0 * event->pos().x());
-//        int dy = int(2.0 * event->pos().y());
-//        prepareGeometryChange();
-
-//        m_width = dx;
-//        m_height = dy;
-//        if (m_width < MIN_ITEM_SIZE){
-//            m_width = MIN_ITEM_SIZE;
-//        }
-
-//        if (m_height < MIN_ITEM_SIZE){
-//            m_height = MIN_ITEM_SIZE;
-//        }
-        QPointF curPos = event->scenePos();
-        QPointF p2 = curPos + QPointF(m_dx, m_dy);
-        m_width = abs(p2.x()-m_p1.x());
-        m_height = abs(p2.y()-m_p1.y());
+        prepareGeometryChange();
+        int x = event->pos().x() - m_dx;
+        int y = event->pos().y() - m_dy;
+        m_width = 2*x;
+        m_height = 2*y;
         if (m_width < MIN_ITEM_SIZE){
             m_width = MIN_ITEM_SIZE;
         }
@@ -163,8 +170,6 @@ void ItemBase::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         if (m_height < MIN_ITEM_SIZE){
             m_height = MIN_ITEM_SIZE;
         }
-        QPointF pos = (m_p1+p2)/2;
-        setPos(pos);
     }
     else if (m_isRotating && !m_hideRotate)
     {
@@ -237,23 +242,8 @@ bool ItemBase::isInCloseArea(const QPointF &pos) const
 }
 
 
-void ItemBase::Rotate(qreal angle){
-    if (angle > 360.0)
-    {
-        while(1)
-        {
-            angle -= 360.0;
-            if (angle < 360.0) break;
-        }
-    }
-    else if (angle < 0.0)
-    {
-        while(1)
-        {
-            angle += 360.0;
-            if (angle > 0.0) break;
-        }
-    }
+void ItemBase::Rotate(qreal _angle){
+    qreal angle = checkAngle(_angle);
     setRotation(angle);
 }
 
