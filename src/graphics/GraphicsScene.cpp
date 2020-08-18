@@ -397,13 +397,11 @@ bool GraphicsScene::onMouseSelectItem(const QPointF &pos)
     int key = item->data(ITEM_DATA_KEY).toInt();
     MapShape::iterator it = m_mapShape.find(key);
     if(it != m_mapShape.end()){
-        //it.value()->shape->SetEditable(true);
+        it.value()->shape->HideControls(false);
         qDebug() << "content item selected";
     }else{
         qDebug() << "selector item selected, or no items selected";
-        //destroyMultiSelector();
     }
-    //signalItemSelected(key);
     return true;
 }
 
@@ -447,7 +445,6 @@ void GraphicsScene::doClearScene(){
     }
     m_pScenePb->mutable_mapscribble()->clear();
 
-    destroyRedoShapes();
     MapShape::iterator it = m_mapShape.begin();
     while(it != m_mapShape.end()){
         SHAPE_DATA *data = it.value();
