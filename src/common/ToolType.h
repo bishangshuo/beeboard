@@ -10,6 +10,7 @@ typedef struct _TOOL_TYPE{
         ELLIPSE,
         TRIANGLE,
         LINE,
+        ARC,
         ERASER,
         UNDO,
         REDO,

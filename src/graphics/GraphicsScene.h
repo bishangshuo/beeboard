@@ -89,6 +89,57 @@ public:
     void LoadTriangleObject(const PBShape::Triangle &triangle);
     void LoadScribbleObject(const PBShape::Scribble &scribble);
 
+    /**
+     * @brief BeginDrawLine
+     * @param pos
+     * @return
+     * 开始画直线
+     * 返回直线key
+     */
+    int BeginDrawLine(const QPointF &pos);
+
+    /**
+     * @brief UpdateLine
+     * @param key BeginDrawLine返回的key
+     * @param pos
+     * 实时更新线段末端点坐标
+     */
+    void UpdateLine(int key, const QPointF &pos);
+
+    /**
+     * @brief EndDrawLine
+     * @param key BeginDrawLine返回的key
+     * @param pos
+     * 停止绘制直线
+     */
+    void EndDrawLine(int key, const QPointF &pos);
+
+    /**
+     * @brief BeginDrawArc
+     * @param rc  圆弧所在的外接正方向rect
+     * @param startAngle 原点O与起始点P连接线向量OP，OP相对于向右方向的角度startAngle, 0 <= startAngle < 360
+     *                  当startAngle >= 360, startAngle = startAngle % 360
+     * @return
+     * 开始画弧
+     */
+    int BeginDrawArc(const QRectF &rc, int startAngle);
+
+    /**
+     * @brief UpdateArc
+     * @param key
+     * @param spanAngle
+     * 鼠标拖动过程中，鼠标坐标点Q，向量OQ与OP形成的夹角spanAngle, -720 < spanAngle < 720
+     * 当 spanAngle >= 720, spanAngle = spanAngle % 720, 当 spanAngle <= -720, spanAngle = -abs(spanAngle) % 720
+     */
+    void UpdateArc(int key, int spanAngle);
+
+    /**
+     * @brief EndDrawArc
+     * @param key
+     * 停止绘制弧线
+     */
+    void EndDrawArc(int key);
+
 signals:
     void sigSceneClicked();
 

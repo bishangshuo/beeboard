@@ -9,6 +9,9 @@
 #include <QRandomGenerator>
 #include <QFileDialog>
 
+#include "src/shape/Arc.h"
+#include "src/shape/Line.h"
+
 const qreal PI = 3.1415926;
 const qreal ARC = PI/180;
 
@@ -149,6 +152,18 @@ void MainWindow::initGraphics(){
     connect(m_pScene, &GraphicsScene::sigRedoAvailable, [=](bool available){
         ui->actionRedo->setEnabled(available);
     });
+
+//    int key = m_pScene->BeginDrawLine(QPointF(-30, -100));
+//    m_pScene->UpdateLine(key, QPointF(200, 100));
+//    m_pScene->EndDrawLine(key, QPointF(200, 100));
+
+    int key = m_pScene->BeginDrawArc(QRectF(-100, -100, 200, 200), 0);
+    m_pScene->UpdateArc(key, 145);
+    m_pScene->EndDrawArc(key);
+
+//    key = m_pScene->BeginDrawArc(QRectF(-100, -100, 200, 200), 100);
+//    m_pScene->UpdateArc(key, 90);
+//    m_pScene->EndDrawArc(key);
 
 }
 

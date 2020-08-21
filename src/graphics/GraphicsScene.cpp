@@ -6,6 +6,7 @@
 #include "src/shape/Ellipse.h"
 #include "src/shape/Triangle.h"
 #include "src/shape/Line.h"
+#include "src/shape/Arc.h"
 #include "src/shape/Pencil.h"
 #include "src/shape/Eraser.h"
 #include "src/shape/MultiSelector.h"
@@ -94,6 +95,113 @@ void GraphicsScene::setToolType(const TOOL_TYPE::Type &toolType){
 
 void GraphicsScene::setView(GraphicsView *view){
     m_pView = view;
+}
+
+int GraphicsScene::BeginDrawLine(const QPointF &pos){
+    deleteSelectItem();
+    m_ptPrev = pos;
+    ShapeBase *shape = new Line(this);
+    if(shape != nullptr){
+        m_nCurKey = shape->Create(m_ptPrev, m_ptPrev+QPointF(1.0, 1.0), this);
+        m_mapShape[m_nCurKey] = new SHAPE_DATA(m_nCurKey, m_eToolType, shape, m_mapShape.size()+1);
+        //shape->SetSelected(true);
+        connect(shape, &ShapeBase::sigRemove, [=](int _key){
+            onItemRemove(_key, true);
+        });
+        connect(shape, &ShapeBase::sigGeoChanged, [=](int _key){
+            onItemGeoChanged(_key);
+        });
+
+        OnSceneChanged();
+        return m_nCurKey;
+    }
+    return 0;
+}
+
+void GraphicsScene::UpdateLine(int key, const QPointF &pos){
+    ShapeBase *shape = nullptr;
+    MapShape::iterator it = m_mapShape.find(key);
+    if(it != m_mapShape.end()){
+        shape = it.value()->shape;
+    }
+    if(shape == nullptr){
+        return;
+    }
+    shape->UpdateRect(m_ptPrev, pos, this);
+}
+
+void GraphicsScene::EndDrawLine(int key, const QPointF &pos){
+    ShapeBase *shape = nullptr;
+    MapShape::iterator it = m_mapShape.find(key);
+    if(it != m_mapShape.end()){
+        shape = it.value()->shape;
+    }
+    if(shape == nullptr){
+        return;
+    }
+    shape->CreateEnd(this);
+    SaveItemToProtobuf(shape);
+    SaveProtobufToFile();
+    //创建新元素，清空所有redo和undo
+    destroyRedoShapes();
+    m_stUndo.push(ACTION_NODE(act_type_create_item, shape));
+    OnSceneChanged();
+}
+
+int GraphicsScene::BeginDrawArc(const QRectF &rc, int startAngle){
+    deleteSelectItem();
+    ShapeBase *shape = new Arc(this);
+    if(shape != nullptr){
+        m_nCurKey = shape->Create(rc.topLeft(), rc.bottomRight(), this);
+        m_mapShape[m_nCurKey] = new SHAPE_DATA(m_nCurKey, m_eToolType, shape, m_mapShape.size()+1);
+        //shape->SetSelected(true);
+        connect(shape, &ShapeBase::sigRemove, [=](int _key){
+            onItemRemove(_key, true);
+        });
+        connect(shape, &ShapeBase::sigGeoChanged, [=](int _key){
+            onItemGeoChanged(_key);
+        });
+
+        Arc *arc = dynamic_cast<Arc *>(shape);
+        arc->SetStartAngle(startAngle);
+
+        OnSceneChanged();
+        return m_nCurKey;
+    }
+    return 0;
+}
+
+
+void GraphicsScene::UpdateArc(int key, int spanAngle){
+    ShapeBase *shape = nullptr;
+    MapShape::iterator it = m_mapShape.find(key);
+    if(it != m_mapShape.end()){
+        shape = it.value()->shape;
+    }
+    if(shape == nullptr){
+        return;
+    }
+
+    Arc *arc = dynamic_cast<Arc *>(shape);
+    arc->SetSpanAngle(spanAngle);
+}
+
+void GraphicsScene::EndDrawArc(int key){
+    ShapeBase *shape = nullptr;
+    MapShape::iterator it = m_mapShape.find(key);
+    if(it != m_mapShape.end()){
+        shape = it.value()->shape;
+    }
+    if(shape == nullptr){
+        return;
+    }
+    shape->CreateEnd(this);
+    SaveItemToProtobuf(shape);
+    SaveProtobufToFile();
+    //创建新元素，清空所有redo和undo
+    destroyRedoShapes();
+    m_stUndo.push(ACTION_NODE(act_type_create_item, shape));
+    OnSceneChanged();
 }
 
 void GraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -450,7 +558,7 @@ void GraphicsScene::doClearScene(){
         SHAPE_DATA *data = it.value();
         ShapeBase *shape = data->shape;
         data->shape->Remove(this);
-        delete shape;
+        shape->deleteLater();
         delete data;
         it = m_mapShape.erase(it);
     }
@@ -507,7 +615,8 @@ void GraphicsScene::onItemGeoChanged(int key){
                 shape->GetType() == TOOL_TYPE::LINE ||
                 shape->GetType() == TOOL_TYPE::RECTANGLE ||
                 shape->GetType() == TOOL_TYPE::ELLIPSE ||
-                shape->GetType() == TOOL_TYPE::TRIANGLE){
+                shape->GetType() == TOOL_TYPE::TRIANGLE ||
+                shape->GetType() == TOOL_TYPE::ARC){
             ModifyItemInProtobuf(shape);
             m_stUndo.push(ACTION_NODE(act_type_change_geo, shape));
             SaveProtobufToFile();

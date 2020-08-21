@@ -1,4 +1,6 @@
 HEADERS += \
+    $$PWD/Arc.h \
+    $$PWD/ArcItem.h \
     $$PWD/Ellipse.h \
     $$PWD/EllipseItem.h \
     $$PWD/Eraser.h \
@@ -21,6 +23,8 @@ HEADERS += \
     $$PWD/pbshape.pb.h
 
 SOURCES += \
+    $$PWD/Arc.cpp \
+    $$PWD/ArcItem.cpp \
     $$PWD/Ellipse.cpp \
     $$PWD/EllipseItem.cpp \
     $$PWD/Eraser.cpp \
